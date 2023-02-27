@@ -1,31 +1,63 @@
-const { Proyectos } = require('../../db')
+const { Proyects } = require('../../db')
 
-exports.crearProyecto = async (data) => {
-
+const addProyect = async (data) => {
 
     //TODO crear validaciones
 
-    try {
-        const { titulo, resumen, descripcion, meta_fianaciamiento, imagen, usuarioId } = data
+    const { title, summary, description, goal, img, userId } = data
 
-        // const usuarioId = req.body // despues va a vernir del req
-
-
-        const proyecto = await Proyectos.create({
-            titulo,
-            resumen,
-            descripcion,
-            meta_fianaciamiento,
-            imagen,
-            usuarioId   // despues cambia esto lechu, no se si en la tabla esta como usuario_id o usuarioId, de igual forma el usuario no lo vamos a pasar por body, si no que lo vamos a pasar por req.usuario, que va a ser la instancia del usuario auntenticado
-
-
-
-            //  algo asi ---> usuario_id = req.usuario.id
-        })
-
-        res.status(201).json({msg: `Proyecto creado Correctamente ${proyecto.titulo}`})
-    } catch (error) {
-        res.status(400).json({msg: 'Hubo un error al crear el proyecto'})
+    //validacion precaria xd
+    if (title === '' || summary === '' || description === '' || img === '' || userId === '') {
+        return {
+            msg: 'Todos los campos son obligatorios'
+        }
     }
+
+    //crear el proyecto
+    const proyecto = await Proyects.create({
+        title,
+        summary,
+        description,
+        goal,
+        img,
+        userId: userId  //esto viene del user autenticado
+    })
+    return {
+        msg: 'Proyecto Creado correctamente'
+    }
+}
+
+
+const getProyectById = async (id) => {
+    //buscamos por el id
+    const proyect = await Proyects.findByPk(id)
+    return proyect
+
+}
+
+const getAllProyects = async () => {
+    //buscamos todos los proyectos
+    const proyects = await Proyects.findAll()
+
+        //si hay proyectos retornarlos
+    if (proyects) return proyects
+    //de lo contrario retornar este mensaje
+    else return 'No se encontraron proyectos'
+}
+
+const searchProyect = async (title) => {
+    //buscamos el proyecto por el nombre
+    const proyect = await Proyects.findOne({
+        where: { title }
+    })
+
+    return proyect
+}
+
+
+module.exports = {
+    addProyect,
+    getProyectById,
+    getAllProyects,
+    searchProyect
 }
