@@ -1,4 +1,4 @@
-const { userCreate } = requiere("../controllers");
+const { userCreate } = require("../user/userController");
 
 const postUser = async function (req, res) {
   const { name, email, password, profile_img } = req.body;
