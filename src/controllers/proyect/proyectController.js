@@ -51,6 +51,9 @@ const searchProyect = async (title) => {
         where: { title }
     })
 
+
+    if(!proyect) return 'No existe ningun proyecto con este nombre'
+
     return proyect
 }
 
