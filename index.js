@@ -1,6 +1,6 @@
 const express = require("express");
-const { conectarDB } = require("./config/db");
 const cors = require("cors");
+const { conectarDB } = require("./src/db");
 require('dotenv').config()
 
 //creamos el servidor
@@ -9,7 +9,7 @@ const app = express();
 
 // conectamos a la base de datos
 
-/* conectarDB(); */
+conectarDB();
 
 //habilitaamos cors
 const opcionesCors = {
@@ -28,8 +28,8 @@ const port = process.env.PORT || 3001;
 
 //definimos las rutas
 
-app.use('/', require('./routes/usuarios'))
-
+/* app.use('/', require('./routes/usuarios'))
+ */
 
 //arrancar la app
 
