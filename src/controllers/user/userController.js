@@ -8,7 +8,7 @@ exports.crearUsuario = async (data) => {
     try {
 
         const { } = data
-            usuario = await Usuarios.create({
+            let usuario = await Usuarios.create({
                 nombre,
                 correo,
                 password
