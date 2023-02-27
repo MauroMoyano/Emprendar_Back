@@ -6,7 +6,7 @@ const postUserHanlder = async function (req, res) {
 
   try {
     if (name && email && password && profile_img) {
-      const response = await UserCreate(name, email, password, profile_img);
+      const response = await userCreate(name, email, password, profile_img);
       res.status(200).send(response);
     }
   } catch (error) {
@@ -17,7 +17,7 @@ const postUserHanlder = async function (req, res) {
 const getAllUsersHandler = async function (req, res) {
   const { name } = req.query;
   try {
-    if (name) {
+    if (!name) {
       const found = await getAllUsers();
       res.status(200).send(found);
     }
