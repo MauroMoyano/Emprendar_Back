@@ -1,7 +1,13 @@
 const { Router } = require("express");
-const { postUser } = require("../controllers/user/userHandler");
+const {
+  postUserHanlder,
+  getAllUsersHandler,
+  getAllUserByIdHandler,
+} = require("../controllers/user/userHandler");
 const routerUser = Router();
 
-routerUser.post("/", postUser);
+routerUser.post("/", postUserHanlder);
+routerUser.get("/", getAllUsersHandler);
+routerUser.get("/:id", getAllUserByIdHandler);
 
 module.exports = routerUser;
