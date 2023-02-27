@@ -1,24 +1,45 @@
-const { Usuarios } = require('../../db')
+const { User } = require('../../db')
 
 
-exports.crearUsuario = async (data) => {
+const UserCreate = async (name, email, password, profile_img) => {
 
-    //TODO crear validaciones
+    const newUser = await User.create({ name, email, password, profile_img });
+    console.log(newUser);
+    return "El usuario se creo con exito"
+}
 
-    try {
+const getAllUsers = async ()=>{
+    const infoDB = await User.findAll();
+    const infoClean = {
+        id: infoDB.id,
+        name: infoDB.name,
+        email: infoDB.emale,
+        account_state: infoDB.account_state,
+        reputation: infoDB.reputation,
+        validate: infoDB.validate,
+        profile_img: infoDB.profile_img,
+    }
+    
+    return infoClean;
+}
 
-        const { } = data
-            let usuario = await Usuarios.create({
-                nombre,
-                correo,
-                password
-            })
-            res.status(201).json({usuario})
-        }
-
-    catch (error) {
-
-        res.status(400).json({ msg: 'Error al crear usuario' })
+const UserByID = async (userID) => {
+    const infoDB = await User.findByPk({where: {id: userID}})
+    const infoClean = {
+        id: infoDB.id,
+        name: infoDB.name,
+        email: infoDB.emale,
+        account_state: infoDB.account_state,
+        reputation: infoDB.reputation,
+        validate: infoDB.validate,
+        profile_img: infoDB.profile_img,
     }
 
+    return infoClean;
+}
+
+module.exports = {
+    UserCreate,
+    getAllUsers,
+    UserByID,
 }
