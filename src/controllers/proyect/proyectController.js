@@ -42,7 +42,7 @@ const getAllProyects = async () => {
         //si hay proyectos retornarlos
     if (proyects) return proyects
     //de lo contrario retornar este mensaje
-    else return 'No se encontraron proyectos'
+    else  throw new Error ('No se encontraron proyectos')
 }
 
 const searchProyect = async (title) => {
@@ -52,10 +52,11 @@ const searchProyect = async (title) => {
     })
 
 
-    if(!proyect) return 'No existe ningun proyecto con este nombre'
+    if(!proyect) throw new Error( 'No existe ningun proyecto con este nombre')
 
-    return proyect
+    return proyect 
 }
+
 
 
 module.exports = {
