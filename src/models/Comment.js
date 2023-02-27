@@ -1,29 +1,29 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-    sequelize.define('comentario', {
+    sequelize.define('comment', {
         id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
-        id_usuario: {
+        id_user: {
             type: DataTypes.UUID,
             allowNull: false,
-            references: {
-                model: 'usuarios',
+            /* references: {
+                model: 'Users',
                 key: 'id'
-            }
+            } */
         },
-        id_proyecto: {
+        id_proyect: {
             type: DataTypes.UUID,
             allowNull: false,
-            references: {
-                model: 'proyectos',
+            /* references: {
+                model: 'Proyect',
                 key: 'id'
-            }
+            } */
         },
-        comentario: {
+        comment: {
             type: DataTypes.TEXT,
             allowNull: false
         },

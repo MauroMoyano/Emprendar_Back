@@ -10,6 +10,8 @@ const sequelize = new Sequelize(
     `postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`,
     {
         dialect: "postgres",
+        logging: false,
+        native: false
     }
 );
 
@@ -47,21 +49,21 @@ sequelize.models = Object.fromEntries(capsEntries)
 
 console.log(sequelize.models);
 
-sequelize.sync({ force: true })
+sequelize.sync({ force: false })
     .then(() => {
         console.log('tablas creadas')
     }).catch((error) => {
         console.log(error)
-    })
+    });
 
-const { Proyectos, Usuarios } = sequelize.models
+const { Proyect, User } = sequelize.models
 
-console.log(Usuarios);
+console.log(User);
 
-/* relacion de uno a muchos entre usuarios(uno) a proyectos */
-Usuarios.hasMany(Proyectos, { foreignKey: 'creador' });
-Proyectos.belongsTo(Usuarios);
+/* relacion de uno a muchos entre User(uno) a proyect */
+User.hasMany(Proyect);
+Proyect.belongsTo(User);
 
 //exportaamos la funcion y la instancia para luego crear los modelos
 
-module.exports = { conectarDB, ...sequelize.models, Proyectos, Usuarios };
+module.exports = { conectarDB, ...sequelize.models, Proyect, User };

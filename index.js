@@ -28,8 +28,7 @@ const port = process.env.PORT || 3001;
 
 //definimos las rutas
 
-/* app.use('/', require('./routes/usuarios'))
- */
+app.use('/', require('./src/routes/index'))
 
 //arrancar la app
 
