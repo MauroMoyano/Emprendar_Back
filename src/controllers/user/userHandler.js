@@ -1,3 +1,4 @@
+
 const { userCreate, getAllUsers, userByID } = require("../user/userController");
 
 const postUserHanlder = async function (req, res) {
@@ -5,7 +6,7 @@ const postUserHanlder = async function (req, res) {
 
   try {
     if (name && email && password && profile_img) {
-      const response = await userCreate(name, email, password, profile_img);
+      const response = await UserCreate(name, email, password, profile_img);
       res.status(200).send(response);
     }
   } catch (error) {

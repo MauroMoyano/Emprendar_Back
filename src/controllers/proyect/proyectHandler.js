@@ -1,11 +1,11 @@
 /* ruta '/' */
-const { getProyectById, getAllProyects } = require('./proyectController')
+const { searchProyect, getAllProyects } = require('./proyectController')
 const getProyects = async (req, res) => {
     /* traerá todos los proyectos de no presentar query */
-    let { id } = req.params
+    let { name } = req.query
     try {
-        if (id) {
-            let result = await getProyectById(id)
+        if (name) {
+            let result = await searchProyect(name)
             res.status(201).json(result)
         } else {
             let result = await getAllProyects()
@@ -30,11 +30,12 @@ const postProyect = async (req, res) => {
 
 }
 
-const { searchProyect } = require('./proyectController')
-const searchProyects = async (req, res) => {
+const { getProyectById } = require('./proyectController')
+const detailProyect = async (req, res) => {
+    let { id } = req.params
 
     try {
-        let result = await searchProyect(req.body)
+        let result = await getProyectById(id)
         res.status(201).json(result)
     } catch (error) {
         res.status(406).json({ error: error.message })
@@ -48,5 +49,5 @@ module.exports = {
     getProyects,
     postProyect,
     /* ruta '/search' */
-    searchProyects,
+    detailProyect,
 }

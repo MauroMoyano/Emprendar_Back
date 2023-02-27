@@ -1,4 +1,4 @@
-const { Proyects } = require('../../db')
+const { Proyect } = require('../../db')
 
 const addProyect = async (data) => {
 
@@ -14,7 +14,7 @@ const addProyect = async (data) => {
     }
 
     //crear el proyecto
-    const proyecto = await Proyects.create({
+    const proyecto = await Proyect.create({
         title,
         summary,
         description,
@@ -30,29 +30,28 @@ const addProyect = async (data) => {
 
 const getProyectById = async (id) => {
     //buscamos por el id
-    const proyect = await Proyects.findByPk(id)
+    const proyect = await Proyect.findByPk(id)
     return proyect
 
 }
 
 const getAllProyects = async () => {
     //buscamos todos los proyectos
-    const proyects = await Proyects.findAll()
+    const proyects = await Proyect.findAll()
 
-        //si hay proyectos retornarlos
+    //si hay proyectos retornarlos
     if (proyects) return proyects
     //de lo contrario retornar este mensaje
     else throw new Error('No se encontraron proyectos')
 }
 
-const searchProyect = async (title) => {
+const searchProyect = async (proyectTitle) => {
     //buscamos el proyecto por el nombre
-    const proyect = await Proyects.findOne({
-        where: { title }
-    })
+    let proyect = await Proyect.findAll()
 
+    proyect = proyect.filter(pj => pj.dataValues.title.includes(proyectTitle))
 
-    if(!proyect) throw new Error('No existe ningun proyecto con este nombre')
+    if (!proyect) throw new Error('No existe ningun proyecto con este nombre')
 
     return proyect
 }
