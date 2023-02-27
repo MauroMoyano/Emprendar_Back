@@ -34,7 +34,7 @@ const { searchProyect } = require('./proyectController')
 const searchProyects = async (req, res) => {
 
     try {
-        let result = await addProyect(req.body)
+        let result = await searchProyect(req.body)
         res.status(201).json(result)
     } catch (error) {
         res.status(406).json({ error: error.message })
@@ -48,5 +48,5 @@ module.exports = {
     getProyects,
     postProyect,
     /* ruta '/search' */
-    searchProyect,
+    searchProyects,
 }
