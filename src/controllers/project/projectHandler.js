@@ -1,14 +1,14 @@
 /* ruta '/' */
-const { searchProyect, getAllProyects } = require('./proyectController')
-const getProyects = async (req, res) => {
+const { searchProject, getAllProjects } = require('./projectController')
+const getProjects = async (req, res) => {
     /* traerá todos los proyectos de no presentar query */
     let { name } = req.query
     try {
         if (name) {
-            let result = await searchProyect(name)
+            let result = await searchProject(name)
             res.status(201).json(result)
         } else {
-            let result = await getAllProyects()
+            let result = await getAllProjects()
             res.status(201).json(result)
         }
     } catch (error) {
@@ -17,11 +17,11 @@ const getProyects = async (req, res) => {
 }
 
 /* ruta '/search' */
-const { addProyect } = require('./proyectController')
-const postProyect = async (req, res) => {
+const { addProject } = require('./projectController')
+const postProject = async (req, res) => {
     /* definira un proyecto nuevo */
     try {
-        let result = await addProyect(req.body)
+        let result = await addProject(req.body)
         res.status(201).json(result)
     } catch (error) {
         res.status(406).json({ error: error.message })
@@ -30,12 +30,12 @@ const postProyect = async (req, res) => {
 
 }
 
-const { getProyectById } = require('./proyectController')
-const detailProyect = async (req, res) => {
+const { getProjectById } = require('./projectController')
+const detailProject = async (req, res) => {
     let { id } = req.params
 
     try {
-        let result = await getProyectById(id)
+        let result = await getProjectById(id)
         res.status(201).json(result)
     } catch (error) {
         res.status(406).json({ error: error.message })
@@ -46,8 +46,8 @@ const detailProyect = async (req, res) => {
 
 module.exports = {
     /* ruta '/' */
-    getProyects,
-    postProyect,
+    getProjects,
+    postProject,
     /* ruta '/search' */
-    detailProyect,
+    detailProject,
 }

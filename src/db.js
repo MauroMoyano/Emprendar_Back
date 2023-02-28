@@ -45,20 +45,22 @@ let capsEntries = entries.map(entry => [entry[0][0].toUpperCase() + entry[0].sli
 sequelize.models = Object.fromEntries(capsEntries)
 
 
-sequelize.sync({ force: false })
+sequelize.sync({ force: true })
     .then(() => {
         console.log('tablas creadas')
     }).catch((error) => {
         console.log(error)
     });
 
-const { Proyect, User } = sequelize.models
+const { Project, User, Category, Comment } = sequelize.models
 
 
-/* relacion de uno a muchos entre User(uno) a proyect */
-User.hasMany(Proyect);
-Proyect.belongsTo(User);
+/* relacion de uno a muchos entre User(uno) a project */
+User.hasMany(Project);
+Project.belongsTo(User);
+
+/* relacion de muchos a muchos entre Project y Category */
 
 //exportaamos la funcion y la instancia para luego crear los modelos
 
-module.exports = { conectarDB, ...sequelize.models, Proyect, User };
+module.exports = { conectarDB, ...sequelize.models, Project, User };
