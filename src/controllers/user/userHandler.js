@@ -1,5 +1,5 @@
 
-const { userCreate, getAllUsers, userByID } = require("../user/userController");
+const { userCreate, getAllUsers, userByID, getAllUserByName } = require("../user/userController");
 
 const postUserHanlder = async function (req, res) {
 
@@ -18,7 +18,7 @@ const getAllUsersHandler = async function (req, res) {
       const found = await getAllUsers();
       res.status(200).json(found);
     }else{
-      const anUser = await getAllUserByName;
+      const anUser = await getAllUserByName(name);
       res.status(200).json(anUser);
     }
   } catch (error) {

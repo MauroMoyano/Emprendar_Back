@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-    sequelize.define('proyect', {
+    sequelize.define('project', {
         id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
@@ -27,7 +27,7 @@ module.exports = (sequelize) => {
         },
         /* estado_proyecto: refiere a si aun está activo, en la parte de casos completado
         se mostrarian los proyectos con estado false (es decir, inactivos, porque se completaron) */
-        proyect_state: {
+        project_state: {
             type: DataTypes.BOOLEAN,
             defaultValue: true
         },
