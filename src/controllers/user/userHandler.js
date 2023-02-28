@@ -3,6 +3,8 @@ const {
   getAllUsers,
   userByID,
   getAllUserByName,
+  updateUser,
+  deleteUser,
 } = require("../user/userController");
 
 const postUserHanlder = async function (req, res) {
@@ -39,9 +41,31 @@ const getAllUserByIdHandler = async function (req, res) {
   }
 };
 
+const putUserHandler = async function (req, res) {
+  const { id } = req.params;
+  try {
+    const response = await updateUser(id);
+    res.status(200).send(response);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const deleteUserHandler = async function (req, res) {
+  const { id } = req.params;
+  try {
+    const response = await deleteUser(id);
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports = {
   postUserHanlder,
   getAllUsersHandler,
   getAllUserByIdHandler,
+  putUserHandler,
+  deleteUserHandler,
 };
 // {}
