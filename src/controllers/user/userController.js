@@ -10,7 +10,7 @@ const userCreate = async (data) => {
         password,
         profile_img
     });
-    console.log(newUser);
+
     return {
         msg: "El usuario se creo con exito"
     };
@@ -45,6 +45,8 @@ const getAllUserByName = async (user_name) => {
             deletedAt: null
         }
     });
+
+    console.log(infoDB);
 
     return infoDB.filter(user => user.dataValues.user_name.includes(user_name))
 }

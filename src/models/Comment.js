@@ -27,5 +27,5 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: false
         },
-    }, { timestamps: false, paranoid:true }) //habilitar el borrado logico
+    }, { paranoid: true }) //habilitar el borrado logico
 }
