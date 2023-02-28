@@ -1,5 +1,5 @@
 /* ruta '/' */
-const { searchProject, getAllProjects } = require('./projectController')
+const { searchProject, getAllProjects, deleteProject, updateProject, updateValidate } = require('./projectController')
 const getProjects = async (req, res) => {
     /* traerá todos los proyectos de no presentar query */
     let { name } = req.query
@@ -44,10 +44,50 @@ const detailProject = async (req, res) => {
 }
 
 
+const deleteProjectHl = async (req, res) => {
+    let { id } = req.params
+
+    try {
+        let result = await deleteProject(id)
+        res.status(201).json(result)
+    } catch (error) {
+        res.status(406).json({ error: error.message })
+    }
+
+}
+
+const updateProjectHl = async (req, res) => {
+    let { id } = req.params
+    
+    try {
+        let result = await updateProject(id,req.body)
+        res.status(201).json(result)
+    } catch (error) {
+        res.status(406).json({ error: error.message })
+    }
+
+}
+
+
+const updateValidateHl = async (req, res) => {
+    let { id } = req.params
+    let {validate} = req.body
+    try {
+        let result = await updateValidate(id,validate)
+        res.status(201).json(result)
+    } catch (error) {
+        res.status(406).json({ error: error.message })
+    }
+
+}
+
 module.exports = {
     /* ruta '/' */
     getProjects,
     postProject,
     /* ruta '/search' */
     detailProject,
+    deleteProjectHl,
+    updateProjectHl,
+    updateValidateHl
 }
