@@ -106,7 +106,7 @@ const updateProyect = async (id, data) => {
     if (!projectToUpdate) {
       throw new Error('No se encontró el proyecto');
     }
-    projectToUpdate.validate = newValidateValue;
+    projectToUpdate.validated = newValidateValue;
     await projectToUpdate.save();
     return projectToUpdate;
   }

@@ -8,7 +8,16 @@ module.exports = (sequelize) => {
             allowNull: false,
             primaryKey: true
         },
+        user_name:{
+            type: DataTypes.TEXT,
+            allowNull: false,
+            unique: true
+        },
         name: {
+            type: DataTypes.TEXT,
+            allowNull: false
+        },
+        last_name:{
             type: DataTypes.TEXT,
             allowNull: false
         },
@@ -31,7 +40,7 @@ module.exports = (sequelize) => {
         },
         /* el validado refiere a un link que tendria que ingresar
         el usuario una vez registrado para poder ingresar a la pagina */
-        validate: {
+        validated: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
         },

@@ -42,7 +42,7 @@ module.exports = (sequelize) => {
         img: {
             type: DataTypes.TEXT
         },
-        validate: {
+        validated: {
             type: DataTypes.ENUM('aceptado', 'rechazado', 'espera'),
             defaultValue: 'espera'
         }
