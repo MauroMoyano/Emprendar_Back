@@ -7,7 +7,7 @@ const postUserHanlder = async function (req, res) {
   try {
     if (name && email && password && profile_img) {
       const response = await userCreate(name, email, password, profile_img);
-      res.status(200).send(response);
+      res.status(200).json(response);
     }
   } catch (error) {
     res.status(400).json({ message: error.message });
