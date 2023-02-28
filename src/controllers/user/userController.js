@@ -1,4 +1,4 @@
-const { User } = require("../../db");
+const { User, Proyect } = require("../../db");
 
 const userCreate = async (name, email, password, profile_img) => {
     const newUser = await User.create({ name, email, password, profile_img });
@@ -26,17 +26,18 @@ const getAllUsers = async () => {
 };
 
 const userByID = async (userID) => {
-    const infoDB = await User.findByPk(userID);
-    console.log(infoDB)
-    const infoClean = {
-        id: infoDB.id,
-        name: infoDB.name,
-        email: infoDB.emale,
-        account_state: infoDB.account_state,
-        reputation: infoDB.reputation,
-        validated: infoDB.validated,
-        profile_img: infoDB.profile_img,
+    const infoUserDB = await User.findByPk(userID);
+    const infoUserClean = {
+        id: infoUserDB.id,
+        name: infoUserDB.name,
+        email: infoUserDB.emale,
+        account_state: infoUserDB.account_state,
+        reputation: infoUserDB.reputation,
+        validated: infoUserDB.validated,
+        profile_img: infoUserDB.profile_img,
     };
+
+    const infoProjectDB = await Proyect.findAll({where: {userId: userID}})
 
     return infoClean;
 };
