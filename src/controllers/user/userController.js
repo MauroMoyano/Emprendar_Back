@@ -1,45 +1,46 @@
-const { User } = require('../../db')
+const { User } = require("../../db");
 
+const userCreate = async (name, email, password, profile_img) => {
+  const newUser = await User.create({ name, email, password, profile_img });
+  console.log(newUser);
+  return "El usuario se creo con exito";
+};
 
-const UserCreate = async (name, email, password, profile_img) => {
-
-    const newUser = await User.create({ name, email, password, profile_img });
-    console.log(newUser);
-    return "El usuario se creo con exito"
-}
-
-const getAllUsers = async ()=>{
-    const infoDB = await User.findAll();
-    const infoClean = {
-        id: infoDB.id,
-        name: infoDB.name,
-        email: infoDB.emale,
-        account_state: infoDB.account_state,
-        reputation: infoDB.reputation,
-        validate: infoDB.validate,
-        profile_img: infoDB.profile_img,
+const getAllUsers = async () => {
+  const infoDB = await User.findAll();
+  const infoClean = infoDB.map(user => {
+    return {
+        id: user.dataValues.id,
+        name: user.dataValues.name,
+        email: user.dataValues.emale,
+        account_state: user.dataValues.account_state,
+        reputation: user.dataValues.reputation,
+        validate: user.dataValues.validate,
+        profile_img: user.dataValues.profile_img,
     }
-    
-    return infoClean;
-}
+  });
 
-const UserByID = async (userID) => {
-    const infoDB = await User.findByPk({where: {id: userID}})
-    const infoClean = {
-        id: infoDB.id,
-        name: infoDB.name,
-        email: infoDB.emale,
-        account_state: infoDB.account_state,
-        reputation: infoDB.reputation,
-        validate: infoDB.validate,
-        profile_img: infoDB.profile_img,
-    }
+  return infoClean;
+};
 
-    return infoClean;
-}
+const userByID = async (userID) => {
+  const infoDB = await User.findByPk(userID);
+  console.log(infoDB)
+  const infoClean = {
+    id: infoDB.id,
+    name: infoDB.name,
+    email: infoDB.emale,
+    account_state: infoDB.account_state,
+    reputation: infoDB.reputation,
+    validate: infoDB.validate,
+    profile_img: infoDB.profile_img,
+  };
+
+  return infoClean;
+};
 
 module.exports = {
-    UserCreate,
-    getAllUsers,
-    UserByID,
-}
+  userCreate,
+  getAllUsers,
+  userByID,
+};

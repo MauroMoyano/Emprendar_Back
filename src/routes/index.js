@@ -6,6 +6,6 @@ const mainRouter = Router()
 
 
 mainRouter.use('/user', routerUser)
-mainRouter.use('/proyec', routerProyect)
+mainRouter.use('/proyect', routerProyect)
 
 module.exports = mainRouter
