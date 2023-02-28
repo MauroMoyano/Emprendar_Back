@@ -100,11 +100,23 @@ const updateProyect = async (id, data) => {
   }
 
 
+  const updateValidate = async (id, newValidateValue) => {
+        //
+    const projectToUpdate = await Proyect.findByPk(id);
+    if (!projectToUpdate) {
+      throw new Error('No se encontró el proyecto');
+    }
+    projectToUpdate.validate = newValidateValue;
+    await projectToUpdate.save();
+    return projectToUpdate;
+  }
+
 module.exports = {
     addProyect,
     getProyectById,
     getAllProyects,
     searchProyect,
     deleteProyect,
-    updateProyect
+    updateProyect,
+    updateValidate
 }
