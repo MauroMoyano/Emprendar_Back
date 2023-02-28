@@ -34,5 +34,7 @@ app.use('/', require('./src/routes/index'))
 
 // "0.0.0.0"  el servidor estará disponible para conexiones entrantes desde cualquier dirección IP.
 app.listen(port, "0.0.0.0", () => {
-    console.log("el servidor esta corriendo en el puerto " + port);
+    console.log("el servidor esta corriendo en el puerto http://localhost:" + port);
+    /* prueba creado de usuarios y pryectos */
+    
 });
