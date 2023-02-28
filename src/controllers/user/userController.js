@@ -37,7 +37,7 @@ const userByID = async (userID) => {
         validated: infoDB.validated,
         profile_img: infoDB.profile_img,
     };
-
+    
     return infoClean;
 };
 
