@@ -80,9 +80,14 @@ const deleteProject = async (id) => {
                 id: id
             }
         })
+
+        return {
+            msg: 'Proyecto Eliminado Correctamente'
+        }
     } else {
         throw new Error('No existe el projecto a eliminar')
     }
+
 }
 
 const updateProject = async (id, data) => {
@@ -96,7 +101,7 @@ const updateProject = async (id, data) => {
     const updatedProject = await project.update(data);
   
     // devolver el projecto actualizado
-    return updatedProject;
+    return {msg: 'Proyecto actualizado correctamente'};
   }
 
 
@@ -108,7 +113,7 @@ const updateProject = async (id, data) => {
     }
     projectToUpdate.validated = newValidateValue;
     await projectToUpdate.save();
-    return projectToUpdate;
+    return {msg: 'Validacion actualizada correctamente'};
   }
 
 module.exports = {
