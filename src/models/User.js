@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
             allowNull: false,
             primaryKey: true
         },
-        user_name:{
+        user_name: {
             type: DataTypes.TEXT,
             allowNull: false,
             unique: true
@@ -17,7 +17,7 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: false
         },
-        last_name:{
+        last_name: {
             type: DataTypes.TEXT,
             allowNull: false
         },
@@ -49,5 +49,5 @@ module.exports = (sequelize) => {
             /* default: poner <imagen> (link), a nube de imagen tipica de usuario sin foto de perfil */
             allowNull: false
         }
-    }, { timestamps: false, paranoid:true }) // habilitar el borrado logico
+    }, { paranoid: true }) // habilitar el borrado logico
 }
