@@ -44,7 +44,7 @@ const getAllUserByIdHandler = async function (req, res) {
 const putUserHandler = async function (req, res) {
   const { id } = req.params;
   try {
-    const response = await updateUser(id);
+    const response = await updateUser(id, req.body);
     res.status(200).send(response);
   } catch (error) {
     res.status(400).json({ message: error.message });
