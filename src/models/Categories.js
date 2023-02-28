@@ -12,5 +12,7 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false
         }
+    },{
+        paranoid:true //habilitar el borrado logico
     })
 }

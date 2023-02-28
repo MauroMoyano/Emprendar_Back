@@ -40,5 +40,5 @@ module.exports = (sequelize) => {
             /* default: poner <imagen> (link), a nube de imagen tipica de usuario sin foto de perfil */
             allowNull: false
         }
-    }, { timestamps: false })
+    }, { timestamps: false, paranoid:true }) // habilitar el borrado logico
 }

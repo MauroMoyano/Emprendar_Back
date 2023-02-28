@@ -37,30 +37,74 @@ const getProyectById = async (id) => {
 
 const getAllProyects = async () => {
     //buscamos todos los proyectos
-    const proyects = await Proyect.findAll()
+    const proyects = await Proyect.findAll({
+        where: {
+            deletedAt: null
+        }
+    })
 
     //si hay proyectos retornarlos
     if (proyects) return proyects
     //de lo contrario retornar este mensaje
-    else  throw new Error ('No se encontraron proyectos')
+    else throw new Error('No se encontraron proyectos')
 }
 
 const searchProyect = async (proyectTitle) => {
     //buscamos el proyecto por el nombre
-    let proyect = await Proyect.findAll()
+    let proyect = await Proyect.findAll({
+        where: {
+            detetedAt: null
+        }
+    })
 
     proyect = proyect.filter(pj => pj.dataValues.title.includes(proyectTitle))
 
     if (!proyect) throw new Error('No existe ningun proyecto con este nombre')
 
-    return proyect 
+    return proyect
 }
 
+
+//funcion borrar proyect
+const deleteProyect = async (id) => {
+
+    const proyectDelete = await Proyect.findOne({
+        where: {
+            id: id
+        }
+    })
+
+    if (proyectDelete) {
+        await Proyect.destroy({
+            where: {
+                id: id
+            }
+        })
+    } else {
+        throw new Error('No existe el proyecto a eliminar')
+    }
+}
+
+const updateProyect = async (id, data) => {
+    // buscar el proyecto por id
+    const proyect = await Proyect.findByPk(id);
+  
+    // comprobar que el proyecto existe
+    if (!proyect) throw new Error('No se encontró el proyecto');
+  
+    // actualizar los valores del proyecto
+    const updatedProyect = await proyect.update(data);
+  
+    // devolver el proyecto actualizado
+    return updatedProyect;
+  }
 
 
 module.exports = {
     addProyect,
     getProyectById,
     getAllProyects,
-    searchProyect
+    searchProyect,
+    deleteProyect,
+    updateProyect
 }
