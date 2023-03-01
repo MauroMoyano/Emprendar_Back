@@ -1,5 +1,8 @@
-const { User, Project } = require("../../db");
+const { emailRegistro } = require("../../../utils/emails");
+const { generateToken } = require("../../../utils/generateToken");
+const { generateJWT } = require("../../../utils/generateJWT");
 
+const { User, Project } = require("../../db");
 const userCreate = async (data) => {
     let { user_name, name, last_name, email, password, profile_img } = data
     if(!user_name || !name || !last_name || !email || !password || !profile_img){
@@ -10,15 +13,23 @@ const userCreate = async (data) => {
       if(comparador){
         throw new Error("Este nombre de usuario ya éxiste");
       }else{
+
         const newUser = await User.create({
           user_name,
           name,
           last_name,
           email,
           password,
-          profile_img
+          profile_img,
+          token: generateToken()
         });
-        console.log(newUser);
+
+        emailRegistro({
+          email: newUser.email,
+          name: newUser.name,
+          token: newUser.token
+        })
+        
         return {
             msg: "El usuario se creo con exito"
         };
@@ -26,6 +37,74 @@ const userCreate = async (data) => {
     }
 
 };
+
+
+const confirmeUser = async (token) => {
+
+  const userToConfirm = await User.findOne({
+    where: {
+      token: token
+    }
+  })
+
+    if(!userToConfirm){
+      throw new Error('Token no valido')
+    }
+
+    userToConfirm.token = ""
+    userToConfirm.confirmed = true
+
+    await userToConfirm.save()
+
+    return 'Confirmado correctamente'
+}
+
+
+const authUser = async (data) => {
+
+  const {email, password} = data
+
+    //comprobar si el usuario existe
+
+      const user = await User.findOne({
+        where: {
+          email
+        }
+      })
+
+      if(!user) {
+        throw new Error('No existe ningun usuario con este correo')
+      }
+
+      // comprobar si el usuario esta confirmado
+
+        if(!user.confirmed) {
+          throw new Error('Tu cuenta no a sido confirmada')
+        }
+
+        //comprobar password
+
+        if(await user.password === password) {
+
+
+          const infoUser = {
+            id: user.id,
+            name: user.name,
+            email:user.email,
+            token: generateJWT(user.id)
+          }
+
+          const infoProjectDB = await Project.findAll({ where: { userId: user.id } })
+
+          const infoMixed = {...infoUser, userProjects: infoProjectDB}
+
+          return infoMixed;
+      
+        } else {
+          throw new Error('Password incorrecto')
+        }
+
+}
 
 const getAllUsers = async () => {
     const infoDB = await User.findAll({
@@ -39,11 +118,13 @@ const getAllUsers = async () => {
             user_name: user.dataValues.user_name,
             name: user.dataValues.name,
             last_name: user.dataValues.last_name,
-            email: user.dataValues.emale,
+            email: user.dataValues.email,
             account_state: user.dataValues.account_state,
             reputation: user.dataValues.reputation,
             validated: user.dataValues.validated,
             profile_img: user.dataValues.profile_img,
+            token: user.dataValues.token,
+            confirmed: user.dataValues.confirmed
         }
     });
 
@@ -74,7 +155,7 @@ const getAllUserByName = async (user_name) => {
           user_name: user.user_name,
           name: user.name,
           last_name: user.last_name,
-          email: user.emale,
+          email: user.email,
           account_state: user.account_state,
           reputation: user.reputation,
           validated: user.validated,
@@ -100,7 +181,7 @@ const userByID = async (userID) => {
         user_name: infoUserDB.user_name,
         name: infoUserDB.name,
         last_name: infoUserDB.last_name,
-        email: infoUserDB.emale,
+        email: infoUserDB.email,
         account_state: infoUserDB.account_state,
         reputation: infoUserDB.reputation,
         validated: infoUserDB.validated,
@@ -148,6 +229,10 @@ const deleteUser = async (userID) =>{
   }
 }
 
+
+
+
+
 module.exports = {
     getAllUserByName,
     userCreate,
@@ -155,4 +240,6 @@ module.exports = {
     userByID,
     deleteUser,
     updateUser,
+    confirmeUser,
+    authUser
 };

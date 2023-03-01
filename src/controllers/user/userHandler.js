@@ -5,6 +5,8 @@ const {
   getAllUserByName,
   updateUser,
   deleteUser,
+  confirmeUser,
+  authUser
 } = require("../user/userController");
 
 const postUserHanlder = async function (req, res) {
@@ -61,11 +63,38 @@ const deleteUserHandler = async function (req, res) {
   }
 };
 
+const confirmeUserHl = async function(req,res) {
+  const {token} = req.params
+
+  try {
+    const response =  await  confirmeUser(token)
+
+    res.status(200).json(response)
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+}
+
+
+const authUserHl = async function(req,res) {
+  
+  try {
+      const response = await authUser(req.body)
+
+      res.status(200).json(response)
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+
+}
+
 module.exports = {
   postUserHanlder,
   getAllUsersHandler,
   getAllUserByIdHandler,
   putUserHandler,
   deleteUserHandler,
+  confirmeUserHl,
+  authUserHl
 };
 // {}
