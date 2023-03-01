@@ -1,41 +1,21 @@
-const { emailRegistro } = require("../../../utils/emails");
+const { emailRegistro } = require("../../../utils/emails");  
 const { generateToken } = require("../../../utils/generateToken");
 const { generateJWT } = require("../../../utils/generateJWT");
 
 const { User, Project } = require("../../db");
 const userCreate = async (data) => {
     let { user_name, name, last_name, email, password, profile_img } = data
-    if(!user_name || !name || !last_name || !email || !password || !profile_img){
-      throw new Error("Por favor complete todos los campos");
-    }else{
-      const comparador = await User.findOne({where: {user_name: user_name}})
-
-      if(comparador){
-        throw new Error("Este nombre de usuario ya éxiste");
-      }else{
-
-        const newUser = await User.create({
-          user_name,
-          name,
-          last_name,
-          email,
-          password,
-          profile_img,
-          token: generateToken()
-        });
-
-        emailRegistro({
-          email: newUser.email,
-          name: newUser.name,
-          token: newUser.token
-        })
-        
-        return {
-            msg: "El usuario se creo con exito"
-        };
-      }
-    }
-
+    const newUser = await User.create({
+      user_name,
+      name,
+      last_name,
+      email,
+      password,
+      profile_img
+  });
+  return {
+    msg: "El usuario se creo con exito"
+  };
 };
 
 
@@ -168,36 +148,20 @@ const getAllUserByName = async (user_name) => {
 }
 
 const userByID = async (userID) => {
-
-  if(!userID){
-    throw new Error("No se especificó el ID del usuario");
-  }else{
-    const infoUserDB = await User.findByPk(userID);
-    if(!infoUserDB){
-      throw new Error("No se encontró ningun usuario con ese ID")
-    }else{
-      const infoUserClean = {
-        id: infoUserDB.id,
-        user_name: infoUserDB.user_name,
-        name: infoUserDB.name,
-        last_name: infoUserDB.last_name,
-        email: infoUserDB.email,
-        account_state: infoUserDB.account_state,
-        reputation: infoUserDB.reputation,
-        validated: infoUserDB.validated,
-        profile_img: infoUserDB.profile_img,
-      };
-
-      const infoProjectDB = await Project.findAll({ where: { userId: userID } })
-
-      const infoMixed = {...infoUserClean, userProjects: infoProjectDB}
-
-      return infoMixed;
-    }
-    
+  const infoDB = await User.findByPk(userID)
+  const infoClean = {
+      id: infoDB.id,
+      name: infoDB.name,
+      email: infoDB.emale,
+      account_state: infoDB.account_state,
+      reputation: infoDB.reputation,
+      validate: infoDB.validate, 
+      profile_img: infoDB.profile_img,
   }
-   
-};
+
+  return infoClean;
+}
+
 
 
 const updateUser = async (id, data) => {
