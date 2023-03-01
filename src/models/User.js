@@ -51,6 +51,15 @@ module.exports = (sequelize) => {
         /* default: poner <imagen> (link), a nube de imagen tipica de usuario sin foto de perfil */
         allowNull: false,
       },
+      token: {
+        type: DataTypes.STRING,
+        defaultValue: ""
+      }
+      ,
+      confirmed : {
+        type:DataTypes.BOOLEAN,
+        defaultValue: false
+      }
     },
     { paranoid: true }
   ); // habilitar el borrado logico

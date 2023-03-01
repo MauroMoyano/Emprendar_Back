@@ -49,43 +49,43 @@ sequelize.sync({ force: true })
     .then(() => {
         console.log('tablas creadas')
     })
-    .then(async () => {
-        let arrUser = [
-            { user_name: "lechu", name: "lautaro", last_name: "garcia", email: "lechu@lechumail.com", password: "lechu1234", profile_img: "algo" },
-            { user_name: "samm", name: "samy", last_name: "samy", email: "samy@samymail.com", password: "samy1234", profile_img: "algo" },
-            { user_name: "jonny", name: "johnny", last_name: "test", email: "jonny@jonnymail.com", password: "jonny1234", profile_img: "algo" },
-            { user_name: "nachito", name: "juan", last_name: "arguello", email: "nachito@nachitomail.com", password: "nachito1234", profile_img: "algo" },
-        ];
-        let arrProject = [
-            { title: 'pala', summary: 'necesito pala', description: 'mi descripcion del proyecto', goal: 600, img: 'algo', userId: '', category: ["emprendimiento", "educacion"] },
-            { title: 'palita', summary: 'necesito palita', description: 'mi descripcion del proyecto', goal: 213, img: 'algo', userId: '', category: ["emprendimiento", "medicina"] },
-            { title: 'pico', summary: 'necesito un pico', description: 'mi descripcion del proyecto', goal: 1200, img: 'algo', userId: '', category: ["emprendimiento", "ambiental"] }
-        ]
+    // .then(async () => {
+    //     let arrUser = [
+    //         { user_name: "lechu", name: "lautaro", last_name: "garcia", email: "lechu@lechumail.com", password: "lechu1234", profile_img: "algo" },
+    //         { user_name: "samm", name: "samy", last_name: "samy", email: "samy@samymail.com", password: "samy1234", profile_img: "algo" },
+    //         { user_name: "jonny", name: "johnny", last_name: "test", email: "jonny@jonnymail.com", password: "jonny1234", profile_img: "algo" },
+    //         { user_name: "nachito", name: "juan", last_name: "arguello", email: "nachito@nachitomail.com", password: "nachito1234", profile_img: "algo" },
+    //     ];
+    //     let arrProject = [
+    //         { title: 'pala', summary: 'necesito pala', description: 'mi descripcion del proyecto', goal: 600, img: 'algo', userId: '', category: ["emprendimiento", "educacion"] },
+    //         { title: 'palita', summary: 'necesito palita', description: 'mi descripcion del proyecto', goal: 213, img: 'algo', userId: '', category: ["emprendimiento", "medicina"] },
+    //         { title: 'pico', summary: 'necesito un pico', description: 'mi descripcion del proyecto', goal: 1200, img: 'algo', userId: '', category: ["emprendimiento", "ambiental"] }
+    //     ]
 
-        let arrCategory = ["tecnologia", "ambiental", "cultural", "social", "medicina", "educacion", "emprendimiento"]
+    //     let arrCategory = ["tecnologia", "ambiental", "cultural", "social", "medicina", "educacion", "emprendimiento"]
 
-        arrCategory.forEach(async (cat) => {
-            await Category.create({
-                name: cat
+    //     arrCategory.forEach(async (cat) => {
+    //         await Category.create({
+    //             name: cat
 
-            })
-        })
+    //         })
+    //     })
 
-        arrUser.forEach(async (user) => {
-            let newUser = await User.create(user)
-            arrProject.forEach(async (project) => {
-                let proj = await Project.create({ title: project.title, summary: project.summary, description: project.description, goal: project.goal, img: project.img, userId: newUser.id })
-                project.category.forEach(async (cat) => {
-                    let catt = await Category.findOne({ where: { name: cat } })
-                    await proj.addCategory(catt)
-                })
-            })
-        });
+    //     arrUser.forEach(async (user) => {
+    //         let newUser = await User.create(user)
+    //         arrProject.forEach(async (project) => {
+    //             let proj = await Project.create({ title: project.title, summary: project.summary, description: project.description, goal: project.goal, img: project.img, userId: newUser.id })
+    //             project.category.forEach(async (cat) => {
+    //                 let catt = await Category.findOne({ where: { name: cat } })
+    //                 await proj.addCategory(catt)
+    //             })
+    //         })
+    //     });
 
-    })
-    .catch((error) => {
-        console.log(error)
-    });
+    // })
+    // .catch((error) => {
+    //     console.log(error)
+    // });
 
 const { Project, User, Category, Comment } = sequelize.models
 
