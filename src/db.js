@@ -87,7 +87,7 @@ sequelize.sync({ force: true })
         console.log(error)
     });
 
-const { Project, User, Category, Comment } = sequelize.models
+const { Project, User, Category, Comment, middle_Project_Category } = sequelize.models
 
 
 /* relacion de uno a muchos entre User(uno) a project */
@@ -98,7 +98,15 @@ Project.belongsTo(User);
 Project.belongsToMany(Category, { through: 'middle_Project_Category', timestamps: false });
 Category.belongsToMany(Project, { through: 'middle_Project_Category', timestamps: false });
 
+/* relacion de muchos a uno entre 3 tablas. Comment, Project, User */
+/* en User */
+User.hasMany(Comment)
+Comment.belongsTo(User)
+/* en Project */
+Project.hasMany(Comment)
+Comment.belongsTo(Project)
+
 
 //exportaamos la funcion y la instancia para luego crear los modelos
 
-module.exports = { conectarDB, ...sequelize.models, Project, User };
+module.exports = { conectarDB, ...sequelize.models };

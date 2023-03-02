@@ -35,25 +35,29 @@ const getProjectById = async (id) => {
 
 }
 
+
 const getAllProjects = async () => {
     //buscamos todos los projectos
     const projects = await Project.findAll({
         where: {
+            validated: 'aceptado',
             deletedAt: null
         }
     })
-
+    console.log(projects);
     //si hay projectos retornarlos
     if (projects) return projects
     //de lo contrario retornar este mensaje
     else throw new Error('No se encontraron projectos')
 }
 
+
 const searchProject = async (projectTitle) => {
     //buscamos el projecto por el nombre
+    console.log(projectTitle);
     let project = await Project.findAll({
         where: {
-            detetedAt: null
+            deletedAt: null
         }
     })
 
@@ -90,31 +94,32 @@ const deleteProject = async (id) => {
 
 }
 
+
 const updateProject = async (id, data) => {
     // buscar el projecto por id
     const project = await Project.findByPk(id);
-  
+
     // comprobar que el projecto existe
     if (!project) throw new Error('No se encontró el projecto');
-  
+
     // actualizar los valores del projecto
     const updatedProject = await project.update(data);
-  
+
     // devolver el projecto actualizado
-    return {msg: 'Proyecto actualizado correctamente'};
-  }
+    return { msg: 'Proyecto actualizado correctamente' };
+}
 
 
-  const updateValidate = async (id, newValidateValue) => {
-        //
+const updateValidate = async (id, newValidateValue) => {
+    //
     const projectToUpdate = await Project.findByPk(id);
     if (!projectToUpdate) {
-      throw new Error('No se encontró el proyecto');
+        throw new Error('No se encontró el proyecto');
     }
     projectToUpdate.validated = newValidateValue;
     await projectToUpdate.save();
-    return {msg: 'Validacion actualizada correctamente'};
-  }
+    return { msg: 'Validacion actualizada correctamente' };
+}
 
 module.exports = {
     addProject,
