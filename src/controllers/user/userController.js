@@ -16,15 +16,14 @@ const userCreate = async (data) => {
   ) {
     throw new Error("Por favor complete todos los campos");
   } else {
-    const findUserName = await User.findOne({
-      where: { user_name: user_name },
-    });
-    const findUserEmail = await User.findOne({ where: { email: email } });
+    const findUser = await User.findOne({ where: { user_name: user_name } });
+    const findEmail = await User.findOne({ where: { email: email } });
 
-    if (findUserEmail) {
-      throw new Error("Este email ya existe");
-    } else if (findUserName) {
-      throw new Error("Este nombre de usuario ya existe");
+    if (findEmail) {
+      throw new Error("Este correo electronico ya esta registrado");
+    }
+    if (findUser) {
+      throw new Error("Este nombre de usuario ya éxiste");
     } else {
       password = await bcrypt.hash(password, 8);
 

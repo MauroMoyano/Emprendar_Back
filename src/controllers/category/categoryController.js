@@ -5,10 +5,7 @@ const getCategories = async () => {
     let categories = await Category.findAll()
 
     return categories.map(cat => {
-        return {
-            id: cat.dataValues.id,
-            name: cat.dataValues.name
-        }
+        return cat.dataValues.name
     });
 }
 
