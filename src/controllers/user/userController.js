@@ -16,10 +16,15 @@ const userCreate = async (data) => {
   ) {
     throw new Error("Por favor complete todos los campos");
   } else {
-    const findUser = await User.findOne({ where: { user_name: user_name } });
+    const findUserName = await User.findOne({
+      where: { user_name: user_name },
+    });
+    const findUserEmail = await User.findOne({ where: { email: email } });
 
-    if (findUser) {
-      throw new Error("Este nombre de usuario ya éxiste");
+    if (findUserEmail) {
+      throw new Error("Este email ya existe");
+    } else if (findUserName) {
+      throw new Error("Este nombre de usuario ya existe");
     } else {
       password = await bcrypt.hash(password, 8);
 
@@ -40,7 +45,7 @@ const userCreate = async (data) => {
       });
 
       return {
-        msg: "El usuario se creo con exito",
+        msg: "El usuario se creo con éxito",
       };
     }
   }
@@ -83,7 +88,7 @@ const authUser = async (data) => {
   // comprobar si el usuario esta confirmado
 
   if (!user.confirmed) {
-    throw new Error("Tu cuenta no a sido confirmada");
+    throw new Error("Tu cuenta no ha sido confirmada");
   }
 
   //comprobar password
