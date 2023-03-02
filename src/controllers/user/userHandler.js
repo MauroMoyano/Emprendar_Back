@@ -7,6 +7,7 @@ const {
   deleteUser,
   confirmeUser,
   authUser,
+  getAllUserInfoAdmin,
 } = require("../user/userController");
 
 const postUserHanlder = async function (req, res) {
@@ -85,6 +86,17 @@ const authUserHl = async function (req, res) {
   }
 };
 
+/* handler de ADMIN. */
+
+const getAllUserDataAdmin = async function (req, res) {
+  try {
+    let result = await getAllUserInfoAdmin();
+    res.status(201).json(result);
+  } catch (error) {
+    res.status(406).json({ error: error.message });
+  }
+};
+
 module.exports = {
   postUserHanlder,
   getAllUsersHandler,
@@ -93,5 +105,7 @@ module.exports = {
   deleteUserHandler,
   confirmeUserHl,
   authUserHl,
+  /* handlers ADMINS. */
+  getAllUserDataAdmin,
 };
 // {}
