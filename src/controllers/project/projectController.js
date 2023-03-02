@@ -1,10 +1,10 @@
-const { Project } = require('../../db')
+const { Project, User } = require('../../db')
 
 const addProject = async (data) => {
 
     //TODO crear validaciones
 
-    const { title, summary, description, goal, img, userId } = data
+    const { title, summary, description, goal, img, userId, country, user_name } = data
 
     //validacion precaria xd
     if (title === '' || summary === '' || description === '' || img === '' || userId === '') {
@@ -20,6 +20,8 @@ const addProject = async (data) => {
         description,
         goal,
         img,
+        country,
+        user_name,
         userId: userId  //esto viene del user autenticado
     })
     return {
@@ -44,7 +46,15 @@ const getAllProjects = async () => {
             deletedAt: null
         }
     })
-    console.log(projects);
+
+
+    /* let allProjects = await projects.forEach(async proj => {
+        console.log(proj.userId);
+        let user = await User.findByPk(proj.userId)
+        console.log(user);
+        return { ...proj, user_name: user.user_name}
+    }); */
+
     //si hay projectos retornarlos
     if (projects) return projects
     //de lo contrario retornar este mensaje
