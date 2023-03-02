@@ -23,6 +23,13 @@ module.exports = (sequelize) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
+      /* agregar mas paises LatinoAmericanos.
+      TODO: ver de agregar provincias nomas de los paises, asi desde el front mostrar para otra opcion
+      de filtrado mas especifica. */
+      country: {
+        type: DataTypes.ENUM('Argentina', 'Chile', 'Bolivia', 'Paraguay', 'Uruguay', 'Colombia', 'Peru'),
+        allowNull: true
+      },
       email: {
         type: DataTypes.TEXT,
         allowNull: false,
@@ -32,20 +39,16 @@ module.exports = (sequelize) => {
         allowNull: false,
       },
       /* estado, la posibilidad de que el usuario sea bloqueado o borrado por metodo logico */
-      account_state: {
+      /* comentado debido a que trabajamos con "paranoid" para el borrado lógico */
+      /* account_state: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
-      },
+      }, */
       reputation: {
         type: DataTypes.DECIMAL,
         defaultValue: 0,
       },
-      /* el validado refiere a un link que tendria que ingresar
-        el usuario una vez registrado para poder ingresar a la pagina */
-      validated: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
+
       profile_img: {
         type: DataTypes.TEXT,
         /* default: poner <imagen> (link), a nube de imagen tipica de usuario sin foto de perfil */
@@ -54,10 +57,19 @@ module.exports = (sequelize) => {
       token: {
         type: DataTypes.STRING,
         defaultValue: ""
-      }
-      ,
-      confirmed : {
-        type:DataTypes.BOOLEAN,
+      },
+      /* el validado refiere a un link que tendria que ingresar
+        el usuario una vez registrado para poder ingresar a la pagina */
+      confirmed: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      },
+      /* TODO: esto haria referencia a que el usuario ha sido eliminado por parte del staff.
+      si el usuario se dio de baja, puede volver a levantar su cuenta "mandando un token de confirmacion"
+      dado el caso de que haya sido borrado por nosotros, el usuario, no tendra permitido volver a ingresar
+      con este mismo email. */
+      eliminatedByAdmin: {
+        type: DataTypes.BOOLEAN,
         defaultValue: false
       }
     },

@@ -6,7 +6,8 @@ const {
   updateUser,
   deleteUser,
   confirmeUser,
-  authUser
+  authUser,
+  getAllUserInfoAdmin
 } = require("../user/userController");
 
 const postUserHanlder = async function (req, res) {
@@ -63,30 +64,45 @@ const deleteUserHandler = async function (req, res) {
   }
 };
 
-const confirmeUserHl = async function(req,res) {
-  const {token} = req.params
+const confirmeUserHl = async function (req, res) {
+  const { token } = req.params
 
   try {
-    const response =  await  confirmeUser(token)
+    const response = await confirmeUser(token)
 
     res.status(200).json(response)
   } catch (error) {
-    res.status(400).json({message: error.message})
+    res.status(400).json({ message: error.message })
   }
 }
 
 
-const authUserHl = async function(req,res) {
-  
+const authUserHl = async function (req, res) {
+
   try {
-      const response = await authUser(req.body)
+    const response = await authUser(req.body)
 
-      res.status(200).json(response)
+    res.status(200).json(response)
   } catch (error) {
-    res.status(400).json({message: error.message})
+    res.status(400).json({ message: error.message })
   }
 
 }
+
+
+/* handler de ADMIN. */
+
+const getAllUserDataAdmin = async function (req, res) {
+
+  try {
+    let result = await getAllUserInfoAdmin()
+    res.status(201).json(result)
+  } catch (error) {
+    res.status(406).json({ error: error.message })
+  }
+}
+
+
 
 module.exports = {
   postUserHanlder,
@@ -95,6 +111,8 @@ module.exports = {
   putUserHandler,
   deleteUserHandler,
   confirmeUserHl,
-  authUserHl
+  authUserHl,
+  /* handlers ADMINS. */
+  getAllUserDataAdmin
 };
 // {}
