@@ -1,6 +1,7 @@
-const { emailRegistro } = require("../../../utils/emails");
+const { emailRegistration } = require("../../../utils/emails");
 const { generateToken } = require("../../../utils/generateToken");
 const { generateJWT } = require("../../../utils/generateJWT");
+const bcrypt = require("bcrypt")
 
 const { User, Project } = require("../../db");
 const userCreate = async (data) => {
@@ -8,11 +9,13 @@ const userCreate = async (data) => {
     if(!user_name || !name || !last_name || !email || !password || !profile_img){
       throw new Error("Por favor complete todos los campos");
     }else{
-      const comparador = await User.findOne({where: {user_name: user_name}})
+      const findUser = await User.findOne({where: {user_name: user_name}})
 
-      if(comparador){
+      if(findUser){
         throw new Error("Este nombre de usuario ya éxiste");
       }else{
+
+        password = await bcrypt.hash(password, 8);
 
         const newUser = await User.create({
           user_name,
@@ -24,7 +27,7 @@ const userCreate = async (data) => {
           token: generateToken()
         });
 
-        emailRegistro({
+        emailRegistration({
           email: newUser.email,
           name: newUser.name,
           token: newUser.token
@@ -83,8 +86,8 @@ const authUser = async (data) => {
         }
 
         //comprobar password
-
-        if(await user.password === password) {
+        const passwordIsTheSame = bcrypt.compareSync(password, user.password)
+        if(passwordIsTheSame) {
 
 
           const infoUser = {
@@ -94,11 +97,8 @@ const authUser = async (data) => {
             token: generateJWT(user.id)
           }
 
-          const infoProjectDB = await Project.findAll({ where: { userId: user.id } })
 
-          const infoMixed = {...infoUser, userProjects: infoProjectDB}
-
-          return infoMixed;
+          return infoUser;
       
         } else {
           throw new Error('Password incorrecto')
@@ -204,8 +204,21 @@ const updateUser = async (id, data) => {
   const userFind = await User.findByPk(id);
   if(!userFind) throw new Error('No se encontró el usuario');
 
-  const updatedUser = await userFind.update(data);
-  console.log(updatedUser);
+  let { user_name, name, last_name, profile_img, email, password } = data;
+
+
+  if(user_name) userFind.user_name = user_name;
+  if(name) userFind.name = name;
+  if(last_name) userFind.last_name = last_name;
+  if(profile_img) userFind.profile_img = profile_img;
+  if(email) userFind.email = email;
+  if(password){
+    const passwordHash = await bcrypt.hash(password, 8);
+    userFind.password = passwordHash;
+  }
+  await userFind.save()
+  // const updatedUser = await userFind.update(data);
+  console.log(userFind);
 
   return {msg: 'Usuario actualizado correctamente'};
 }

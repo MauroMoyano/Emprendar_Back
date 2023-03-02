@@ -1,7 +1,7 @@
 const nodemailer =  require('nodemailer')
 
 
- const emailRegistro = async (datos) => {
+ const emailRegistration = async (datos) => {
 
     
     const { email, name, token } = datos;
@@ -33,5 +33,5 @@ const nodemailer =  require('nodemailer')
 
 
 module.exports = {
-    emailRegistro
+    emailRegistration
 }
