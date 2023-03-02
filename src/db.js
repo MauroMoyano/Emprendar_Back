@@ -51,15 +51,52 @@ sequelize.sync({ force: true })
     })
     .then(async () => {
         let arrUser = [
-            { user_name: "lechu", name: "lautaro", last_name: "garcia", email: "lechu@lechumail.com", password: "lechu1234", profile_img: "algo" },
-            { user_name: "samm", name: "samy", last_name: "samy", email: "samy@samymail.com", password: "samy1234", profile_img: "algo" },
-            { user_name: "jonny", name: "johnny", last_name: "test", email: "jonny@jonnymail.com", password: "jonny1234", profile_img: "algo" },
-            { user_name: "nachito", name: "juan", last_name: "arguello", email: "nachito@nachitomail.com", password: "nachito1234", profile_img: "algo" },
+            { user_name: "lechu", name: "lautaro", last_name: "garcia", country: "Chile", email: "lechu@lechumail.com", password: "lechu1234", profile_img: "algo" },
+            { user_name: "jonny", name: "johnny", last_name: "hernandez", country: "Uruguay", email: "jonny@jonnymail.com", password: "jonny1234", profile_img: "algo" },
+            { user_name: "sandy", name: "sandy", last_name: "pestaña", country: "Uruguay", email: "samy@samymail.com", password: "samy1234", profile_img: "algo" },
+            { user_name: "nachito", name: "juan", last_name: "arguello", country: "Chile", email: "nachito@nachitomail.com", password: "nachito1234", profile_img: "algo" },
         ];
         let arrProject = [
-            { title: 'pala', summary: 'necesito pala', description: 'mi descripcion del proyecto', goal: 600, img: 'algo', userId: '', category: ["emprendimiento", "educacion"] },
-            { title: 'palita', summary: 'necesito palita', description: 'mi descripcion del proyecto', goal: 213, img: 'algo', userId: '', category: ["emprendimiento", "medicina"] },
-            { title: 'pico', summary: 'necesito un pico', description: 'mi descripcion del proyecto', goal: 1200, img: 'algo', userId: '', category: ["emprendimiento", "ambiental"] }
+            {
+                title: 'herramientas para emprendimiento',
+                summary: 'necesito mas herramientas para el emprendimiento',
+                description: 'necesito algo de plata para poder adquirir unas herramientas necesarias para poder continuar con mi emprendimiento y seguir adelante',
+                goal: 600,
+                amount_collected: 560,
+                img: 'algo' /* 'https://bynder.sbdinc.com/m/23371ada92b5637e/Drupal_Large-STMT82780_A1.jpg' */,
+                userId: '',
+                category: ["emprendimiento", "cultural"]
+            },
+            {
+                title: 'herramientas de poda',
+                summary: 'necesito herramientas para jardineria',
+                description: 'las herramientas que tengo se me fueron rompiendo y no tengo la plata necesaria para poder comprarme unas nuevas en este momento',
+                goal: 213,
+                amount_collected: 100,
+                img: 'algo',
+                userId: '',
+                category: ["emprendimiento"]
+            },
+            {
+                title: 'proyecto inmobiliario',
+                summary: 'necesito algunos recursos para poder empezar a arreglar mi local y empezar',
+                description: 'tengo el lugar para pdoer empezar pero no las condiciones para trabajar dentro, tengo que darle una mano de pintura y agregar unas cosas mas para que quede presentable para el publico',
+                goal: 1200,
+                amount_collected: 920,
+                img: 'algo',
+                userId: '',
+                category: ["emprendimiento", "social"]
+            },
+            {
+                title: 'colecta para hospital',
+                summary: 'recaudacion de fondos',
+                description: 'el hospital se esta quedando corto de presupuesto, por lo que estamos juntando dinero para poder comprar elementos necesarios para poder continuar con las labores internas, con los procesimientos como se deben y la compra de instruimental necesarios',
+                goal: 22000,
+                amount_collected: 1420,
+                img: 'algo',
+                userId: '',
+                category: ["medicina", "social"]
+            }
         ]
 
         let arrCategory = ["tecnologia", "ambiental", "cultural", "social", "medicina", "educacion", "emprendimiento"]
@@ -72,22 +109,62 @@ sequelize.sync({ force: true })
         })
 
         arrUser.forEach(async (user) => {
-            let newUser = await User.create(user)
-            arrProject.forEach(async (project) => {
-                let proj = await Project.create({ title: project.title, summary: project.summary, description: project.description, goal: project.goal, img: project.img, userId: newUser.id })
-                project.category.forEach(async (cat) => {
-                    let catt = await Category.findOne({ where: { name: cat } })
-                    await proj.addCategory(catt)
-                })
-            })
-        });
 
+            let newUser = await User.create(user)
+
+            let proj
+            newUser.user_name === "lechu"
+                ? (
+                    proj = await Project.create({ ...arrProject[0], userId: newUser.id, validated: 'aceptado' }),
+                    arrProject[0].category.map(async (cat) => {
+
+                        let catt = await Category.findOne({ where: { name: cat } })
+
+                        await proj.addCategory(catt)
+
+                    })
+                )
+                : newUser.user_name === "sandy"
+                    ? (
+                        proj = await Project.create({ ...arrProject[1], userId: newUser.id, validated: 'aceptado' }),
+                        arrProject[1].category.map(async (cat) => {
+
+                            let catt = await Category.findOne({ where: { name: cat } })
+
+                            await proj.addCategory(catt)
+
+                        })
+                    )
+                    : newUser.user_name === "jonny"
+                        ? (
+                            proj = await Project.create({ ...arrProject[2], userId: newUser.id, validated: 'aceptado' }),
+                            arrProject[2].category.map(async (cat) => {
+
+                                let catt = await Category.findOne({ where: { name: cat } })
+
+                                await proj.addCategory(catt)
+
+                            })
+                        )
+                        : newUser.user_name === "nachito"
+                            ? (
+                                proj = await Project.create({ ...arrProject[3], userId: newUser.id, validated: 'aceptado' }),
+                                arrProject[3].category.map(async (cat) => {
+
+                                    let catt = await Category.findOne({ where: { name: cat } })
+
+                                    await proj.addCategory(catt)
+
+                                })
+                            )
+                            : {}
+        });
     })
     .catch((error) => {
         console.log(error)
     });
 
-const { Project, User, Category, Comment, middle_Project_Category } = sequelize.models
+const { Project, User, Category, Comment } = sequelize.models
 
 
 /* relacion de uno a muchos entre User(uno) a project */
