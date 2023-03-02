@@ -23,13 +23,6 @@ module.exports = (sequelize) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      /* agregar mas paises LatinoAmericanos.
-      TODO: ver de agregar provincias nomas de los paises, asi desde el front mostrar para otra opcion
-      de filtrado mas especifica. */
-      country: {
-        type: DataTypes.ENUM('Argentina', 'Chile', 'Bolivia', 'Paraguay', 'Uruguay', 'Colombia', 'Peru'),
-        allowNull: true
-      },
       email: {
         type: DataTypes.TEXT,
         allowNull: false,

@@ -51,14 +51,15 @@ sequelize.sync({ force: true })
     })
     .then(async () => {
         let arrUser = [
-            { user_name: "lechu", name: "lautaro", last_name: "garcia", country: "Chile", email: "lechu@lechumail.com", password: "lechu1234", profile_img: "algo" },
-            { user_name: "jonny", name: "johnny", last_name: "hernandez", country: "Uruguay", email: "jonny@jonnymail.com", password: "jonny1234", profile_img: "algo" },
-            { user_name: "sandy", name: "sandy", last_name: "pestaña", country: "Uruguay", email: "samy@samymail.com", password: "samy1234", profile_img: "algo" },
-            { user_name: "nachito", name: "juan", last_name: "arguello", country: "Chile", email: "nachito@nachitomail.com", password: "nachito1234", profile_img: "algo" },
+            { user_name: "lechu", name: "lautaro", last_name: "garcia", email: "lechu@lechumail.com", password: "lechu1234", profile_img: "algo" },
+            { user_name: "jonny", name: "johnny", last_name: "hernandez", email: "jonny@jonnymail.com", password: "jonny1234", profile_img: "algo" },
+            { user_name: "sandy", name: "sandy", last_name: "pestaña", email: "samy@samymail.com", password: "samy1234", profile_img: "algo" },
+            { user_name: "nachito", name: "juan", last_name: "arguello", email: "nachito@nachitomail.com", password: "nachito1234", profile_img: "algo" },
         ];
         let arrProject = [
             {
                 title: 'herramientas para emprendimiento',
+                country: "Chile",
                 summary: 'necesito mas herramientas para el emprendimiento',
                 description: 'necesito algo de plata para poder adquirir unas herramientas necesarias para poder continuar con mi emprendimiento y seguir adelante',
                 goal: 600,
@@ -69,6 +70,7 @@ sequelize.sync({ force: true })
             },
             {
                 title: 'herramientas de poda',
+                country: "Uruguay",
                 summary: 'necesito herramientas para jardineria',
                 description: 'las herramientas que tengo se me fueron rompiendo y no tengo la plata necesaria para poder comprarme unas nuevas en este momento',
                 goal: 213,
@@ -79,6 +81,7 @@ sequelize.sync({ force: true })
             },
             {
                 title: 'proyecto inmobiliario',
+                country: "Uruguay",
                 summary: 'necesito algunos recursos para poder empezar a arreglar mi local y empezar',
                 description: 'tengo el lugar para pdoer empezar pero no las condiciones para trabajar dentro, tengo que darle una mano de pintura y agregar unas cosas mas para que quede presentable para el publico',
                 goal: 1200,
@@ -89,6 +92,7 @@ sequelize.sync({ force: true })
             },
             {
                 title: 'colecta para hospital',
+                country: "Chile",
                 summary: 'recaudacion de fondos',
                 description: 'el hospital se esta quedando corto de presupuesto, por lo que estamos juntando dinero para poder comprar elementos necesarios para poder continuar con las labores internas, con los procesimientos como se deben y la compra de instruimental necesarios',
                 goal: 22000,
@@ -115,7 +119,7 @@ sequelize.sync({ force: true })
             let proj
             newUser.user_name === "lechu"
                 ? (
-                    proj = await Project.create({ ...arrProject[0], userId: newUser.id, validated: 'aceptado' }),
+                    proj = await Project.create({ ...arrProject[0], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
                     arrProject[0].category.map(async (cat) => {
 
                         let catt = await Category.findOne({ where: { name: cat } })
@@ -126,7 +130,7 @@ sequelize.sync({ force: true })
                 )
                 : newUser.user_name === "sandy"
                     ? (
-                        proj = await Project.create({ ...arrProject[1], userId: newUser.id, validated: 'aceptado' }),
+                        proj = await Project.create({ ...arrProject[1], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
                         arrProject[1].category.map(async (cat) => {
 
                             let catt = await Category.findOne({ where: { name: cat } })
@@ -137,7 +141,7 @@ sequelize.sync({ force: true })
                     )
                     : newUser.user_name === "jonny"
                         ? (
-                            proj = await Project.create({ ...arrProject[2], userId: newUser.id, validated: 'aceptado' }),
+                            proj = await Project.create({ ...arrProject[2], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
                             arrProject[2].category.map(async (cat) => {
 
                                 let catt = await Category.findOne({ where: { name: cat } })
@@ -148,7 +152,7 @@ sequelize.sync({ force: true })
                         )
                         : newUser.user_name === "nachito"
                             ? (
-                                proj = await Project.create({ ...arrProject[3], userId: newUser.id, validated: 'aceptado' }),
+                                proj = await Project.create({ ...arrProject[3], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
                                 arrProject[3].category.map(async (cat) => {
 
                                     let catt = await Category.findOne({ where: { name: cat } })
@@ -164,7 +168,7 @@ sequelize.sync({ force: true })
         console.log(error)
     });
 
-const { Project, User, Category, Comment } = sequelize.models
+const { Project, User, Category, Comment, } = sequelize.models
 
 
 /* relacion de uno a muchos entre User(uno) a project */
