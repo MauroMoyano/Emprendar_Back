@@ -188,6 +188,6 @@ Project.hasMany(Comment)
 Comment.belongsTo(Project)
 
 
-//exportaamos la funcion y la instancia para luego crear los modelos
+//exportamos la funcion y la instancia para luego crear los modelos
 
 module.exports = { conectarDB, ...sequelize.models };
