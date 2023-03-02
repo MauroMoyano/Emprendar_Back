@@ -165,6 +165,7 @@ sequelize
         ? ((proj = await Project.create({
             ...arrProject[0],
             userId: newUser.id,
+            validated: "aceptado",
           })),
           arrProject[0].category.map(async (cat) => {
             let catt = await Category.findOne({ where: { name: cat } });
@@ -175,6 +176,7 @@ sequelize
         ? ((proj = await Project.create({
             ...arrProject[1],
             userId: newUser.id,
+            validated: "aceptado",
           })),
           arrProject[1].category.map(async (cat) => {
             let catt = await Category.findOne({ where: { name: cat } });
@@ -185,6 +187,7 @@ sequelize
         ? ((proj = await Project.create({
             ...arrProject[2],
             userId: newUser.id,
+            validated: "aceptado",
           })),
           arrProject[2].category.map(async (cat) => {
             let catt = await Category.findOne({ where: { name: cat } });
@@ -195,6 +198,7 @@ sequelize
         ? ((proj = await Project.create({
             ...arrProject[3],
             userId: newUser.id,
+            validated: "aceptado",
           })),
           arrProject[3].category.map(async (cat) => {
             let catt = await Category.findOne({ where: { name: cat } });
@@ -207,6 +211,53 @@ sequelize
   .catch((error) => {
     console.log(error);
   });
+
+arrUser.forEach(async (user) => {
+  let newUser = await User.create(user);
+
+  let proj;
+  newUser.user_name === "lechu"
+    ? ((proj = await Project.create({
+        ...arrProject[0],
+        userId: newUser.id,
+      })),
+      arrProject[0].category.map(async (cat) => {
+        let catt = await Category.findOne({ where: { name: cat } });
+
+        await proj.addCategory(catt);
+      }))
+    : newUser.user_name === "sandy"
+    ? ((proj = await Project.create({
+        ...arrProject[1],
+        userId: newUser.id,
+      })),
+      arrProject[1].category.map(async (cat) => {
+        let catt = await Category.findOne({ where: { name: cat } });
+
+        await proj.addCategory(catt);
+      }))
+    : newUser.user_name === "jonny"
+    ? ((proj = await Project.create({
+        ...arrProject[2],
+        userId: newUser.id,
+      })),
+      arrProject[2].category.map(async (cat) => {
+        let catt = await Category.findOne({ where: { name: cat } });
+
+        await proj.addCategory(catt);
+      }))
+    : newUser.user_name === "nachito"
+    ? ((proj = await Project.create({
+        ...arrProject[3],
+        userId: newUser.id,
+      })),
+      arrProject[3].category.map(async (cat) => {
+        let catt = await Category.findOne({ where: { name: cat } });
+
+        await proj.addCategory(catt);
+      }))
+    : {};
+});
 
 arrUser
   .forEach(async (user) => {
