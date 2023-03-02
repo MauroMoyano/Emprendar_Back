@@ -78,7 +78,7 @@ sequelize.sync({ force: true })
                 category: ["emprendimiento"]
             },
             {
-                title: 'proyecto inmoviliario',
+                title: 'proyecto inmobiliario',
                 summary: 'necesito algunos recursos para poder empezar a arreglar mi local y empezar',
                 description: 'tengo el lugar para pdoer empezar pero no las condiciones para trabajar dentro, tengo que darle una mano de pintura y agregar unas cosas mas para que quede presentable para el publico',
                 goal: 1200,
@@ -124,7 +124,7 @@ sequelize.sync({ force: true })
 
                     })
                 )
-                : newUser.user_name === "samm"
+                : newUser.user_name === "sandy"
                     ? (
                         proj = await Project.create({ ...arrProject[1], userId: newUser.id }),
                         arrProject[1].category.map(async (cat) => {
