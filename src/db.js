@@ -115,7 +115,7 @@ sequelize.sync({ force: true })
             let proj
             newUser.user_name === "lechu"
                 ? (
-                    proj = await Project.create({ ...arrProject[0], userId: newUser.id }),
+                    proj = await Project.create({ ...arrProject[0], userId: newUser.id, validated: 'aceptado' }),
                     arrProject[0].category.map(async (cat) => {
 
                         let catt = await Category.findOne({ where: { name: cat } })
@@ -126,7 +126,7 @@ sequelize.sync({ force: true })
                 )
                 : newUser.user_name === "sandy"
                     ? (
-                        proj = await Project.create({ ...arrProject[1], userId: newUser.id }),
+                        proj = await Project.create({ ...arrProject[1], userId: newUser.id, validated: 'aceptado' }),
                         arrProject[1].category.map(async (cat) => {
 
                             let catt = await Category.findOne({ where: { name: cat } })
@@ -137,7 +137,7 @@ sequelize.sync({ force: true })
                     )
                     : newUser.user_name === "jonny"
                         ? (
-                            proj = await Project.create({ ...arrProject[2], userId: newUser.id }),
+                            proj = await Project.create({ ...arrProject[2], userId: newUser.id, validated: 'aceptado' }),
                             arrProject[2].category.map(async (cat) => {
 
                                 let catt = await Category.findOne({ where: { name: cat } })
@@ -148,7 +148,7 @@ sequelize.sync({ force: true })
                         )
                         : newUser.user_name === "nachito"
                             ? (
-                                proj = await Project.create({ ...arrProject[3], userId: newUser.id }),
+                                proj = await Project.create({ ...arrProject[3], userId: newUser.id, validated: 'aceptado' }),
                                 arrProject[3].category.map(async (cat) => {
 
                                     let catt = await Category.findOne({ where: { name: cat } })
