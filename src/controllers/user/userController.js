@@ -1,6 +1,7 @@
-const { emailRegistro } = require("../../../utils/emails");
+const { emailRegistration } = require("../../../utils/emails");
 const { generateToken } = require("../../../utils/generateToken");
 const { generateJWT } = require("../../../utils/generateJWT");
+const bcrypt = require("bcrypt");
 
 const { User, Project } = require("../../db");
 const userCreate = async (data) => {
@@ -199,8 +200,20 @@ const updateUser = async (id, data) => {
   const userFind = await User.findByPk(id);
   if (!userFind) throw new Error("No se encontró el usuario");
 
-  const updatedUser = await userFind.update(data);
-  console.log(updatedUser);
+  let { user_name, name, last_name, profile_img, email, password } = data;
+
+  if (user_name) userFind.user_name = user_name;
+  if (name) userFind.name = name;
+  if (last_name) userFind.last_name = last_name;
+  if (profile_img) userFind.profile_img = profile_img;
+  if (email) userFind.email = email;
+  if (password) {
+    const passwordHash = await bcrypt.hash(password, 8);
+    userFind.password = passwordHash;
+  }
+  await userFind.save();
+  // const updatedUser = await userFind.update(data);
+  console.log(userFind);
 
   return { msg: "Usuario actualizado correctamente" };
 };

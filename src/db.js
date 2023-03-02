@@ -157,6 +157,28 @@ sequelize
     console.log(error);
   });
 
+arrUser
+  .forEach(async (user) => {
+    let newUser = await User.create(user);
+    arrProject.forEach(async (project) => {
+      let proj = await Project.create({
+        title: project.title,
+        summary: project.summary,
+        description: project.description,
+        goal: project.goal,
+        img: project.img,
+        userId: newUser.id,
+      });
+      project.category.forEach(async (cat) => {
+        let catt = await Category.findOne({ where: { name: cat } });
+        await proj.addCategory(catt);
+      });
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
 const { Project, User, Category, Comment } = sequelize.models;
 
 /* relacion de uno a muchos entre User(uno) a project */
