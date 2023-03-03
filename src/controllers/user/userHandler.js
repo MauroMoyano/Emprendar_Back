@@ -36,6 +36,7 @@ const getAllUsersHandler = async function (req, res) {
 
 const getAllUserByIdHandler = async function (req, res) {
   const { id } = req.params;
+  console.log(req)
   try {
     const found = await userByID(id);
     res.status(200).send(found);
@@ -78,16 +79,24 @@ const confirmeUserHl = async function (req, res) {
 
 
 const authUserHl = async function (req, res) {
+  
 
   try {
     const response = await authUser(req.body)
-
+  
     res.status(200).json(response)
   } catch (error) {
+  
     res.status(400).json({ message: error.message })
   }
 
 }
+
+const authedUserhl = async function (req,res) {
+ 
+    res.json(req.user)
+}
+
 
 
 /* handler de ADMIN. */
@@ -113,6 +122,7 @@ module.exports = {
   confirmeUserHl,
   authUserHl,
   /* handlers ADMINS. */
-  getAllUserDataAdmin
+  getAllUserDataAdmin,
+  authedUserhl
 };
 // {}
