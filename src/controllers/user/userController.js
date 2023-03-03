@@ -13,10 +13,10 @@ const userCreate = async (data) => {
     const findEmail = await User.findOne({ where: { email:email} })
 
     if (findEmail) {
-      throw new Error("Este correo electronico ya esta registrado");
+      throw new Error("Este correo electrónico ya está registrado");
     } 
     if (findUser) {
-      throw new Error("Este nombre de usuario ya éxiste");
+      throw new Error("Este nombre de usuario ya existe");
     } else {
 
       password = await bcrypt.hash(password, 8);
@@ -38,7 +38,7 @@ const userCreate = async (data) => {
       })
 
       return {
-        msg: "El usuario se creo con exito"
+        msg: "El usuario se creó con éxito"
       };
     }
   }
@@ -80,13 +80,13 @@ const authUser = async (data) => {
   })
 
   if (!user) {
-    throw new Error('No existe ningun usuario con este correo')
+    throw new Error('No existe ningún usuario con este correo')
   }
 
   // comprobar si el usuario esta confirmado
 
   if (!user.confirmed) {
-    throw new Error('Tu cuenta no a sido confirmada')
+    throw new Error('Tu cuenta no ha sido confirmada')
   }
 
   //comprobar password
@@ -141,7 +141,7 @@ const getAllUsers = async () => {
 const getAllUserByName = async (user_name) => {
 
   if (!user_name) {
-    throw new Error("Por favor ingrese un Nombre de Usuario")
+    throw new Error("Por favor ingrese un nombre de usuario")
   }
 
   const infoDB = await User.findAll({
@@ -151,7 +151,7 @@ const getAllUserByName = async (user_name) => {
   });
 
   if (!infoDB) {
-    throw new Error("No se encontró ningun Usuario")
+    throw new Error("No se encontró ningún Usuario")
   } else {
 
     const infoSearch = infoDB.filter(user => user.dataValues.user_name.includes(user_name))
@@ -183,7 +183,7 @@ const userByID = async (userID) => {
   } else {
     const infoUserDB = await User.findByPk(userID);
     if (!infoUserDB) {
-      throw new Error("No se encontró ningun usuario con ese ID")
+      throw new Error("No se encontró ningún usuario con ese ID")
     } else {
       const infoUserClean = {
         id: infoUserDB.id,
@@ -238,7 +238,7 @@ const updateUser = async (id, data) => {
 /* este seria controlador que maneja el usuario para dar de baja el su perfil. */
 const deleteUser = async (userID) => {
   if (!userID) {
-    throw new Error("No se asigno un ID");
+    throw new Error("No se asignó un ID");
   } else {
     const userFind = await User.findOne({ where: { id: userID } });
     if (!userFind) {
@@ -247,7 +247,7 @@ const deleteUser = async (userID) => {
       await User.destroy({ where: { id: userID } })
 
       return {
-        msg: 'Usuario Eliminado Correctamente'
+        msg: 'Usuario eliminado correctamente'
       }
     }
 
