@@ -99,10 +99,61 @@ sequelize.sync({ force: true })
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
                 category: ["medicina", "social"]
+            },
+            {
+                title: 'donaciones a orfanato',
+                country: "Argentina",
+                summary: 'recaudacion de fondos',
+                description: 'los chicos del orfanato estan en condiciones precarias en las cuales no se deberia vivir, estamos recaudando fondos para poder apoyarlos y mejorar las condiciones del lugar.',
+                goal: 140000,
+                amount_collected: 9300,
+                img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
+                userId: '',
+                category: ["medicina", "social", "educacion"]
+            },
+            {
+                title: 'un futuro mejor',
+                country: 'Paraguay',
+                summary: 'ayuda a escuelas rurales',
+                description: 'los chicos de la escuela necesitan un apoyo por parte de gurpos de perosnas que quieran aportar su granito de arena',
+                goal: 53000,
+                amount_collected: 39000,
+                img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
+                userId: '',
+                category: ["cultural", "social", "educacion"]
+            },
+            {
+                title: 'mi primer emprendimiento',
+                country: 'Bolivia',
+                summary: 'falta de ciertos recursos',
+                description: 'estoy por empezar con un emprendimiento con un grupo que he estado organizando, pero nos estaria faltando fondos para poder llevarlo acabo...',
+                goal: 162000,
+                amount_collected: 25000,
+                img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
+                userId: '',
+                category: ["emprendimiento", "social", "educacion"]
+            },
+            {
+                title: 'idea innovadora',
+                country: 'Peru',
+                summary: 'recursos para poder implementar pruebas en una nueva tecnologia',
+                description: 'somoy parte de un grupo de emprendedores que hemos podido hacer un nuevo artefacto innovador, pero por razones economicas no podemos ponerlo a prueba ni menos patentarlo',
+                goal: 453500,
+                amount_collected: 142000,
+                img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
+                userId: '',
+                category: ["emprendimiento", "social", "tecnologia"]
             }
         ]
 
         let arrCategory = ["tecnologia", "ambiental", "cultural", "social", "medicina", "educacion", "emprendimiento"]
+
+        let arrComents = [
+            "Me encantó esta idea. Es muy útil y de alta calidad.",
+            "las intenciones tuyas son muy buenas, tienes todo mi apoyo",
+            "muy buena la propuesta, exitos!",
+            "la veo dificil pero no hay nada que con el tiempo no se pueda realizar"
+        ]
 
         arrCategory.forEach(async (cat) => {
             await Category.create({
@@ -115,48 +166,81 @@ sequelize.sync({ force: true })
 
             let newUser = await User.create(user)
 
-            let proj
+            let proj1
+            let proj2
             newUser.user_name === "lechu"
                 ? (
-                    proj = await Project.create({ ...arrProject[0], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
+                    proj1 = await Project.create({ ...arrProject[0], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
                     arrProject[0].category.map(async (cat) => {
 
                         let catt = await Category.findOne({ where: { name: cat } })
 
-                        await proj.addCategory(catt)
+                        await proj1.addCategory(catt)
+
+                    }),
+                    proj2 = await Project.create({ ...arrProject[4], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
+                    arrProject[4].category.map(async (cat) => {
+
+                        let catt = await Category.findOne({ where: { name: cat } })
+
+                        await proj2.addCategory(catt)
 
                     })
                 )
                 : newUser.user_name === "sandy"
                     ? (
-                        proj = await Project.create({ ...arrProject[1], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
+                        proj1 = await Project.create({ ...arrProject[1], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
                         arrProject[1].category.map(async (cat) => {
 
                             let catt = await Category.findOne({ where: { name: cat } })
 
-                            await proj.addCategory(catt)
+                            await proj1.addCategory(catt)
+
+                        }),
+                        proj2 = await Project.create({ ...arrProject[5], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
+                        arrProject[5].category.map(async (cat) => {
+
+                            let catt = await Category.findOne({ where: { name: cat } })
+
+                            await proj2.addCategory(catt)
 
                         })
                     )
                     : newUser.user_name === "jonny"
                         ? (
-                            proj = await Project.create({ ...arrProject[2], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
+                            proj1 = await Project.create({ ...arrProject[2], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
                             arrProject[2].category.map(async (cat) => {
 
                                 let catt = await Category.findOne({ where: { name: cat } })
 
-                                await proj.addCategory(catt)
+                                await proj1.addCategory(catt)
+
+                            }),
+                            proj2 = await Project.create({ ...arrProject[6], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
+                            arrProject[6].category.map(async (cat) => {
+
+                                let catt = await Category.findOne({ where: { name: cat } })
+
+                                await proj2.addCategory(catt)
 
                             })
                         )
                         : newUser.user_name === "nachito"
                             ? (
-                                proj = await Project.create({ ...arrProject[3], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
+                                proj1 = await Project.create({ ...arrProject[3], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
                                 arrProject[3].category.map(async (cat) => {
 
                                     let catt = await Category.findOne({ where: { name: cat } })
 
-                                    await proj.addCategory(catt)
+                                    await proj1.addCategory(catt)
+
+                                }),
+                                proj2 = await Project.create({ ...arrProject[7], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
+                                arrProject[7].category.map(async (cat) => {
+
+                                    let catt = await Category.findOne({ where: { name: cat } })
+
+                                    await proj2.addCategory(catt)
 
                                 })
                             )
