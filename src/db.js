@@ -44,17 +44,16 @@ let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map(entry => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
 sequelize.models = Object.fromEntries(capsEntries)
 
-
 sequelize.sync({ force: true })
     .then(() => {
         console.log('tablas creadas')
     })
     .then(async () => {
         let arrUser = [
-            { user_name: "lechu", name: "lautaro", last_name: "garcia", email: "lechu@lechumail.com", password: "lechu1234", profile_img: "algo" },
-            { user_name: "jonny", name: "johnny", last_name: "hernandez", email: "jonny@jonnymail.com", password: "jonny1234", profile_img: "algo" },
-            { user_name: "sandy", name: "sandy", last_name: "pestaña", email: "samy@samymail.com", password: "samy1234", profile_img: "algo" },
-            { user_name: "nachito", name: "juan", last_name: "arguello", email: "nachito@nachitomail.com", password: "nachito1234", profile_img: "algo" },
+            { user_name: "lechu", name: "lautaro", last_name: "garcia", email: "lechu@lechumail.com", password: "lechu1234", profile_img: "https://bestbuyerpersona.com/wp-content/uploads/2022/02/undraw_profile_pic_ic5t.png" },
+            { user_name: "jonny", name: "johnny", last_name: "hernandez", email: "jonny@jonnymail.com", password: "jonny1234", profile_img: "https://bestbuyerpersona.com/wp-content/uploads/2022/02/undraw_profile_pic_ic5t.png" },
+            { user_name: "sandy", name: "sandy", last_name: "pestaña", email: "samy@samymail.com", password: "samy1234", profile_img: "https://bestbuyerpersona.com/wp-content/uploads/2022/02/undraw_profile_pic_ic5t.png" },
+            { user_name: "nachito", name: "juan", last_name: "arguello", email: "nachito@nachitomail.com", password: "nachito1234", profile_img: "https://bestbuyerpersona.com/wp-content/uploads/2022/02/undraw_profile_pic_ic5t.png" },
         ];
         let arrProject = [
             {
@@ -64,7 +63,7 @@ sequelize.sync({ force: true })
                 description: 'necesito algo de plata para poder adquirir unas herramientas necesarias para poder continuar con mi emprendimiento y seguir adelante',
                 goal: 600,
                 amount_collected: 560,
-                img: 'algo' /* 'https://bynder.sbdinc.com/m/23371ada92b5637e/Drupal_Large-STMT82780_A1.jpg' */,
+                img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
                 category: ["emprendimiento", "cultural"]
             },
@@ -75,7 +74,7 @@ sequelize.sync({ force: true })
                 description: 'las herramientas que tengo se me fueron rompiendo y no tengo la plata necesaria para poder comprarme unas nuevas en este momento',
                 goal: 213,
                 amount_collected: 100,
-                img: 'algo',
+                img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
                 category: ["emprendimiento"]
             },
@@ -86,7 +85,7 @@ sequelize.sync({ force: true })
                 description: 'tengo el lugar para pdoer empezar pero no las condiciones para trabajar dentro, tengo que darle una mano de pintura y agregar unas cosas mas para que quede presentable para el publico',
                 goal: 1200,
                 amount_collected: 920,
-                img: 'algo',
+                img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
                 category: ["emprendimiento", "social"]
             },
@@ -97,7 +96,7 @@ sequelize.sync({ force: true })
                 description: 'el hospital se esta quedando corto de presupuesto, por lo que estamos juntando dinero para poder comprar elementos necesarios para poder continuar con las labores internas, con los procesimientos como se deben y la compra de instruimental necesarios',
                 goal: 22000,
                 amount_collected: 1420,
-                img: 'algo',
+                img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
                 category: ["medicina", "social"]
             }
