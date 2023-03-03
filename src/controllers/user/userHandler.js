@@ -94,7 +94,7 @@ const authUserHl = async function (req, res) {
 
 const authedUserhl = async function (req,res) {
  
-    res.json(req.user)
+    res.json({user:req.user})
 }
 
 

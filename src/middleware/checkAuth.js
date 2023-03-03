@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
+const { userByID } = require("../controllers/user/userController");
 
-const checkAuth = (req, res, next) => {
+const checkAuth = async (req, res, next) => {
    
         const autHeader = req.get("Authorization");
-        console.log(req)
       if (autHeader) {
         //obtener el token
         const token = autHeader.split(" ")[1];
@@ -15,7 +15,7 @@ const checkAuth = (req, res, next) => {
           const user = jwt.verify(token, process.env.JWT_SECRET);
     
    
-          req.user = user
+          req.user = await userByID(user.id)
        
         } catch (error) {
          res.json('error')

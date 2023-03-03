@@ -99,12 +99,16 @@ const authUser = async (data) => {
       name: user.name,
       last_name: user.last_name,
       email: user.email,
-      token: generateJWT(user.id)
+      token: generateJWT(user.id, user.user_name)
     }
 
    
+    const infoProjectDB = await Project.findAll({ where: { userId: infoUser.id } })
 
-    return infoUser;
+    const infoMixed = { ...infoUser, userProjects: infoProjectDB }
+
+    return infoMixed;
+
 
   } else {
     throw new Error('Password incorrecto')
