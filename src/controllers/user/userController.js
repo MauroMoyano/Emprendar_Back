@@ -102,6 +102,7 @@ const authUser = async (data) => {
       token: generateJWT(user.id)
     }
 
+   
 
     return infoUser;
 
@@ -177,7 +178,7 @@ const getAllUserByName = async (user_name) => {
 
 /* controler del back para mostrar el detalle del usuario junto con los respectivos proyectos que creo el mismo */
 const userByID = async (userID) => {
-
+  
   if (!userID) {
     throw new Error("No se especificó el ID del usuario");
   } else {

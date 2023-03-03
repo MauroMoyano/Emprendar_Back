@@ -10,10 +10,10 @@ const sequelize = new Sequelize(
     `postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`,
     {
         dialect: "postgres",
-        logging: false,
-        native: false
+        logging:true
     }
 );
+
 
 //creamos una funcion para conectarnos a la bd
 const conectarDB = async () => {

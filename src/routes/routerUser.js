@@ -7,8 +7,10 @@ const {
   deleteUserHandler,
   confirmeUserHl,
   authUserHl,
-  getAllUserDataAdmin
+  getAllUserDataAdmin,
+  authedUserhl
 } = require("../controllers/user/userHandler");
+const {checkAuth} = require("../middleware/checkAuth");
 const routerUser = Router();
 
 /* creado de usuario */
@@ -33,6 +35,11 @@ routerUser.delete("/:id", deleteUserHandler);
 /* login // confirmacion de email */
 routerUser.get("/confirmar/:token", confirmeUserHl);
 routerUser.post("/login", authUserHl);
+
+
+routerUser.get('/login/me', checkAuth, authedUserhl)
+
+
 
 /* ruta de ADMINS. */
 routerUser.get("/admins", getAllUserDataAdmin)
