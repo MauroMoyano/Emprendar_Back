@@ -1,6 +1,6 @@
 const express = require("express");
-const { conectarDB } = require("./config/db");
 const cors = require("cors");
+const { conectarDB } = require("./src/db");
 require('dotenv').config()
 
 //creamos el servidor
@@ -9,7 +9,7 @@ const app = express();
 
 // conectamos a la base de datos
 
-/* conectarDB(); */
+conectarDB();
 
 //habilitaamos cors
 const opcionesCors = {
@@ -28,12 +28,13 @@ const port = process.env.PORT || 3001;
 
 //definimos las rutas
 
-app.use('/', require('./routes/usuarios'))
-
+app.use('/', require('./src/routes/index'))
 
 //arrancar la app
 
 // "0.0.0.0"  el servidor estará disponible para conexiones entrantes desde cualquier dirección IP.
 app.listen(port, "0.0.0.0", () => {
-    console.log("el servidor esta corriendo en el puerto " + port);
+    console.log("el servidor esta corriendo en el puerto http://localhost:" + port);
+    /* prueba creado de usuarios y pryectos */
+    
 });
