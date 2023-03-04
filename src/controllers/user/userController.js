@@ -63,7 +63,7 @@ const confirmeUser = async (token) => {
 
   await userToConfirm.save()
 
-  return 'Confirmado correctamente'
+  return {message: 'Confirmado correctamente'}
 }
 
 
