@@ -4,7 +4,7 @@ const addProject = async (data) => {
 
     //TODO crear validaciones
 
-    const { title, summary, description, goal, img, userId, country, user_name } = data
+    const { title, summary, description, goal, img, userId, country, user_name,category } = data
 
     //validacion precaria xd
     if (title === '' || summary === '' || description === '' || img === '' || userId === '') {
@@ -22,6 +22,7 @@ const addProject = async (data) => {
         img,
         country,
         user_name,
+        category,
         userId: userId  //esto viene del user autenticado
     })
     return {
