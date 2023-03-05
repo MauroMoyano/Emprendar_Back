@@ -10,7 +10,7 @@ const sequelize = new Sequelize(
     `postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`,
     {
         dialect: "postgres",
-        logging:true
+        logging:false
     }
 );
 
