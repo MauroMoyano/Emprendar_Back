@@ -10,7 +10,8 @@ const sequelize = new Sequelize(
     `postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`,
     {
         dialect: "postgres",
-        logging:true
+        logging: false,
+        native: false
     }
 );
 
@@ -50,10 +51,10 @@ sequelize.sync({ force: true })
     })
     .then(async () => {
         let arrUser = [
-            { user_name: "lechu", name: "lautaro", last_name: "garcia", email: "lechu@lechumail.com", password: "lechu1234", profile_img: "https://bestbuyerpersona.com/wp-content/uploads/2022/02/undraw_profile_pic_ic5t.png" },
-            { user_name: "jonny", name: "johnny", last_name: "hernandez", email: "jonny@jonnymail.com", password: "jonny1234", profile_img: "https://bestbuyerpersona.com/wp-content/uploads/2022/02/undraw_profile_pic_ic5t.png" },
-            { user_name: "sandy", name: "sandy", last_name: "pestaña", email: "samy@samymail.com", password: "samy1234", profile_img: "https://bestbuyerpersona.com/wp-content/uploads/2022/02/undraw_profile_pic_ic5t.png" },
-            { user_name: "nachito", name: "juan", last_name: "arguello", email: "nachito@nachitomail.com", password: "nachito1234", profile_img: "https://bestbuyerpersona.com/wp-content/uploads/2022/02/undraw_profile_pic_ic5t.png" },
+            { user_name: "lechu", name: "lautaro", last_name: "garcia", email: "lechu@lechumail.com", password: "lechu1234", profile_img: "https://bestbuyerpersona.com/wp-content/uploads/2022/02/undraw_profile_pic_ic5t.png", confirmed: true },
+            { user_name: "jonny", name: "johnny", last_name: "hernandez", email: "jonny@jonnymail.com", password: "jonny1234", profile_img: "https://bestbuyerpersona.com/wp-content/uploads/2022/02/undraw_profile_pic_ic5t.png", confirmed: true },
+            { user_name: "sandy", name: "sandy", last_name: "pestaña", email: "samy@samymail.com", password: "samy1234", profile_img: "https://bestbuyerpersona.com/wp-content/uploads/2022/02/undraw_profile_pic_ic5t.png", confirmed: true },
+            { user_name: "nachito", name: "juan", last_name: "arguello", email: "nachito@nachitomail.com", password: "nachito1234", profile_img: "https://bestbuyerpersona.com/wp-content/uploads/2022/02/undraw_profile_pic_ic5t.png", confirmed: true },
         ];
         let arrProject = [
             {
@@ -135,7 +136,7 @@ sequelize.sync({ force: true })
             },
             {
                 title: 'idea innovadora',
-                country: 'Peru',
+                country: 'Perú',
                 summary: 'recursos para poder implementar pruebas en una nueva tecnologia',
                 description: 'somoy parte de un grupo de emprendedores que hemos podido hacer un nuevo artefacto innovador, pero por razones economicas no podemos ponerlo a prueba ni menos patentarlo',
                 goal: 453500,
@@ -155,6 +156,14 @@ sequelize.sync({ force: true })
             "la veo dificil pero no hay nada que con el tiempo no se pueda realizar"
         ]
 
+        const arrCountry = ["México", "Colombia", "Argentina", "Brasil", "Chile", "Perú", "Ecuador", "Bolivia", "Uruguay", "Paraguay", "Venezuela", "Costa Rica", "Cuba", "Puerto Rico", "República Dominicana", "Honduras", "Nicaragua", "Panamá", "El Salvador", "Guatemala"];
+
+        arrCountry.forEach(async (country) => {
+            Country.create({
+                name: country
+            })
+        })
+
         arrCategory.forEach(async (cat) => {
             await Category.create({
                 name: cat
@@ -170,78 +179,102 @@ sequelize.sync({ force: true })
             let proj2
             newUser.user_name === "lechu"
                 ? (
-                    proj1 = await Project.create({ ...arrProject[0], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
+                    proj1 = await Project.create({ ...arrProject[0], /* user_name: newUser.user_name, */ userId: newUser.id, validated: 'aceptado' }),
                     arrProject[0].category.map(async (cat) => {
 
                         let catt = await Category.findOne({ where: { name: cat } })
 
                         await proj1.addCategory(catt)
 
+                        let count = await Country.findOne({ where: { name: arrProject[0].country } })
+
+                        await proj1.setCountry(count)
                     }),
-                    proj2 = await Project.create({ ...arrProject[4], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
+                    proj2 = await Project.create({ ...arrProject[4], /* user_name: newUser.user_name, */ userId: newUser.id, validated: 'aceptado' }),
                     arrProject[4].category.map(async (cat) => {
 
                         let catt = await Category.findOne({ where: { name: cat } })
 
                         await proj2.addCategory(catt)
 
+                        let count = await Country.findOne({ where: { name: arrProject[4].country } })
+
+                        await proj2.setCountry(count)
                     })
                 )
                 : newUser.user_name === "sandy"
                     ? (
-                        proj1 = await Project.create({ ...arrProject[1], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
+                        proj1 = await Project.create({ ...arrProject[1], /* user_name: newUser.user_name, */ userId: newUser.id, validated: 'aceptado' }),
                         arrProject[1].category.map(async (cat) => {
 
                             let catt = await Category.findOne({ where: { name: cat } })
 
                             await proj1.addCategory(catt)
 
+                            let count = await Country.findOne({ where: { name: arrProject[1].country } })
+
+                            await proj1.setCountry(count)
                         }),
-                        proj2 = await Project.create({ ...arrProject[5], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
+                        proj2 = await Project.create({ ...arrProject[5], /* user_name: newUser.user_name, */ userId: newUser.id, validated: 'aceptado' }),
                         arrProject[5].category.map(async (cat) => {
 
                             let catt = await Category.findOne({ where: { name: cat } })
 
                             await proj2.addCategory(catt)
 
+                            let count = await Country.findOne({ where: { name: arrProject[5].country } })
+
+                            await proj2.setCountry(count)
                         })
                     )
                     : newUser.user_name === "jonny"
                         ? (
-                            proj1 = await Project.create({ ...arrProject[2], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
+                            proj1 = await Project.create({ ...arrProject[2], /* user_name: newUser.user_name, */ userId: newUser.id, validated: 'aceptado' }),
                             arrProject[2].category.map(async (cat) => {
 
                                 let catt = await Category.findOne({ where: { name: cat } })
 
                                 await proj1.addCategory(catt)
 
+                                let count = await Country.findOne({ where: { name: arrProject[2].country } })
+
+                                await proj1.setCountry(count)
                             }),
-                            proj2 = await Project.create({ ...arrProject[6], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
+                            proj2 = await Project.create({ ...arrProject[6], /* user_name: newUser.user_name, */ userId: newUser.id, validated: 'aceptado' }),
                             arrProject[6].category.map(async (cat) => {
 
                                 let catt = await Category.findOne({ where: { name: cat } })
 
                                 await proj2.addCategory(catt)
 
+                                let count = await Country.findOne({ where: { name: arrProject[6].country } })
+
+                                await proj2.setCountry(count)
                             })
                         )
                         : newUser.user_name === "nachito"
                             ? (
-                                proj1 = await Project.create({ ...arrProject[3], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
+                                proj1 = await Project.create({ ...arrProject[3], /* user_name: newUser.user_name, */ userId: newUser.id, validated: 'aceptado' }),
                                 arrProject[3].category.map(async (cat) => {
 
                                     let catt = await Category.findOne({ where: { name: cat } })
 
                                     await proj1.addCategory(catt)
 
+                                    let count = await Country.findOne({ where: { name: arrProject[3].country } })
+
+                                    await proj1.setCountry(count)
                                 }),
-                                proj2 = await Project.create({ ...arrProject[7], user_name: newUser.user_name, userId: newUser.id, validated: 'aceptado' }),
+                                proj2 = await Project.create({ ...arrProject[7], /* user_name: newUser.user_name, */ userId: newUser.id, validated: 'aceptado' }),
                                 arrProject[7].category.map(async (cat) => {
 
                                     let catt = await Category.findOne({ where: { name: cat } })
 
                                     await proj2.addCategory(catt)
 
+                                    let count = await Country.findOne({ where: { name: arrProject[7].country } })
+
+                                    await proj2.setCountry(count)
                                 })
                             )
                             : {}
@@ -251,7 +284,7 @@ sequelize.sync({ force: true })
         console.log(error)
     });
 
-const { Project, User, Category, Comment, } = sequelize.models
+const { Project, User, Category, Comment, Country } = sequelize.models
 
 
 /* relacion de uno a muchos entre User(uno) a project */
@@ -262,13 +295,17 @@ Project.belongsTo(User);
 Project.belongsToMany(Category, { through: 'middle_Project_Category', timestamps: false });
 Category.belongsToMany(Project, { through: 'middle_Project_Category', timestamps: false });
 
+/* relacion de uno a muchos entre Country y Project */
+Country.hasMany(Project);
+Project.belongsTo(Country);
+
 /* relacion de muchos a uno entre 3 tablas. Comment, Project, User */
 /* en User */
-User.hasMany(Comment)
-Comment.belongsTo(User)
+User.hasMany(Comment);
+Comment.belongsTo(User);
 /* en Project */
-Project.hasMany(Comment)
-Comment.belongsTo(Project)
+Project.hasMany(Comment);
+Comment.belongsTo(Project);
 
 
 //exportamos la funcion y la instancia para luego crear los modelos
