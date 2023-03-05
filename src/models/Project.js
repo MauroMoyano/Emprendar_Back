@@ -12,10 +12,10 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: false,
         },
-        category: {
+        /* category: {
             type: DataTypes.ARRAY(DataTypes.TEXT),
             allowNull: false
-        },
+        }, */
         summary: {
             type: DataTypes.TEXT,
             allowNull: false
@@ -46,13 +46,13 @@ module.exports = (sequelize) => {
         img: {
             type: DataTypes.TEXT
         },
-        user_name: {
+        /* user_name: {
             type: DataTypes.STRING
-        },
-        country: {
+        }, */
+        /* country: {
             type: DataTypes.ENUM('Argentina', 'Chile', 'Bolivia', 'Paraguay', 'Uruguay', 'Colombia', 'Peru'),
             allowNull: true
-          },
+          }, */
         validated: {
             type: DataTypes.ENUM('aceptado', 'rechazado', 'espera'),
             defaultValue: 'espera'

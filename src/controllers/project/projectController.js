@@ -1,10 +1,10 @@
-const { Project, User } = require('../../db')
+const { Project, User, Country, Category } = require('../../db')
 
 const addProject = async (data) => {
 
     //TODO crear validaciones
 
-    const { title, summary, description, goal, img, userId, country, user_name } = data
+    const { title, summary, description, goal, img, userId, country, category } = await data
 
     //validacion precaria xd
     if (title === '' || summary === '' || description === '' || img === '' || userId === '') {
@@ -12,6 +12,9 @@ const addProject = async (data) => {
             msg: 'Todos los campos son obligatorios'
         }
     }
+    let user = await User.findByPk(userId)
+
+    let countries = await Country.findOne({ where: { name: country } })
 
     //crear el projecto
     const projecto = await Project.create({
@@ -20,10 +23,21 @@ const addProject = async (data) => {
         description,
         goal,
         img,
-        country,
-        user_name,
-        userId: userId  //esto viene del user autenticado
+        validated: "aceptado", /* va para por el momento por no tener el recurso del dashboard de admin */
+
+        /* user_name: user.dataValues.user_name */ /* no se le incluira porque ira dentro del user: {id, user_name} */
+
+        /* userId: userId */  //esto viene del user autenticado
     })
+
+    await category.map(async (name) => {
+        let cat = await Category.findOne({ where: { name } })
+        await projecto.addCategory(cat)
+    })
+
+    await projecto.setUser(user)
+    await projecto.setCountry(countries)
+
     return {
         msg: 'Projecto Creado correctamente'
     }
@@ -32,7 +46,14 @@ const addProject = async (data) => {
 
 const getProjectById = async (id) => {
     //buscamos por el id
-    const project = await Project.findByPk(id)
+    const project = await Project.findByPk(
+        id,
+        {
+            include: [
+                { model: Country, attributes: ['name'] },
+                { model: Category, attributes: ['name'], through: { attributes: [] } },
+            ]
+        })
     return project
 
 }
@@ -44,7 +65,13 @@ const getAllProjects = async () => {
         where: {
             validated: 'aceptado',
             deletedAt: null
-        }
+        },
+        include: [
+            { model: Country, attributes: ['name'] },
+            { model: User, attributes: ['id', 'user_name', 'profile_img'] },
+            { model: Category, attributes: ['name'], through: { attributes: [] } },
+        ]
+
     })
 
 
@@ -67,8 +94,14 @@ const searchProject = async (projectTitle) => {
     console.log(projectTitle);
     let project = await Project.findAll({
         where: {
+            validated: 'aceptado',
             deletedAt: null
-        }
+        },
+        include: [
+            { model: Country, attributes: ['name'] },
+            { model: User, attributes: ['id', 'user_name', 'profile_img'] },
+            { model: Category, attributes: ['name'], through: { attributes: [] } },
+        ]
     })
 
     project = project.filter(pj => pj.dataValues.title.includes(projectTitle))
