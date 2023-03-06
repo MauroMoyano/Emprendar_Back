@@ -3,18 +3,19 @@ const { generateToken } = require("../../../utils/generateToken");
 const { generateJWT } = require("../../../utils/generateJWT");
 const bcrypt = require("bcrypt")
 
-const { User, Project } = require("../../db");
+const { User, Project, Country, Category } = require("../../db");
+
 const userCreate = async (data) => {
   let { user_name, name, last_name, email, password, profile_img } = data
   if (!user_name || !name || !last_name || !email || !password || !profile_img) {
     throw new Error("Por favor complete todos los campos");
   } else {
     const findUser = await User.findOne({ where: { user_name: user_name } })
-    const findEmail = await User.findOne({ where: { email:email} })
+    const findEmail = await User.findOne({ where: { email: email } })
 
     if (findEmail) {
       throw new Error("Este correo electrónico ya está registrado");
-    } 
+    }
     if (findUser) {
       throw new Error("Este nombre de usuario ya existe");
     } else {
@@ -63,7 +64,7 @@ const confirmeUser = async (token) => {
 
   await userToConfirm.save()
 
-  return {message: 'Confirmado correctamente'}
+  return { message: 'Confirmado correctamente' }
 }
 
 
@@ -102,7 +103,7 @@ const authUser = async (data) => {
       token: generateJWT(user.id, user.user_name)
     }
 
-   
+
     const infoProjectDB = await Project.findAll({ where: { userId: infoUser.id } })
 
     const infoMixed = { ...infoUser, userProjects: infoProjectDB }
@@ -181,12 +182,12 @@ const getAllUserByName = async (user_name) => {
 
 
 /* controler del back para mostrar el detalle del usuario junto con los respectivos proyectos que creo el mismo */
-const userByID = async (userID) => {
-  
-  if (!userID) {
+const userByID = async (userId) => {
+
+  if (!userId) {
     throw new Error("No se especificó el ID del usuario");
   } else {
-    const infoUserDB = await User.findByPk(userID);
+    const infoUserDB = await User.findByPk(userId);
     if (!infoUserDB) {
       throw new Error("No se encontró ningún usuario con ese ID")
     } else {
@@ -202,7 +203,14 @@ const userByID = async (userID) => {
         profile_img: infoUserDB.profile_img,
       };
 
-      const infoProjectDB = await Project.findAll({ where: { userId: userID } })
+      const infoProjectDB = await Project.findAll({
+        where: {
+          userId
+        }, include: [
+          { model: Country, attributes: ['name'] },
+          { model: Category, attributes: ['name'], through: { attributes: [] } },
+        ]
+      })
 
       const infoMixed = { ...infoUserClean, userProjects: infoProjectDB }
 
@@ -265,6 +273,7 @@ const deleteUser = async (userID) => {
 TODO: crear filtros por ciertos parametros de usuario, como deletedAt 
 (con su instancia de usuario borrado. no se el valor que se le da con el destroy({<})) */
 const getAllUserInfoAdmin = async () => {
+  console.log("match");
   const infoDB = await User.findAll();
   const infoClean = infoDB.map(user => {
     return {
