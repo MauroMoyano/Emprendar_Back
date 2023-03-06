@@ -79,22 +79,22 @@ const confirmeUserHl = async function (req, res) {
 
 
 const authUserHl = async function (req, res) {
-  
+
 
   try {
     const response = await authUser(req.body)
-  
+
     res.status(200).json(response)
   } catch (error) {
-  
+
     res.status(400).json({ message: error.message })
   }
 
 }
 
-const authedUserhl = async function (req,res) {
- 
-    res.json({user:req.user})
+const authedUserhl = async function (req, res) {
+
+  res.json({ msg: 'algo' })
 }
 
 
@@ -102,7 +102,7 @@ const authedUserhl = async function (req,res) {
 /* handler de ADMIN. */
 
 const getAllUserDataAdmin = async function (req, res) {
-
+  console.log('matchdsad asfasdgasdgdfdaswfasd');
   try {
     let result = await getAllUserInfoAdmin()
     res.status(201).json(result)

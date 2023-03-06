@@ -42,7 +42,7 @@ routerUser.get('/login/me', checkAuth, authedUserhl)
 
 
 /* ruta de ADMINS. */
-routerUser.get("/admins", getAllUserDataAdmin)
+routerUser.get('/admins', getAllUserDataAdmin)
 
 
 module.exports = routerUser;
