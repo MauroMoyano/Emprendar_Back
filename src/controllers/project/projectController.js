@@ -55,7 +55,7 @@ const getProjectById = async (id) => {
             ]
         })
 
-    let comments = await Comment.findAll({
+    /* let comments = await Comment.findAll({
         where: {
             deletedAt: null,
             projectId: id
@@ -63,9 +63,9 @@ const getProjectById = async (id) => {
             { model: User, attributes: ['user_name', 'profile_img'] }
         ]
 
-    })
+    }) */
 
-    return { project: project, comments: comments }
+    return project
 
 }
 

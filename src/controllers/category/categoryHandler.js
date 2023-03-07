@@ -12,5 +12,14 @@ const getAllCategories = async function (req, res) {
     }
 }
 
+const getProjectsByCategiries = async function (req, res) {
+    try {
+        let result = getProjectIncludesCat(req.body)
+        res.status().json(result)
+    } catch (error) {
+        res.status().json()
+    }
+}
 
-module.exports = getAllCategories
+
+module.exports = { getAllCategories, getProjectsByCategiries }

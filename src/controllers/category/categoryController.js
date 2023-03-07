@@ -1,4 +1,4 @@
-const { Category } = require('../../db')
+const { Category, Project } = require('../../db')
 
 /* trate las categorias para cargarlas en el redux del front */
 const getCategories = async () => {
@@ -9,5 +9,19 @@ const getCategories = async () => {
     });
 }
 
+const getProjectIncludesCat = async (data) => {
+    let resultProject = []
+    data.forEach(async category => {
+        resultProject.push(await Category.findAll({
+            where: {
+                name: category
+            }, includes: [
+                { module: Project, attributes: ['id', 'title', 'summary'] }
+            ]
+        }))
+    });
+    return new Set(resultProject)
+}
 
-module.exports = getCategories
+
+module.exports = { getCategories, getProjectIncludesCat }
