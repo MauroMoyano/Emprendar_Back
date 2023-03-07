@@ -1,4 +1,4 @@
-const { Project, User, Country, Category } = require('../../db')
+const { Project, User, Country, Category, Comment } = require('../../db')
 
 const addProject = async (data) => {
 
@@ -46,7 +46,7 @@ const addProject = async (data) => {
 
 const getProjectById = async (id) => {
     //buscamos por el id
-    const project = await Project.findByPk(
+    let project = await Project.findByPk(
         id,
         {
             include: [
@@ -54,7 +54,18 @@ const getProjectById = async (id) => {
                 { model: Category, attributes: ['name'], through: { attributes: [] } },
             ]
         })
-    return project
+
+    let comments = await Comment.findAll({
+        where: {
+            deletedAt: null,
+            projectId: id
+        }, include: [
+            { model: User, attributes: ['user_name', 'profile_img'] }
+        ]
+
+    })
+
+    return { project: project, comments: comments }
 
 }
 

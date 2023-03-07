@@ -1,4 +1,4 @@
-const { Comment } = require('../../db')
+const { Comment, User, Project } = require('../../db')
 
 /* posteo del comentario, creacion */
 const newComment = async function (data) {
@@ -9,10 +9,33 @@ const newComment = async function (data) {
         throw new Error('debes completar el campo antes de enviar')
     }
 
-    return await Comment.create({
-        userId,
-        projectId,
+    let comm = await Comment.create({
         comment
+    })
+
+    let user = await User.findByPk(userId)
+    let project = await Project.findByPk(projectId)
+
+    console.log(project);
+
+
+    await comm.setUser(user)
+    await comm.setProject(project)
+
+    return await Comment.findByPk(comm.id)
+
+}
+
+
+const getCommentByIdProject = async function (data) {
+
+    let { projectId } = data
+
+    return await Comment.findAll({
+        where: {
+            deletedAt: null,
+            projectId
+        }
     })
 }
 
@@ -47,6 +70,7 @@ const eliminateCommentController = async function (id) {
 
 module.exports = {
     newComment,
+    getCommentByIdProject,
     changeComment,
     eliminateCommentController
 }
