@@ -39,7 +39,7 @@ const userCreate = async (data) => {
       })
 
       return {
-        msg: "El usuario se creó con éxito"
+        message: "El usuario se creó con éxito, revisa tu casilla de Email para confirmar"
       };
     }
   }
