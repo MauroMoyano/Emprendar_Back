@@ -1,4 +1,4 @@
-const getCategories = require("./categoryController")
+const { getCategories, getProjectIncludesCat } = require("./categoryController")
 
 
 /* handler para hacer una peticion de todas las categorias */
@@ -17,9 +17,12 @@ const getProjectsByCategiries = async function (req, res) {
         let result = getProjectIncludesCat(req.body)
         res.status().json(result)
     } catch (error) {
-        res.status().json()
+        res.status().json({ error: error.message })
     }
 }
 
 
-module.exports = { getAllCategories, getProjectsByCategiries }
+module.exports = {
+    getAllCategories,
+    getProjectsByCategiries
+}

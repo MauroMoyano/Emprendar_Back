@@ -24,4 +24,7 @@ const getProjectIncludesCat = async (data) => {
 }
 
 
-module.exports = { getCategories, getProjectIncludesCat }
+module.exports = {
+    getCategories,
+    getProjectIncludesCat
+}
