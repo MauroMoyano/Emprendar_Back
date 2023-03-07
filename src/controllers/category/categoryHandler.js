@@ -14,10 +14,10 @@ const getAllCategories = async function (req, res) {
 
 const getProjectsByCategiries = async function (req, res) {
     try {
-        let result = getProjectIncludesCat(req.body)
-        res.status().json(result)
+        let result = await getProjectIncludesCat(req.body)
+        res.status(201).json(result)
     } catch (error) {
-        res.status().json({ error: error.message })
+        res.status(406).json({ error: error.message })
     }
 }
 

@@ -10,17 +10,37 @@ const getCategories = async () => {
 }
 
 const getProjectIncludesCat = async (data) => {
-    let resultProject = []
-    data.forEach(async category => {
-        resultProject.push(await Category.findAll({
+    const { categories } = data
+
+    console.log(categories);
+
+    const resultProject = []
+
+    categories.forEach(async name => {
+        let result = await Category.findAll({
             where: {
-                name: category
-            }, includes: [
-                { module: Project, attributes: ['id', 'title', 'summary'] }
+                deletedAt: null,
+                name
+            },
+            include: [
+                { model: Project, attributes: ['title'], through: { attributes: [] } },
             ]
-        }))
+        })
+
+        /* console.log(result[0].dataValues.projects[0].dataValues); */
+
+        result.map(response => {
+            response.dataValues.projects.map(res => {
+                console.log("FINAL ==========>",res.dataValues);
+                resultProject.push(res.dataValues)
+            })
+        })
+
     });
-    return new Set(resultProject)
+
+    console.log(resultProject);
+
+    return resultProject
 }
 
 
