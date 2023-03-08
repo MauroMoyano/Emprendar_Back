@@ -56,5 +56,6 @@ module.exports = {
     postNewComment,
     getCommentProject,
     updateComment,
-    deleteComment
+    deleteComment,
+    getCommentProject
 }
