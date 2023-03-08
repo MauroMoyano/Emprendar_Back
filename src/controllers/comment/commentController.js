@@ -9,19 +9,17 @@ const getCommentByIdProject = async function (data) {
             deletedAt: null,
             projectId
         },
-        include : {
-            model : User,
-            atributes : ["name"],
-            trougth :{
-                attributes : ["userId"]
-              }
+        include: {
+            model: User,
+            atributes: ["name"],
+            trougth: {
+                attributes: ["userId"]
+            }
 
         }
     })
     return result
 }
-
-
 
 
 
@@ -50,20 +48,6 @@ const newComment = async function (data) {
     return await Comment.findByPk(comm.id)
 
 }
-
-
-const getCommentByIdProject = async function (data) {
-
-    let { projectId } = data
-
-    return await Comment.findAll({
-        where: {
-            deletedAt: null,
-            projectId
-        }
-    })
-}
-
 
 /* cambio del valor del commentario por parte de un usuario especifico, el mismo quien lo creó.
 para mayor seguridad, nos podriamos preguntar si está activo el token con el cual el usuario inicia.
@@ -98,5 +82,5 @@ module.exports = {
     getCommentByIdProject,
     changeComment,
     eliminateCommentController,
-    getCommentByIdProject 
+    getCommentByIdProject
 }
