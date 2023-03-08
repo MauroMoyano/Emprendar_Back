@@ -1,4 +1,29 @@
-const { Comment } = require('../../db')
+const { Comment, User } = require('../../db')
+
+const getCommentByIdProject = async function (data) {
+
+    let { projectId } = data
+
+    const result = await Comment.findAll({
+        where: {
+            deletedAt: null,
+            projectId
+        },
+        include : {
+            model : User,
+            atributes : ["name"],
+            trougth :{
+                attributes : ["userId"]
+              }
+
+        }
+    })
+    return result
+}
+
+
+
+
 
 /* posteo del comentario, creacion */
 const newComment = async function (data) {
@@ -48,5 +73,6 @@ const eliminateCommentController = async function (id) {
 module.exports = {
     newComment,
     changeComment,
-    eliminateCommentController
+    eliminateCommentController,
+    getCommentByIdProject 
 }
