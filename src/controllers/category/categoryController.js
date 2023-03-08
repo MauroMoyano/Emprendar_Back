@@ -16,18 +16,16 @@ const getProjectIncludesCat = async (data) => {
 
     const resultProject = []
 
-    categories.forEach(async name => {
+    await Promise.all(categories.map(async name => {
         let result = await Category.findAll({
             where: {
                 deletedAt: null,
                 name
             },
             include: [
-                { model: Project, attributes: ['title'], through: { attributes: [] } },
+                { model: Project, attributes: ['id','title','summary','img','userId'], through: { attributes: [] } },
             ]
         })
-
-        /* console.log(result[0].dataValues.projects[0].dataValues); */
 
         result.map(response => {
             response.dataValues.projects.map(res => {
@@ -36,7 +34,7 @@ const getProjectIncludesCat = async (data) => {
             })
         })
 
-    });
+    }))
 
     console.log(resultProject);
 
