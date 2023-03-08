@@ -8,14 +8,13 @@ const {
   confirmeUserHl,
   authUserHl,
   getAllUserDataAdmin,
-  authedUserhl
+  authedUserhl,
 } = require("../controllers/user/userHandler");
-const {checkAuth} = require("../middleware/checkAuth");
+const { checkAuth } = require("../middleware/checkAuth");
 const routerUser = Router();
-
+const { passport } = require("../middleware/google");
 /* creado de usuario */
 routerUser.post("/", postUserHanlder);
-
 
 /* rutas generales de la pagina */
 
@@ -36,13 +35,39 @@ routerUser.delete("/:id", deleteUserHandler);
 routerUser.get("/confirmar/:token", confirmeUserHl);
 routerUser.post("/login", authUserHl);
 
-
-routerUser.get('/login/me', checkAuth, authedUserhl)
-
-
+routerUser.get("/login/me", checkAuth, authedUserhl);
 
 /* ruta de ADMINS. */
-routerUser.get('/admins', getAllUserDataAdmin)
+routerUser.get("/admins", getAllUserDataAdmin);
 
+routerUser.get(
+  "/auth/google",
+  passport.authenticate("google"),
+  function (req, res) {}
+);
+
+routerUser.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/auth/google",
+    session: false,
+  }),
+  (req, res) => {
+    const userString = JSON.stringify(req.user);
+
+    res.send(
+      ` 
+      <!DOCTYPE html>
+      <html lang="en">
+
+      <body>
+          
+      </body>
+      <script> window.opener.postMessage(${userString}, 'http://localhost:3000') </script>
+      </html>
+      `
+    );
+  }
+);
 
 module.exports = routerUser;

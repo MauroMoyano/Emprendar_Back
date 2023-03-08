@@ -39,7 +39,7 @@ const userCreate = async (data) => {
       })
 
       return {
-        msg: "El usuario se creó con éxito"
+        message: "El usuario se creó con éxito, revisa tu casilla de Email para confirmar"
       };
     }
   }
@@ -243,7 +243,6 @@ const updateUser = async (id, data) => {
   }
   await userFind.save()
   // const updatedUser = await userFind.update(data);
-  console.log(userFind);
 
   return { msg: 'Usuario actualizado correctamente' };
 }

@@ -1,3 +1,6 @@
+
+const passport = require("passport");
+
 const express = require("express");
 const cors = require("cors");
 const { conectarDB } = require("./src/db");
@@ -6,6 +9,8 @@ require('dotenv').config()
 //creamos el servidor
 
 const app = express();
+
+app.use(passport.initialize())
 
 // conectamos a la base de datos
 

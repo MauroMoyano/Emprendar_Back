@@ -36,7 +36,6 @@ const getAllUsersHandler = async function (req, res) {
 
 const getAllUserByIdHandler = async function (req, res) {
   const { id } = req.params;
-  console.log(req)
   try {
     const found = await userByID(id);
     res.status(200).send(found);
@@ -94,7 +93,8 @@ const authUserHl = async function (req, res) {
 
 const authedUserhl = async function (req, res) {
 
-  res.json({ msg: 'algo' })
+    res.json(req.user)
+
 }
 
 
@@ -102,7 +102,6 @@ const authedUserhl = async function (req, res) {
 /* handler de ADMIN. */
 
 const getAllUserDataAdmin = async function (req, res) {
-  console.log('matchdsad asfasdgasdgdfdaswfasd');
   try {
     let result = await getAllUserInfoAdmin()
     res.status(201).json(result)
