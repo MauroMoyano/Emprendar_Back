@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { postNewComment, updateComment, deleteComment } = require("../controllers/comment/commentHandler");
+const { postNewComment, updateComment, deleteComment,getCommentProject  } = require("../controllers/comment/commentHandler");
 const routerComment = Router()
 
 /* para postear comentarios a un proyecto desde un usuario auth 
@@ -9,6 +9,7 @@ routerComment.post('/', postNewComment)
 /* ruta innecesaria, no vamos a solicitar un detalle del comentario ahora. se van a 
 pedir por cada proyecto */
 /* routerComment.get('/:projectId',) */
+routerComment.get('/:projectId', getCommentProject)
 /* ruta de actualizacion de un comentario.
 TODO: la idea es que cuando se actualice, dentro del estado de reduc, se actualice el por
 el nuevo valor del comentario. la idea la tango para implementar */

@@ -1,4 +1,23 @@
-const { newComment, changeComment, eliminateCommentController } = require("./commentController")
+const { getCommentByIdProject ,newComment, changeComment, eliminateCommentController } = require("./commentController")
+
+
+
+const getCommentProject = async (req, res) => {
+
+    try {
+        let result = await getCommentByIdProject(req.params)
+        res.status(201).json(result)
+    } catch (error) {
+        res.status(406).json({ error: error.message })
+
+    }
+}
+
+
+
+
+
+
 
 /* se crea un nuevo comentario, en el cual ademas de devolver un "msg" devolvemos lo que 
 defini como "toRedux", que vendria a contener los datos del nuevo comentario. el mismo se manda asi
@@ -42,5 +61,6 @@ const deleteComment = async (req, res) => {
 module.exports = {
     postNewComment,
     updateComment,
-    deleteComment
+    deleteComment,
+    getCommentProject
 }
