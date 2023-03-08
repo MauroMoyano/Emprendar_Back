@@ -4,7 +4,7 @@ const addProject = async (data) => {
 
     //TODO crear validaciones
 
-    const { title, summary, description, goal, img, userId, country, category } = await data
+    const { title, summary, description, goal, img, userId, country, user_name,category } = data
 
     //validacion precaria xd
     if (title === '' || summary === '' || description === '' || img === '' || userId === '') {
@@ -23,11 +23,10 @@ const addProject = async (data) => {
         description,
         goal,
         img,
-        validated: "aceptado", /* va para por el momento por no tener el recurso del dashboard de admin */
-
-        /* user_name: user.dataValues.user_name */ /* no se le incluira porque ira dentro del user: {id, user_name} */
-
-        /* userId: userId */  //esto viene del user autenticado
+        country,
+        user_name,
+        category,
+        userId: userId  //esto viene del user autenticado
     })
 
     await category.map(async (name) => {
