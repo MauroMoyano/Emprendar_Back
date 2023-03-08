@@ -243,7 +243,6 @@ const updateUser = async (id, data) => {
   }
   await userFind.save()
   // const updatedUser = await userFind.update(data);
-  console.log(userFind);
 
   return { msg: 'Usuario actualizado correctamente' };
 }

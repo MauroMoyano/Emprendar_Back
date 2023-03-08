@@ -90,7 +90,6 @@ const getAllProjects = async () => {
 
 const searchProject = async (projectTitle) => {
     //buscamos el projecto por el nombre
-    console.log(projectTitle);
     let project = await Project.findAll({
         where: {
             validated: 'aceptado',

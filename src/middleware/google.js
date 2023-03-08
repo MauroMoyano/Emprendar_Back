@@ -2,6 +2,8 @@ const passport = require("passport");
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 const {User} = require('../db')
 const {userByID} = require('../controllers/user/userController')
+const { generateJWT } = require("../..//utils/generateJWT");
+
 require('dotenv').config()
 
 
@@ -17,31 +19,35 @@ passport.use("google", new GoogleStrategy({
 } , async function(req,accesToken, refreshToken, profile, done) {
    
 
+      
 
        const newUser = await User.findOne({
         where: {
-            email : profile._json.email
+            email : profile._json.email,
         }
        })
-
-       if(newUser) {
+    
+       if(newUser) {    
             const user = await userByID(newUser.id)
-
+            console.log('nuevo usuaro  ===>', newUser.id)
+            user.token =  generateJWT(user.id, user.user_name)
             done(null,user)
-       }
-
+       } else {
         const userByGoogle = await User.create({
 
             name : profile.name.givenName,
             last_name: profile.name.familyName,
-            user_name: profile.displayName,
+            user_name: profile._json.email,
             email : profile._json.email,
             profile_img: profile._json.picture,
             confirmed:true,
             password: ''
        }) 
+       userByGoogle.token = generateJWT(userByGoogle.id, userByGoogle.user_name)
+       done(null, userByGoogle)
 
-         done(null, userByGoogle)
+       }
+
 } ))
 
 
