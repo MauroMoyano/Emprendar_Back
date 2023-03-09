@@ -1,3 +1,4 @@
+const { Promise } = require('bluebird');
 const { Category, Project } = require('../../db')
 
 /* trate las categorias para cargarlas en el redux del front */
@@ -14,33 +15,22 @@ const getProjectIncludesCat = async (data) => {
 
     console.log(categories);
 
-    const resultProject = []
-
-    await Promise.all(categories.map(async name => {
-        let result = await Category.findAll({
+    let resultDB = await categories.map(async name => {
+        return await Category.findAll({
             where: {
                 deletedAt: null,
                 name
             },
             include: [
-                { model: Project, attributes: ['id','title','summary','img','userId'], through: { attributes: [] } },
+                { model: Project, attributes: ['id', 'title', 'summary', 'img', 'userId'], through: { attributes: [] } },
             ]
         })
+    })
 
-        result.map(response => {
-            response.dataValues.projects.map(res => {
-                console.log("FINAL ==========>",res.dataValues);
-                resultProject.push(res.dataValues)
-            })
-        })
-
-    }))
-
-    console.log(resultProject);
-
-    return resultProject
+    return await Promise.all(resultDB)
+        .then(res => res.flat())
+        .then(res => res.flatMap(data => data.projects))
 }
-
 
 module.exports = {
     getCategories,
