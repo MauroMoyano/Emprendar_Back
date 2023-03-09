@@ -78,7 +78,7 @@ const getAllProjects = async (page, pageNum = 4) => {
             { model: User, attributes: ['id', 'user_name', 'profile_img'] },
             { model: Category, attributes: ['name'], through: { attributes: [] } },
         ]
-    });
+    })
 
     return rows
 
