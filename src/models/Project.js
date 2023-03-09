@@ -55,7 +55,7 @@ module.exports = (sequelize) => {
           }, */
         validated: {
             type: DataTypes.ENUM('aceptado', 'rechazado', 'espera'),
-            defaultValue: 'espera'
+            defaultValue: 'aceptado'
         }
     }, { paranoid: true }) //habilitar el borrado logico
 }
