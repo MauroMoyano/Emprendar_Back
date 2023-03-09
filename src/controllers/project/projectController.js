@@ -57,6 +57,7 @@ const getProjectById = async (id) => {
 
 }
 
+/* a incluir filtros tambien. */
 
 const getAllProjects = async (page, pageNum = 4) => {
     //buscamos todos los projectos
@@ -83,6 +84,11 @@ const getAllProjects = async (page, pageNum = 4) => {
 
 }
 
+
+
+
+
+/* fin de filtros. */
 
 const searchProject = async (projectTitle) => {
     //buscamos el projecto por el nombre
