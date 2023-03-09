@@ -14,7 +14,7 @@ const getAllCategories = async function (req, res) {
 
 const getProjectsByCategiries = async function (req, res) {
     try {
-        await getProjectIncludesCat(req.body)
+        await getProjectIncludesCat(req.query)
             /* Convertir objetos a cadenas JSON, formato: '{}' */
             .then(res => res.map(JSON.stringify))
             .then(res => new Set(res))

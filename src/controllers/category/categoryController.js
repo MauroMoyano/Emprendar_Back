@@ -11,21 +11,32 @@ const getCategories = async () => {
 }
 
 const getProjectIncludesCat = async (data) => {
+
     const { categories } = data
 
-    console.log(categories);
-
-    let resultDB = await categories.map(async name => {
-        return await Category.findAll({
+    let resultDB
+    
+    typeof categories !== 'string'
+        ? resultDB = await categories.map(async name => {
+            return await Category.findAll({
+                where: {
+                    deletedAt: null,
+                    name
+                },
+                include: [
+                    { model: Project, attributes: ['id', 'title', 'summary', 'img', 'userId'], through: { attributes: [] } },
+                ]
+            })
+        })
+        : resultDB = await Category.findAll({
             where: {
                 deletedAt: null,
-                name
+                name: categories
             },
             include: [
                 { model: Project, attributes: ['id', 'title', 'summary', 'img', 'userId'], through: { attributes: [] } },
             ]
         })
-    })
 
     return await Promise.all(resultDB)
         .then(res => res.flat())
