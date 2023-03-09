@@ -57,38 +57,34 @@ const getProjectById = async (id) => {
 
 }
 
-/* a incluir filtros tambien. */
+/* a incluir filtros tambien. */ 
+ 
+const getAllProjects = async (page, pageNum = 4) => { 
+    //buscamos todos los projectos 
+ 
+    let offset = (page - 1) * pageNum; 
+    let limit = pageNum; 
+ 
+    const { count, rows } = await Project.findAndCountAll({ 
+        offset, 
+        limit, 
+        /* order: [['title', 'ASC']], */  
+        where: { 
+            validated: 'aceptado', 
+            deletedAt: null 
+        }, 
+        include: [ 
+            { model: Country, attributes: ['name'] }, 
+            { model: User, attributes: ['id', 'user_name', 'profile_img'] }, 
+            { model: Category, attributes: ['name'], through: { attributes: [] } }, 
+        ] 
+    }) 
+ 
+    return rows 
+ 
+} 
 
-const getAllProjects = async (page, pageNum = 4) => {
-    //buscamos todos los projectos
-
-    let offset = (page - 1) * pageNum;
-    let limit = pageNum;
-
-    const { count, rows } = await Project.findAndCountAll({
-        offset,
-        limit,
-        /* order: [['title', 'ASC']], */
-        where: {
-            validated: 'aceptado',
-            deletedAt: null
-        },
-        include: [
-            { model: Country, attributes: ['name'] },
-            { model: User, attributes: ['id', 'user_name', 'profile_img'] },
-            { model: Category, attributes: ['name'], through: { attributes: [] } },
-        ]
-    });
-
-    return rows
-
-}
-
-
-
-
-
-/* fin de filtros. */
+/* fin de filtros. */ 
 
 const searchProject = async (projectTitle) => {
     //buscamos el projecto por el nombre
