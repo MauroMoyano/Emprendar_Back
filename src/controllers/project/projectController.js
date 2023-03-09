@@ -4,7 +4,7 @@ const addProject = async (data) => {
 
     //TODO crear validaciones
 
-    const { title, summary, description, goal, img, userId, country, user_name,category } = data
+    const { title, summary, description, goal, img, userId, country, user_name, category } = data
 
     //validacion precaria xd
     if (title === '' || summary === '' || description === '' || img === '' || userId === '') {
@@ -58,9 +58,16 @@ const getProjectById = async (id) => {
 }
 
 
-const getAllProjects = async () => {
+const getAllProjects = async (page, pageNum = 4) => {
     //buscamos todos los projectos
-    const projects = await Project.findAll({
+
+    let offset = (page - 1) * pageNum;
+    let limit = pageNum;
+
+    const { count, rows } = await Project.findAndCountAll({
+        offset,
+        limit,
+        /* order: [['title', 'ASC']], */
         where: {
             validated: 'aceptado',
             deletedAt: null
@@ -70,21 +77,10 @@ const getAllProjects = async () => {
             { model: User, attributes: ['id', 'user_name', 'profile_img'] },
             { model: Category, attributes: ['name'], through: { attributes: [] } },
         ]
+    });
 
-    })
+    return rows
 
-
-    /* let allProjects = await projects.forEach(async proj => {
-        console.log(proj.userId);
-        let user = await User.findByPk(proj.userId)
-        console.log(user);
-        return { ...proj, user_name: user.user_name}
-    }); */
-
-    //si hay projectos retornarlos
-    if (projects) return projects
-    //de lo contrario retornar este mensaje
-    else throw new Error('No se encontraron projectos')
 }
 
 
