@@ -59,7 +59,6 @@ const confirmeUser = async (token) => {
     throw new Error('Token no valido')
   }
 
-  userToConfirm.token = ""
   userToConfirm.confirmed = true
 
   await userToConfirm.save()
