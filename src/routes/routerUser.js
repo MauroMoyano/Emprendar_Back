@@ -62,8 +62,9 @@ routerUser.get(
 
       <body>
           
+
       </body>
-      <script> window.opener.postMessage(${userString}, 'http://localhost:3000') </script>
+      <script> window.opener.postMessage(${userString}, '${process.env.FRONTEND_URL}') </script>
       </html>
       `
     );

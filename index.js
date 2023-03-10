@@ -1,6 +1,6 @@
 
 const passport = require("passport");
-
+const bodyParser = require('body-parser');
 const express = require("express");
 const cors = require("cors");
 const { conectarDB } = require("./src/db");
@@ -26,7 +26,7 @@ app.use(cors(opcionesCors));
 //habilitamos leer los valores del body
 
 app.use(express.json());
-
+app.use(bodyParser.urlencoded({ extended: false }));
 // dejamos definido el puerto para railway, si no existe usamos 3001
 
 const port = process.env.PORT || 3001;
@@ -39,7 +39,7 @@ app.use('/', require('./src/routes/index'))
 
 // "0.0.0.0"  el servidor estará disponible para conexiones entrantes desde cualquier dirección IP.
 app.listen(port, "0.0.0.0", () => {
-    console.log("el servidor esta corriendo en el puerto http://localhost:" + port);
+    console.log("el servidor esta corriendo en el puerto" + port);
     /* prueba creado de usuarios y pryectos */
     
 });
