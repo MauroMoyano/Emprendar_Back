@@ -1,10 +1,12 @@
 const { Router } = require('express')
-const { getProjects, postProject, detailProject, updateProjectHl, deleteProjectHl, updateValidateHl } = require('../controllers/project/projectHandler')
+const { getProjects, postProject, detailProject, updateProjectHl, deleteProjectHl, updateValidateHl, getAllFilteredProjects } = require('../controllers/project/projectHandler')
 const routerProject = Router()
 
 /* rutas de Usuarios */
 /* ruta para traer todos los poryectos */
 routerProject.get('/', getProjects)
+/* ruta para filtro de proyectos */
+routerProject.get('/filter', getAllFilteredProjects)
 /* ruta para el detalle del proyecto pasado por params */
 routerProject.get('/:id', detailProject)
 /* ruta para postear un nuevo prouecto */
