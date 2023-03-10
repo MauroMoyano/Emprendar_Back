@@ -88,10 +88,10 @@ const getAllProjects = async (page, pageNum = 4) => {
 
 const getFilteredProjects = async (condition, pageNum = 4) => {
 
-    const { orden, country, category, page } = condition;
+    const { orden, country, category/* , page  */} = condition;
 
-    console.log(page);
-
+    
+    let page = 1
     let offset = (page - 1) * pageNum;
     let limit = pageNum;
 
@@ -102,7 +102,7 @@ const getFilteredProjects = async (condition, pageNum = 4) => {
     let thisOrder
 
     orden
-        ? thisOrder = [['title', orden]]
+        ? thisOrder = [['goal', orden]]
         : thisOrder = null
 
     let thisCountry
