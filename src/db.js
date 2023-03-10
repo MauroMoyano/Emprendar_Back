@@ -77,7 +77,7 @@ sequelize.sync({ force : true})
                 amount_collected: 100,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["emprendimiento"]
+                category: ["emprendimiento","tecnología"]
             },
             {
                 title: 'proyecto inmobiliario',
@@ -88,7 +88,7 @@ sequelize.sync({ force : true})
                 amount_collected: 920,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["emprendimiento", "social"]
+                category: ["emprendimiento", "social","tecnología"]
             },
             {
                 title: 'colecta para hospital',
@@ -99,7 +99,7 @@ sequelize.sync({ force : true})
                 amount_collected: 1420,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["medicina", "social"]
+                category: ["medicina", "social","tecnología"]
             },
             {
                 title: 'donaciones a orfanato',
@@ -110,7 +110,7 @@ sequelize.sync({ force : true})
                 amount_collected: 9300,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["medicina", "social", "educacion"]
+                category: ["medicina", "social", "educacion","tecnología"]
             },
             {
                 title: 'un futuro mejor',
@@ -121,7 +121,7 @@ sequelize.sync({ force : true})
                 amount_collected: 39000,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["cultural", "social", "educacion"]
+                category: ["cultural", "social", "educación"]
             },
             {
                 title: 'mi primer emprendimiento',
@@ -132,7 +132,7 @@ sequelize.sync({ force : true})
                 amount_collected: 25000,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["emprendimiento", "social", "educacion"]
+                category: ["emprendimiento", "social", "educación"]
             },
             {
                 title: 'idea innovadora',
@@ -143,11 +143,11 @@ sequelize.sync({ force : true})
                 amount_collected: 142000,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["emprendimiento", "social", "tecnologia"]
+                category: ["emprendimiento", "social", "tecnología"]
             }
         ]
 
-        let arrCategory = ["tecnologia", "ambiental", "cultural", "social", "medicina", "educacion", "emprendimiento"]
+        let arrCategory = ["tecnología", "ambiental", "cultural", "social", "medicina", "educación", "emprendimiento"]
 
         let arrComents = [
             "Me encantó esta idea. Es muy útil y de alta calidad.",
