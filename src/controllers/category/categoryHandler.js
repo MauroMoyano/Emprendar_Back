@@ -6,6 +6,7 @@ const getAllCategories = async function (req, res) {
 
     try {
         let result = await getCategories()
+        
         res.status(201).json(result)
     } catch (error) {
         res.status(406).json({ error: error.message })

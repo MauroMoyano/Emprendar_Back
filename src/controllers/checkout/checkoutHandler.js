@@ -1,8 +1,9 @@
 const stripe = require('stripe')('sk_test_51Mk4HfG6CreG8V9N5nKgDAm4wc1uwltulf3qMyrjgKL9a36y6rOhUpe3mIH6SnF1ImzSt4Dli2JPf2aSOMHfZ9by00FprIxbkZ');
 
   async function checkoutHl(req, res) {
-    console.log(req.body)
+
   if (req.method === 'POST') {
+    console.log(req.body.amount)
     try {
       // Create Checkout Sessions from body params.
       const session = await stripe.checkout.sessions.create({
@@ -10,7 +11,7 @@ const stripe = require('stripe')('sk_test_51Mk4HfG6CreG8V9N5nKgDAm4wc1uwltulf3qM
           {
             price_data: {
                 currency: 'usd',
-                unit_amount_decimal: 2000,
+                unit_amount_decimal: req.body.amount * 100,
                 product_data: {
                   name: 'Donacion voluntaria',
                   description: 'Vas a hacer una donacion al proyecto',
