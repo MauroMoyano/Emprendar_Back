@@ -16,6 +16,18 @@ const getProjects = async (req, res) => {
     }
 }
 
+const { getFilteredProjects } = require('./projectController')
+/* handler de los proyectos filtrados por varias condicionales mixtas */
+const getAllFilteredProjects = async (req, res) => {
+    console.log(req.query);
+    try {
+        await getFilteredProjects(req.query)
+            .then(result => res.status(201).json(result))
+    } catch (error) {
+        res.status(406).json({ error: error.message })
+    }
+}
+
 
 const { addProject } = require('./projectController')
 /* posteo de un proyecto de un usuario particular.
@@ -92,6 +104,8 @@ module.exports = {
     postProject,
     detailProject,
     updateProjectHl,
+    /* filtro de proyectos */
+    getAllFilteredProjects,
     /* de Usuario y ADMIN */
     deleteProjectHl,
     /* de solo ADMIN */

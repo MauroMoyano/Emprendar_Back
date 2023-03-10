@@ -1,3 +1,5 @@
+const { Op } = require('sequelize')
+const { InvalidConnectionError } = require('sequelize')
 const { Project, User, Country, Category } = require('../../db')
 
 const addProject = async (data) => {
@@ -57,34 +59,103 @@ const getProjectById = async (id) => {
 
 }
 
-/* a incluir filtros tambien. */ 
- 
-const getAllProjects = async (page, pageNum = 4) => { 
-    //buscamos todos los projectos 
- 
-    let offset = (page - 1) * pageNum; 
-    let limit = pageNum; 
- 
-    const { count, rows } = await Project.findAndCountAll({ 
-        offset, 
-        limit, 
-        /* order: [['title', 'ASC']], */  
-        where: { 
-            validated: 'aceptado', 
-            deletedAt: null 
-        }, 
-        include: [ 
-            { model: Country, attributes: ['name'] }, 
-            { model: User, attributes: ['id', 'user_name', 'profile_img'] }, 
-            { model: Category, attributes: ['name'], through: { attributes: [] } }, 
-        ] 
-    }) 
- 
-    return rows 
- 
-} 
+/* a incluir filtros tambien. */
 
-/* fin de filtros. */ 
+const getAllProjects = async (page, pageNum = 4) => {
+    //buscamos todos los projectos 
+
+    let offset = (page - 1) * pageNum;
+    let limit = pageNum;
+
+    const { count, rows } = await Project.findAndCountAll({
+        offset,
+        limit,
+        /* order: [['title', 'ASC']], */
+        where: {
+            validated: 'aceptado',
+            deletedAt: null
+        },
+        include: [
+            { model: Country, attributes: ['name'] },
+            { model: User, attributes: ['id', 'user_name', 'profile_img'] },
+            { model: Category, attributes: ['name'], through: { attributes: [] } },
+        ]
+    })
+
+    return rows
+
+}
+
+const getFilteredProjects = async (condition, pageNum = 4) => {
+
+    const { orden, country, category, page } = condition;
+
+    console.log(page);
+
+    let offset = (page - 1) * pageNum;
+    let limit = pageNum;
+
+    if (isNaN(offset) || isNaN(limit)) {
+        throw new Error('Error: offset or limit is not a number');
+    }
+
+    let thisOrder
+
+    orden
+        ? thisOrder = [['title', orden]]
+        : thisOrder = null
+
+    let thisCountry
+
+    country
+        ? thisCountry = { name: country }
+        : thisCountry = null
+
+    let thisCategory
+
+    category
+        ? thisCategory = { name: category }
+        : thisCategory = null
+
+    console.log(
+        'ordennnnn', thisOrder,
+        'countryyyyy', thisCountry,
+        'categoryyyyyy', thisCategory
+    );
+
+    const { count, rows } = await Project.findAndCountAll({
+        offset,
+        limit,
+        order: thisOrder,
+        where: {
+            validated: 'aceptado',
+            deletedAt: null,
+        },
+        include: [
+            {
+                model: Country,
+                attributes: ['name'],
+                where: thisCountry,
+                required: true
+            },
+            {
+                model: User,
+                attributes: ['id', 'user_name', 'profile_img']
+            },
+            {
+                model: Category,
+                attributes: ['name'], through: { attributes: [] },
+                where: thisCategory,
+                required: true
+            },
+        ],
+        /* group: 'project.id', */
+    })
+
+    return rows
+
+}
+/* fin de filtros. */
 
 const searchProject = async (projectTitle) => {
     //buscamos el projecto por el nombre
@@ -163,9 +234,11 @@ const updateValidate = async (id, newValidateValue) => {
 module.exports = {
     addProject,
     getProjectById,
-    getAllProjects,
     searchProject,
     deleteProject,
     updateProject,
-    updateValidate
+    updateValidate,
+    /* filtros */
+    getAllProjects,
+    getFilteredProjects
 }
