@@ -5,6 +5,8 @@ const routerComment = require('./routerComment')
 const routerCategory = require('./routerCategory')
 const routerCountry = require('./routerCountry')
 const routerImage = require('./routerImage')
+const routerCheckout = require('./routerCheckout')
+
 
 const mainRouter = Router()
 
@@ -16,6 +18,7 @@ mainRouter.use('/comment', routerComment)
 mainRouter.use('/category', routerCategory)
 mainRouter.use('/country', routerCountry)
 mainRouter.use('/images', routerImage)
+mainRouter.use('/checkout', routerCheckout)
 
 
 module.exports = mainRouter
