@@ -1,3 +1,5 @@
+const { Project, User, Country, Category } = require('../../db')
+
 const stripe = require('stripe')('sk_test_51Mk4HfG6CreG8V9N5nKgDAm4wc1uwltulf3qMyrjgKL9a36y6rOhUpe3mIH6SnF1ImzSt4Dli2JPf2aSOMHfZ9by00FprIxbkZ');
 
   async function checkoutHl(req, res) {
@@ -25,6 +27,18 @@ const stripe = require('stripe')('sk_test_51Mk4HfG6CreG8V9N5nKgDAm4wc1uwltulf3qM
         success_url: `${process.env.FRONTEND_URL}/detailUser/${req.body.userId}/${req.body.id}/?success=true`,
         cancel_url: `${process.env.FRONTEND_URL}/detailUser/${req.body.userId}/${req.body.id}/?canceled=true`,
       });
+
+
+
+    const project = await Project.findByPk(req.body.id)
+    
+    const collectedAmount = parseInt(project.amount_collected);
+    const paymentAmount = parseInt(req.body.amount);
+    const totalAmount = collectedAmount + paymentAmount;
+    project.amount_collected = totalAmount.toString();
+    await project.save();
+
+    
       res.redirect(303, session.url);
     } catch (err) {
       res.status(err.statusCode || 500).json(err.message);
