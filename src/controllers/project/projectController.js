@@ -294,6 +294,18 @@ const updateValidate = async (id, newValidateValue) => {
     return { msg: 'Validacion actualizada correctamente' };
 }
 
+
+const getAllProjectsAdmin = async () => {
+    //
+    const projects = await Project.findAll();
+    if (!projects) {
+        throw new Error('No se encontró ningun proyecto');
+    }
+
+    return projects;
+}
+
+
 module.exports = {
     addProject,
     getProjectById,
@@ -304,5 +316,7 @@ module.exports = {
     /* getAllProjects2, */
     /* filtros */
     getAllProjects,
-    getFilteredProjects
+    getFilteredProjects,
+
+    getAllProjectsAdmin
 }

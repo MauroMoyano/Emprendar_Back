@@ -38,7 +38,7 @@ routerUser.post("/login", authUserHl);
 routerUser.get("/login/me", checkAuth, authedUserhl);
 
 /* ruta de ADMINS. */
-routerUser.get("/admins", getAllUserDataAdmin);
+routerUser.get("/admin/users", getAllUserDataAdmin);
 
 routerUser.get(
   "/auth/google",

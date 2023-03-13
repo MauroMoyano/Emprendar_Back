@@ -282,7 +282,8 @@ const getAllUserInfoAdmin = async () => {
       email: user.dataValues.email,
       reputation: user.dataValues.reputation,
       profile_img: user.dataValues.profile_img,
-      confirmed: user.dataValues.confirmed
+      confirmed: user.dataValues.confirmed,
+      createdAt: user.dataValues.createdAt
     }
   });
   return infoClean;
