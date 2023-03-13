@@ -16,6 +16,20 @@ const getProjects = async (req, res) => {
     }
 }
 
+/*  */
+/* const { getAllProjects2 } = require('./projectController')
+const getProjectsToCopy = async (req, res) => {
+    console.log('llego hasta aca');
+    try {
+        let result = await getAllProjects2()
+        res.status(201).json(result)
+    } catch (error) {
+        res.status(406).json({ error: error.message })
+    }
+
+} */
+/*  */
+
 const { getFilteredProjects } = require('./projectController')
 /* handler de los proyectos filtrados por varias condicionales mixtas */
 const getAllFilteredProjects = async (req, res) => {
@@ -104,6 +118,7 @@ module.exports = {
     postProject,
     detailProject,
     updateProjectHl,
+    /* getProjectsToCopy, */
     /* filtro de proyectos */
     getAllFilteredProjects,
     /* de Usuario y ADMIN */

@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { getProjects, postProject, detailProject, updateProjectHl, deleteProjectHl, updateValidateHl, getAllFilteredProjects } = require('../controllers/project/projectHandler')
+const { getProjects, postProject, detailProject, updateProjectHl, deleteProjectHl, updateValidateHl, getAllFilteredProjects, getProjectsToCopy } = require('../controllers/project/projectHandler')
 const routerProject = Router()
 
 /* rutas de Usuarios */
@@ -23,4 +23,7 @@ routerProject.delete('/:id', deleteProjectHl)
 routerProject.put('/validar/:id', updateValidateHl)
 
 
+/*  */
+/* routerProject.get('/home', getProjectsToCopy) */
+/*  */
 module.exports = routerProject
