@@ -2,15 +2,12 @@ const { searchProject, getAllProjects } = require('./projectController')
 /* este handler trae como bien dice todos los proyectos */
 const getProjects = async (req, res) => {
 
-    let { name, numPage } = req.query
+    let { page, country, orden, category, search } = req.query
     try {
-        if (name) {
-            let result = await searchProject(name)
-            res.status(201).json(result)
-        } else {
-            let result = await getAllProjects(numPage)
-            res.status(201).json(result)
-        }
+        let data = { page, country, orden, category, search }
+        let result = await getAllProjects(data)
+        res.status(201).json(result)
+
     } catch (error) {
         res.status(406).json({ error: error.message })
     }

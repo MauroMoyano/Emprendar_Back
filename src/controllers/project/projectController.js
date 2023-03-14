@@ -1,4 +1,5 @@
 const { Promise } = require('bluebird')
+const { Op, Sequelize } = require('sequelize')
 const { Project, User, Country, Category } = require('../../db')
 
 const addProject = async (data) => {
@@ -75,9 +76,9 @@ const getProjectById = async (id) => {
 /*  */
 /* a incluir filtros tambien. */
 
-const getAllProjects = async (page, pageNum = 4) => {
+const getAllProjects = async (data, pageNum = 4) => {
     //buscamos todos los projectos 
-    if (!page) {
+    /* if (!page) {
         const allProjects = await Project.findAll({
             where: {
                 validated: 'aceptado',
@@ -90,60 +91,76 @@ const getAllProjects = async (page, pageNum = 4) => {
             ]
         })
         return allProjects
+    } */
+
+    const { orden, page, country, category, search } = data
+
+    let countryName = null;
+    if (country) {
+        countryName = country;
     }
+
+    let categoryName = null;
+    if (category) {
+        categoryName = category;
+    }
+
+    let order = null;
+    if (orden) {
+        order = [['goal', orden]];
+    }
+
     let offset = (page - 1) * pageNum;
     let limit = pageNum;
 
-    console.log(page);
+    let where1 = {
+        where: {
+            validated: 'aceptado',
+            deletedAt: null
+        }
+    };
+    let where2 = {
+        where: {
+            deletedAt: null
+        }
+    }
+    let where3 = {
+        where: {
+            deletedAt: null,
+
+        }
+
+    }
+
+    if (search && search.length > 0) {
+        where1.where[`title`] = { [Op.iLike]: `%${search}%` }
+    }
+
+    if (countryName) {
+        where2.where[`$name$`] = { [Op.iLike]: `%${country}%` };
+    }
+
+    if (categoryName) {
+        where3.where[`name`] = { [Op.iLike]: `%${category}%` }
+
+    }
+
+    console.log(where1, where2, where3);
 
     const { count, rows } = await Project.findAndCountAll({
         offset,
         limit,
-        /* order: [['title', 'ASC']], */
-        where: {
-            validated: 'aceptado',
-            deletedAt: null
-        },
+        order,
         include: [
-            { model: Country, attributes: ['name'] },
+            { model: Country, attributes: ['name'], where: where2.where },
             { model: User, attributes: ['id', 'user_name', 'profile_img'] },
-            /* { model: Category, attributes: ['name'], through: { attributes: [] } }, */
-        ]
+            { model: Category, attributes: ['name'], where: where3.where, through: { attributes: [] } },
+        ],
+        where: where1.where
     })
 
-    let res = []
-    await Promise.all(rows.map(async (pj) => {
-        return {
-            pj, category: await pj.getCategories({
-                attributes: ['name'],
-                through: { attributes: [] },
-            })
-        }
-    }))
-        .then(proj => {
-            proj.map(obj => {
-                /* console.log(obj.category.category) */
-                res.push({
-                    id: obj.pj.dataValues.id,
-                    title: obj.pj.dataValues.title,
-                    summary: obj.pj.dataValues.summary,
-                    description: obj.pj.dataValues.description,
-                    date: obj.pj.dataValues.date,
-                    goal: obj.pj.dataValues.goal,
-                    amount_collected: obj.pj.dataValues.amount_collected,
-                    img: obj.pj.dataValues.img,
-                    userId: obj.pj.dataValues.userId,
-                    country: obj.pj.dataValues.country.dataValues,
-                    user: obj.pj.dataValues.user.dataValues,
-                    category: obj.category
-
-                })
-            })
-        })
-
-
     return {
-        data: res,
+        data: rows,
         pages: Math.ceil(count / pageNum),
     };
 
