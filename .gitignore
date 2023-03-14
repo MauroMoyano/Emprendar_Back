@@ -132,3 +132,4 @@ package-lock.json
 
 # vercel
 .vercel
+yarn.lock
