@@ -1,5 +1,5 @@
-const { Op } = require('sequelize')
-const { InvalidConnectionError } = require('sequelize')
+const { Promise } = require('bluebird')
+const { Op, Sequelize } = require('sequelize')
 const { Project, User, Country, Category } = require('../../db')
 
 const addProject = async (data) => {
@@ -58,19 +58,9 @@ const getProjectById = async (id) => {
     return project
 
 }
-
-/* a incluir filtros tambien. */
-
-const getAllProjects = async (page, pageNum = 4) => {
-    //buscamos todos los projectos 
-
-    let offset = (page - 1) * pageNum;
-    let limit = pageNum;
-
+/*  */
+/* const getAllProjects2 = async () => {
     const { count, rows } = await Project.findAndCountAll({
-        offset,
-        limit,
-        /* order: [['title', 'ASC']], */
         where: {
             validated: 'aceptado',
             deletedAt: null
@@ -81,16 +71,106 @@ const getAllProjects = async (page, pageNum = 4) => {
             { model: Category, attributes: ['name'], through: { attributes: [] } },
         ]
     })
-
     return rows
+} */
+/*  */
+/* a incluir filtros tambien. */
+
+const getAllProjects = async (data, pageNum = 4) => {
+    //buscamos todos los projectos 
+    /* if (!page) {
+        const allProjects = await Project.findAll({
+            where: {
+                validated: 'aceptado',
+                deletedAt: null
+            },
+            include: [
+                { model: Country, attributes: ['name'] },
+                { model: User, attributes: ['id', 'user_name', 'profile_img'] },
+                { model: Category, attributes: ['name'], through: { attributes: [] } },
+            ]
+        })
+        return allProjects
+    } */
+
+    const { orden, page, country, category, search } = data
+
+    let countryName = null;
+    if (country) {
+        countryName = country;
+    }
+
+    let categoryName = null;
+    if (category) {
+        categoryName = category;
+    }
+
+    let order = null;
+    if (orden) {
+        order = [['goal', orden]];
+    }
+
+    let offset = (page - 1) * pageNum;
+    let limit = pageNum;
+
+    let where1 = {
+        where: {
+            validated: 'aceptado',
+            deletedAt: null
+        }
+    };
+    let where2 = {
+        where: {
+            deletedAt: null
+        }
+    }
+    let where3 = {
+        where: {
+            deletedAt: null,
+
+        }
+
+    }
+
+    if (search && search.length > 0) {
+        where1.where[`title`] = { [Op.iLike]: `%${search}%` }
+    }
+
+    if (countryName) {
+        where2.where[`$name$`] = { [Op.iLike]: `%${country}%` };
+    }
+
+    if (categoryName) {
+        where3.where[`name`] = { [Op.iLike]: `%${category}%` }
+
+    }
+
+    console.log(where1, where2, where3);
+
+    const { count, rows } = await Project.findAndCountAll({
+        offset,
+        limit,
+        order,
+        include: [
+            { model: Country, attributes: ['name'], where: where2.where },
+            { model: User, attributes: ['id', 'user_name', 'profile_img'] },
+            { model: Category, attributes: ['name'], where: where3.where, through: { attributes: [] } },
+        ],
+        where: where1.where
+    })
+
+    return {
+        data: rows,
+        pages: Math.ceil(count / pageNum),
+    };
 
 }
 
 const getFilteredProjects = async (condition, pageNum = 4) => {
 
-    const { orden, country, category/* , page  */} = condition;
+    const { orden, country, category/* , page  */ } = condition;
 
-    
+
     let page = 1
     let offset = (page - 1) * pageNum;
     let limit = pageNum;
@@ -250,6 +330,7 @@ module.exports = {
     deleteProject,
     updateProject,
     updateValidate,
+    /* getAllProjects2, */
     /* filtros */
     getAllProjects,
     getFilteredProjects,
