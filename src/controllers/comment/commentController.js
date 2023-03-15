@@ -3,7 +3,6 @@ const { Comment, User } = require('../../db')
 const getCommentByIdProject = async function (data) {
 
     let { projectId } = data
-
     const result = await Comment.findAll({
         where: {
             deletedAt: null,
