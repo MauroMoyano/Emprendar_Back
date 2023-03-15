@@ -1,4 +1,5 @@
 const { Promise } = require('bluebird')
+const sequelize = require('sequelize')
 const { Op, Sequelize } = require('sequelize')
 const { Project, User, Country, Category } = require('../../db')
 
@@ -6,7 +7,7 @@ const addProject = async (data) => {
 
     //TODO crear validaciones
 
-    const { title, summary, description, goal, img, userId, country, user_name, category } = data
+    const { title, summary, description, goal, img, userId, country, category } = data
 
     //validacion precaria xd
     if (title === '' || summary === '' || description === '' || img === '' || userId === '') {
@@ -15,9 +16,7 @@ const addProject = async (data) => {
         }
     }
     let user = await User.findByPk(userId)
-
     let countries = await Country.findOne({ where: { name: country } })
-
     //crear el projecto
     const projecto = await Project.create({
         title,
@@ -25,17 +24,20 @@ const addProject = async (data) => {
         description,
         goal,
         img,
-        country,
-        user_name,
-        category,
-        userId: userId  //esto viene del user autenticado
     })
+
+    if (category.length < 5) {
+        let long = 5 - category.length
+        for (let i = 0; i < long; i++) {
+            let newNull = `null${i}`
+            category.push(newNull)
+        }
+    }
 
     await category.map(async (name) => {
         let cat = await Category.findOne({ where: { name } })
         await projecto.addCategory(cat)
     })
-
     await projecto.setUser(user)
     await projecto.setCountry(countries)
 
@@ -58,40 +60,11 @@ const getProjectById = async (id) => {
     return project
 
 }
-/*  */
-/* const getAllProjects2 = async () => {
-    const { count, rows } = await Project.findAndCountAll({
-        where: {
-            validated: 'aceptado',
-            deletedAt: null
-        },
-        include: [
-            { model: Country, attributes: ['name'] },
-            { model: User, attributes: ['id', 'user_name', 'profile_img'] },
-            { model: Category, attributes: ['name'], through: { attributes: [] } },
-        ]
-    })
-    return rows
-} */
-/*  */
+
 /* a incluir filtros tambien. */
 
 const getAllProjects = async (data, pageNum = 4) => {
-    //buscamos todos los projectos 
-    /* if (!page) {
-        const allProjects = await Project.findAll({
-            where: {
-                validated: 'aceptado',
-                deletedAt: null
-            },
-            include: [
-                { model: Country, attributes: ['name'] },
-                { model: User, attributes: ['id', 'user_name', 'profile_img'] },
-                { model: Category, attributes: ['name'], through: { attributes: [] } },
-            ]
-        })
-        return allProjects
-    } */
+    //buscamos todos los projectos y los filtramos si recibimos en datos algo mas que page
 
     const { orden, page, country, category, search } = data
 
@@ -127,11 +100,8 @@ const getAllProjects = async (data, pageNum = 4) => {
     let where3 = {
         where: {
             deletedAt: null,
-
         }
-
     }
-
     if (search && search.length > 0) {
         where1.where[`title`] = { [Op.iLike]: `%${search}%` }
     }
@@ -142,10 +112,11 @@ const getAllProjects = async (data, pageNum = 4) => {
 
     if (categoryName) {
         where3.where[`name`] = { [Op.iLike]: `%${category}%` }
-
     }
 
     console.log(where1, where2, where3);
+
+    let id = await Category.findOne({ where: { name: category }, attributes: ['id'] })
 
     const { count, rows } = await Project.findAndCountAll({
         offset,
@@ -153,15 +124,74 @@ const getAllProjects = async (data, pageNum = 4) => {
         order,
         include: [
             { model: Country, attributes: ['name'], where: where2.where },
-            { model: User, attributes: ['id', 'user_name', 'profile_img'] },
-            { model: Category, attributes: ['name'], where: where3.where, through: { attributes: [] } },
+            { model: User, attributes: ['user_name', 'profile_img'] },
+            { model: Category, attributes: [], where: where3.where, through: { attributes: [] } },
         ],
         where: where1.where
     })
 
+    let cantidad
+    let result = []
+    if (categoryName) {
+        cantidad = count
+        for (const res of rows) {
+            let arrCategories = []
+            let cat = await Category.findAll({
+                attributes: ['name'],
+                include: [
+                    { model: Project, attributes: ['id'], where: { id: res.dataValues.id }, through: { attributes: [] } }
+                ]
+            })
+            cat.map(cate => {
+                if (!cate.dataValues.name.includes('null')) arrCategories.push({ name: cate.dataValues.name })
+            })
+            result.push({
+                id: res.dataValues.id,
+                title: res.dataValues.title,
+                summary: res.dataValues.summary,
+                description: res.dataValues.description,
+                date: res.dataValues.data,
+                goal: res.dataValues.goal,
+                img: res.dataValues.img,
+                userId: res.dataValues.userId,
+                country: res.dataValues.country,
+                user: res.dataValues.user,
+                categories: arrCategories
+            })
+        }
+    } else {
+        cantidad = count / 5
+        for (const res of rows) {
+            let arrCategories = []
+            let cat = await Category.findAll({
+                attributes: ['name'],
+                include: [
+                    { model: Project, attributes: ['id'], where: { id: res.dataValues.id }, through: { attributes: [] } }
+                ]
+            })
+            cat.map(cate => {
+                if (!cate.dataValues.name.includes('null')) arrCategories.push({ name: cate.dataValues.name })
+            })
+            result.push({
+                id: res.dataValues.id,
+                title: res.dataValues.title,
+                summary: res.dataValues.summary,
+                description: res.dataValues.description,
+                date: res.dataValues.data,
+                goal: res.dataValues.goal,
+                img: res.dataValues.img,
+                userId: res.dataValues.userId,
+                country: res.dataValues.country,
+                user: res.dataValues.user,
+                categories: arrCategories
+            })
+        }
+    }
+    console.log(cantidad);
+
     return {
-        data: rows,
-        pages: Math.ceil(count / pageNum),
+        data: result,
+        pages: Math.ceil(cantidad / pageNum),
     };
 
 }
