@@ -9,6 +9,9 @@ const {
   authUserHl,
   getAllUserDataAdmin,
   authedUserhl,
+  resetPasswordHl,
+  newPasswordHl,
+  comprobarTokenHl
 } = require("../controllers/user/userHandler");
 const { checkAuth } = require("../middleware/checkAuth");
 const routerUser = Router();
@@ -70,5 +73,10 @@ routerUser.get(
     );
   }
 );
+
+routerUser.post('/config/resetpassword', resetPasswordHl)
+routerUser.get('/config/resetpassword/:token', comprobarTokenHl)
+
+routerUser.post('/config/resetpassword/:token',newPasswordHl)
 
 module.exports = routerUser;
