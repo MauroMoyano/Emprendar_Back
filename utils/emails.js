@@ -86,13 +86,13 @@ const emailResetPassword =  async (datos) => {
                         <img src="https://res.cloudinary.com/nachito02/image/upload/v1678480886/m3xfx5kv4buvgvnxdqlw.png" alt="LogoEmprendar" width="720px" />
                     </tr>
                     <tr style="width: 720px; text-align: center;">
-                        <h3>Confirma tu cuenta en Emprendar</h3>
+                        <h3>Recupera tu contraseña en Emprendar</h3>
                     </tr>
                     <tr style="width: 720px; text-align: center;">
-                    <p> Hola ${name} Comprueba tu cuenta en emprendar </p>
+                    <p> Hola ${name} solicistaste un cambio de contraseña </p>
                     </tr>
                     <tr style="width: 720px; text-align: center;">
-                    <p> Tu cuenta ya esta casi lista, solo debes comprobarla en el siguiente enlace: </p>
+                    <p> Sigue el siguiente enlace para continuar con el cambio de contraseña: </p>
                     </tr>
                     <tr style="width: 720px; text-align: center;">
                     <a href="${process.env.FRONTEND_URL}/newPassword/${token}">
