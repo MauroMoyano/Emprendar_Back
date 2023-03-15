@@ -91,6 +91,7 @@ const updateValidateHl = async (req, res) => {
     let { id } = req.params
     let { validate } = req.body
     try {
+        console.log("confirmacion de validacion id , estado", id, "       ", req.body)
         let result = await updateValidate(id, validate)
         res.status(201).json(result)
     } catch (error) {
