@@ -5,9 +5,13 @@ const { Category, Project } = require('../../db')
 const getCategories = async () => {
     let categories = await Category.findAll()
 
-    return categories.map(cat => {
-        return cat.dataValues.name
+    let result = []
+
+    categories.map(cat => {
+        if (!cat.dataValues.name.includes('null'))
+            result.push(cat.dataValues.name)
     });
+    return result
 }
 
 const getProjectIncludesCat = async (data) => {
@@ -15,7 +19,7 @@ const getProjectIncludesCat = async (data) => {
     const { categories } = data
 
     let resultDB
-    
+
     typeof categories !== 'string'
         ? resultDB = await categories.map(async name => {
             return await Category.findAll({

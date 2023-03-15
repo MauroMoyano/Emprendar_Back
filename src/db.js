@@ -45,7 +45,7 @@ let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map(entry => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
 sequelize.models = Object.fromEntries(capsEntries)
 
-sequelize.sync({ force : false, alter:true})
+sequelize.sync({ force: true })
     .then(() => {
         console.log('tablas creadas')
     })
@@ -66,7 +66,7 @@ sequelize.sync({ force : false, alter:true})
                 amount_collected: 560,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["emprendimiento"]
+                category: ["emprendimiento", "null1", "null2"]
             },
             {
                 title: 'herramientas de poda',
@@ -77,7 +77,7 @@ sequelize.sync({ force : false, alter:true})
                 amount_collected: 100,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["emprendimiento"]
+                category: ["emprendimiento", "null1", "null2"]
             },
             {
                 title: 'proyecto inmobiliario',
@@ -88,7 +88,7 @@ sequelize.sync({ force : false, alter:true})
                 amount_collected: 920,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["emprendimiento"]
+                category: ["emprendimiento", "social", "null1"]
             },
             {
                 title: 'colecta para hospital',
@@ -99,7 +99,7 @@ sequelize.sync({ force : false, alter:true})
                 amount_collected: 1420,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["medicina"]
+                category: ["medicina", "social", "null1"]
             },
             {
                 title: 'donaciones a orfanato',
@@ -110,7 +110,7 @@ sequelize.sync({ force : false, alter:true})
                 amount_collected: 9300,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["social"]
+                category: ["social", "cultural", "educación"]
             },
             {
                 title: 'un futuro mejor',
@@ -121,7 +121,7 @@ sequelize.sync({ force : false, alter:true})
                 amount_collected: 39000,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["social"]
+                category: ["social", "cultural", "null1"]
             },
             {
                 title: 'mi primer emprendimiento',
@@ -132,7 +132,7 @@ sequelize.sync({ force : false, alter:true})
                 amount_collected: 25000,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["emprendimiento"]
+                category: ["emprendimiento", "null1", "null2"]
             },
             {
                 title: 'idea innovadora',
@@ -143,11 +143,11 @@ sequelize.sync({ force : false, alter:true})
                 amount_collected: 142000,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["emprendimiento"]
+                category: ["emprendimiento", "social", "null1"]
             }
         ]
 
-        let arrCategory = ["tecnología", "ambiental", "cultural", "social", "medicina", "educación", "emprendimiento"]
+        let arrCategory = ["tecnología", "ambiental", "cultural", "social", "medicina", "educación", "emprendimiento", "null1", "null2", "null3", "null4"]
 
         let arrComents = [
             "Me encantó esta idea. Es muy útil y de alta calidad.",
