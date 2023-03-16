@@ -1,6 +1,5 @@
-
 const passport = require("passport");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 const express = require("express");
 const cors = require("cors");
 const { conectarDB } = require("./src/db");
@@ -56,7 +55,7 @@ conectarDB();
 
 //habilitaamos cors
 const opcionesCors = {
-    origin: process.env.FRONTEND_URL,
+  origin: process.env.FRONTEND_URL,
 };
 
 app.use(cors(opcionesCors));
@@ -72,7 +71,7 @@ const port = process.env.PORT || 3001;
 
 //definimos las rutas
 
-app.use('/', require('./src/routes/index'))
+app.use("/", require("./src/routes/index"));
 
 //arrancar la app
 
