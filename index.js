@@ -27,25 +27,27 @@ const io = new Server (server,{
 
 
 io.on("connection", (socket) => {
-    console.log("a user connected")
 
-    socket.on("abrir_chat",(chatId)=>{
+    socket.on("messages",(text)=>{
+        console.log(text);
+        socket.broadcast.emit("messages", text)
+    })
+
+})
+
+
+/**  socket.on("abrir_chat",(chatId)=>{
         socket.join(chatId)
     } )
 
     socket.on("message",(data)=>{
         chatCreate(data)
-        console.log(data);
 
-        socket.to(123).emit("send_message",data )
+        socket.to(123).emit("send_message",(data =>{
+            console.log("data de send data", data);
+        }))
     })
-
-
-
-})
-
-
-
+ */
 
 
 app.use(passport.initialize())
