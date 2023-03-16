@@ -1,16 +1,16 @@
-
 const passport = require("passport");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 const express = require("express");
 const cors = require("cors");
 const { conectarDB } = require("./src/db");
-require('dotenv').config()
+const socket = require("socket.io");
+require("dotenv").config();
 
 //creamos el servidor
 
 const app = express();
 
-app.use(passport.initialize())
+app.use(passport.initialize());
 
 // conectamos a la base de datos
 
@@ -18,7 +18,7 @@ conectarDB();
 
 //habilitaamos cors
 const opcionesCors = {
-    origin: process.env.FRONTEND_URL,
+  origin: process.env.FRONTEND_URL,
 };
 
 app.use(cors(opcionesCors));
@@ -33,13 +33,38 @@ const port = process.env.PORT || 3001;
 
 //definimos las rutas
 
-app.use('/', require('./src/routes/index'))
+app.use("/", require("./src/routes/index"));
 
 //arrancar la app
 
 // "0.0.0.0"  el servidor estará disponible para conexiones entrantes desde cualquier dirección IP.
-app.listen(port, "0.0.0.0", () => {
-    console.log("el servidor esta corriendo en el puerto" + port);
-    /* prueba creado de usuarios y pryectos */
-    
+const server = app.listen(port, "0.0.0.0", () => {
+  console.log("el servidor esta corriendo en el puerto" + port);
+  /* prueba creado de usuarios y pryectos */
+});
+
+const io = new socket.Server(server, {
+  pingTimeout: 6000,
+  cors: {
+    origin: process.env.FRONTEND_URL,
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("conectado a socket.io");
+
+  //definir los eventos
+
+  socket.on("abrir proyecto", (project) => {
+    socket.join(project);
+  });
+
+  socket.on("nuevo comentario", (data) => {
+    socket.to(data.projectId).emit("comentario agregado", data);
+  });
+
+  socket.on("eliminar comentario", (data) => {
+    console.log(data);
+    socket.to(data).emit("comentario eliminado", data);
+  });
 });
