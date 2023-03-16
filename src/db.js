@@ -66,18 +66,18 @@ sequelize.sync({ force: true })
                 amount_collected: 560,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["emprendimiento", "null1", "null2"]
+                category: ["emprendimiento", "null1", "null2", "null3", "null4"]
             },
             {
                 title: 'herramientas de poda',
-                country: "Uruguay",
+                country: "México",
                 summary: 'necesito herramientas para jardineria',
                 description: 'las herramientas que tengo se me fueron rompiendo y no tengo la plata necesaria para poder comprarme unas nuevas en este momento',
                 goal: 213,
                 amount_collected: 100,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["emprendimiento", "null1", "null2"]
+                category: ["emprendimiento", "null1", "null2", "null3", "null4"]
             },
             {
                 title: 'proyecto inmobiliario',
@@ -88,7 +88,7 @@ sequelize.sync({ force: true })
                 amount_collected: 920,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["emprendimiento", "social", "null1"]
+                category: ["emprendimiento", "social", "null1", "null2", "null3"]
             },
             {
                 title: 'colecta para hospital',
@@ -99,7 +99,7 @@ sequelize.sync({ force: true })
                 amount_collected: 1420,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["medicina", "social", "null1"]
+                category: ["medicina", "social", "null1", "null2", "null3"]
             },
             {
                 title: 'donaciones a orfanato',
@@ -110,7 +110,7 @@ sequelize.sync({ force: true })
                 amount_collected: 9300,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["social", "cultural", "educación"]
+                category: ["social", "cultural", "educación", "null1", "null2"]
             },
             {
                 title: 'un futuro mejor',
@@ -121,7 +121,7 @@ sequelize.sync({ force: true })
                 amount_collected: 39000,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["social", "cultural", "null1"]
+                category: ["social", "cultural", "null1", "null2", "null3"]
             },
             {
                 title: 'mi primer emprendimiento',
@@ -132,7 +132,7 @@ sequelize.sync({ force: true })
                 amount_collected: 25000,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["emprendimiento", "null1", "null2"]
+                category: ["emprendimiento", "null1", "null2", "null3", "null4"]
             },
             {
                 title: 'idea innovadora',
@@ -143,7 +143,7 @@ sequelize.sync({ force: true })
                 amount_collected: 142000,
                 img: 'https://www.tec.ac.cr/hoyeneltec/sites/default/files/styles/colorbox/public/media/img/main/diseno-de-fondo-de-pulgares-arriba_1294-60.jpg',
                 userId: '',
-                category: ["emprendimiento", "social", "null1"]
+                category: ["emprendimiento", "social", "null1", "null2", "null3"]
             }
         ]
 
