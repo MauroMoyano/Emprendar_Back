@@ -286,7 +286,6 @@ sequelize.sync({ force : false, alter:true})
 
 const { Project, User, Category, Comment, Country } = sequelize.models
 
-
 /* relacion de uno a muchos entre User(uno) a project */
 User.hasMany(Project);
 Project.belongsTo(User);
@@ -308,7 +307,6 @@ Project.hasMany(Comment);
 Comment.belongsTo(Project);
 
 
-
 //exportamos la funcion y la instancia para luego crear los modelos
 
-module.exports = { conectarDB, ...sequelize.models };
+module.exports = { conectarDB, ...sequelize.models, sequelize };
