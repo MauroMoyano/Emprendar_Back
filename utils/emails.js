@@ -96,7 +96,7 @@ const emailResetPassword =  async (datos) => {
                     </tr>
                     <tr style="width: 720px; text-align: center;">
                     <a href="${process.env.FRONTEND_URL}/newPassword/${token}">
-                        <button style="background-color: #594A78; border:none; border-radius: 10px; width: fit-content; height:fit-content; padding: 10px; cursor:pointer; ">Confirmar Email</button>
+                        <button style="background-color: #594A78; border:none; border-radius: 10px; width: fit-content; height:fit-content; padding: 10px; cursor:pointer; ">Recuperar contraseña</button>
                     </a>
                     </tr>
                     
