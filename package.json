@@ -27,6 +27,7 @@
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.9.0",
     "sequelize": "^6.28.2",
+    "socket.io": "^4.6.1",
     "stripe": "^11.14.0"
   },
   "devDependencies": {
