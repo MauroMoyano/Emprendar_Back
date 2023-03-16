@@ -368,7 +368,7 @@ const newPassword = async (token,password) => {
 
     return {msg: 'Contraseña cambiada correctamente'}
   } else {
-    throw new Error('Token no valido')
+    return ('Token no valido')
   }
 
 }
