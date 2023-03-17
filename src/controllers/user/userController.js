@@ -1,4 +1,4 @@
-const { emailRegistration } = require("../../../utils/emails");
+const { emailRegistration, emailResetPassword } = require("../../../utils/emails");
 const { generateToken } = require("../../../utils/generateToken");
 const { generateJWT } = require("../../../utils/generateJWT");
 const bcrypt = require("bcrypt")
@@ -322,6 +322,57 @@ TODO: handler y ruta de esta función.*/
 
 
 
+const resetPassword = async (email) => {
+  const user = await User.findOne({where: {email : email}})
+
+  if(!user) {
+    throw new Error('El usuario no existe')
+  }
+
+    user.token = generateToken()
+
+    await user.save()
+      //enviar email 
+      emailResetPassword({
+        email:user.email,
+        name: user.name,
+        token: user.token
+
+      })
+
+      return {msg: 'Enviamos el email con las instrucciones'}
+  }
+
+const comprobarToken = async (token) => {
+
+  const tokenValido = await User.findOne({where:{token}});
+
+  if(tokenValido) {
+         return {msg: "Token valido y el usuario existe"}
+  } else {
+        throw new Error('Token invalido')
+  }
+}
+
+
+
+const newPassword = async (token,password) => {
+
+  const user = await User.findOne({where: {token:token}})
+
+  if(user) {
+    user.password = await bcrypt.hash(password, 8);
+    user.token = '';
+
+    await user.save()
+
+    return {msg: 'Contraseña cambiada correctamente'}
+  } else {
+    return ('Token no valido')
+  }
+
+}
+
 module.exports = {
   getAllUserByName,
   userCreate,
@@ -333,7 +384,10 @@ module.exports = {
   authUser,
   /* los controladores de los admins */
   getAllUserInfoAdmin,
+  resetPassword,
+  comprobarToken
   /* a inplementar cuando tengamos terminado lo basico */
   /* getFilterUserInfoByDeletedAt,
-  deleteUserByAdmin */
+  deleteUserByAdmin */,
+  newPassword
 };
