@@ -7,7 +7,10 @@ const {
   deleteUser,
   confirmeUser,
   authUser,
-  getAllUserInfoAdmin
+  getAllUserInfoAdmin,
+  resetPassword,
+  comprobarToken,
+  newPassword
 } = require("../user/userController");
 
 const postUserHanlder = async function (req, res) {
@@ -112,6 +115,50 @@ const getAllUserDataAdmin = async function (req, res) {
 
 
 
+const resetPasswordHl =  async( req,res) => {
+  const {email} = req.body
+    try {
+      const response = await resetPassword(email)
+
+      res.json(response)
+    } catch (error) {
+      console.log(error)
+    }
+
+}
+
+const comprobarTokenHl =  async( req,res) => {
+
+    const {token} = req.params
+    console.log(token)
+    try {
+      const response = await comprobarToken(token)
+      res.status(200).json(response)
+    } catch (error) {
+     
+      res.status(400).json({error: error.message})
+    }
+
+}
+
+
+const newPasswordHl =  async( req,res) => {
+
+  const {token} = req.params;
+
+const {password} = req.body
+
+  try {
+     const response = await newPassword(token,password)
+
+     res.status(200).json(response)
+  } catch (error) {
+      res.status(400).json(error)
+  }
+
+
+}
+
 module.exports = {
   postUserHanlder,
   getAllUsersHandler,
@@ -122,6 +169,9 @@ module.exports = {
   authUserHl,
   /* handlers ADMINS. */
   getAllUserDataAdmin,
-  authedUserhl
+  authedUserhl,
+  resetPasswordHl,
+  newPasswordHl,
+  comprobarTokenHl
 };
 // {}

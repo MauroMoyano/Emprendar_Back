@@ -1,55 +1,15 @@
-
 const passport = require("passport");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 const express = require("express");
 const cors = require("cors");
 const { conectarDB } = require("./src/db");
-require('dotenv').config()
-const {Server}  = require("socket.io")
-const http = require("http")
+const socket = require("socket.io");
+require("dotenv").config();
 const morgan = require("morgan");
-const { Socket } = require("dgram");
-const {chatCreate} =require("./src/controllers/chats/chatController")
-
-
 //creamos el servidor
 const app = express();
 
-const server = http.createServer(app)
-
-
-const io = new Server (server,{
-    cors: {
-        origin : "http://localhost:3000"
-    }
-})
-
-
-
-io.on("connection", (socket) => {
-
-    socket.on("messages",(text)=>{
-        socket.broadcast.emit("messages", text)
-    })
-
-})
-
-
-/**  socket.on("abrir_chat",(chatId)=>{
-        socket.join(chatId)
-    } )
-
-    socket.on("message",(data)=>{
-        chatCreate(data)
-
-        socket.to(123).emit("send_message",(data =>{
-            console.log("data de send data", data);
-        }))
-    })
- */
-
-
-app.use(passport.initialize())
+app.use(passport.initialize());
 
 // conectamos a la base de datos
 
@@ -57,7 +17,7 @@ conectarDB();
 
 //habilitaamos cors
 const opcionesCors = {
-    origin: process.env.FRONTEND_URL,
+  origin: process.env.FRONTEND_URL,
 };
 
 app.use(cors(opcionesCors));
@@ -73,18 +33,42 @@ const port = process.env.PORT || 3001;
 
 //definimos las rutas
 
-app.use('/', require('./src/routes/index'))
+app.use("/", require("./src/routes/index"));
 
 //arrancar la app
 
 // "0.0.0.0"  el servidor estará disponible para conexiones entrantes desde cualquier dirección IP.
-server.listen(port, "0.0.0.0", () => {
-    console.log("el servidor esta corriendo en el puerto" + port);
-    /* prueba creado de usuarios y pryectos */
-    
+const server = app.listen(port, "0.0.0.0", () => {
+  console.log("el servidor esta corriendo en el puerto" + port);
+  /* prueba creado de usuarios y pryectos */
 });
 
+const io = new socket.Server(server, {
+  pingTimeout: 6000,
+  cors: {
+    origin: process.env.FRONTEND_URL,
+  },
+});
 
-module.exports = {io}
-//socket
+io.on("connection", (socket) => {
+  console.log("conectado a socket.io");
 
+  //definir los eventos
+  
+  socket.on("messages",(text)=>{
+    socket.broadcast.emit("messages", text)
+  })
+
+  socket.on("abrir proyecto", (project) => {
+    socket.join(project);
+  });
+
+  socket.on("nuevo comentario", (data) => {
+    socket.to(data.projectId).emit("comentario agregado", data);
+  });
+
+  socket.on("eliminar comentario", (data) => {
+    console.log(data);
+    socket.to(data).emit("comentario eliminado", data);
+  });
+});
