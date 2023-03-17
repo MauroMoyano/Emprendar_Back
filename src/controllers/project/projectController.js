@@ -124,7 +124,7 @@ const getAllProjects = async (data, pageNum = 4) => {
         order,
         include: [
             { model: Country, attributes: ['name'], where: where2.where },
-            { model: User, attributes: ['user_name', 'profile_img'] },
+            { model: User, attributes: ['user_name', 'profile_img'], where: { confirmed: true, eliminatedByAdmin: false, deletedAt: null } },
             { model: Category, attributes: [], where: where3.where, through: { attributes: [] } },
         ],
         where: where1.where
