@@ -343,13 +343,12 @@ const updateValidate = async (id, newValidateValue) => {
 
 
 const getAllProjectsAdmin = async () => {
-    //
-    const projects = await Project.findAll();
+
+    const projects = await Project.findAll({order : [['title', "ASC"]]});
     if (!projects) {
         throw new Error('No se encontró ningun proyecto');
     }
-
-    return projects;
+    return [...projects.sort((a,b)=> a.title.localeCompare(b.title))]
 }
 
 

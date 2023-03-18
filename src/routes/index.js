@@ -6,6 +6,7 @@ const routerCategory = require('./routerCategory')
 const routerCountry = require('./routerCountry')
 const routerImage = require('./routerImage')
 const routerCheckout = require('./routerCheckout')
+const routerChat = require('./routerChat')
 
 
 const mainRouter = Router()
@@ -19,6 +20,6 @@ mainRouter.use('/category', routerCategory)
 mainRouter.use('/country', routerCountry)
 mainRouter.use('/images', routerImage)
 mainRouter.use('/checkout', routerCheckout)
-
+mainRouter.use("/chats", routerChat )
 
 module.exports = mainRouter
