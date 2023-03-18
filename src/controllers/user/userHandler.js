@@ -10,7 +10,8 @@ const {
   getAllUserInfoAdmin,
   resetPassword,
   comprobarToken,
-  newPassword
+  newPassword,
+  changePassword
 } = require("../user/userController");
 
 const postUserHanlder = async function (req, res) {
@@ -156,6 +157,20 @@ const {password} = req.body
       res.status(400).json(error)
   }
 
+
+}
+
+const changePasswordHl = async (req,res) => {
+
+  const {password, newPassword, verifyPassword} = req.body
+  const {id}  = req.user
+    try {
+      const response = await changePassword(id,password, newPassword,verifyPassword)
+
+      res.status(200).json(response)
+    } catch (error) {
+      res.status(400).json({error: error.message})
+    }
 
 }
 

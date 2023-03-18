@@ -373,6 +373,32 @@ const newPassword = async (token,password) => {
 
 }
 
+
+const changePassword = async (id,password,newPassword,verifyPassword) => {
+
+    const user = await User.findByPk(id)
+
+      if(newPassword === verifyPassword) {
+        const passwordIsTheSame =  bcrypt.compareSync(password, user.password)
+
+        if(passwordIsTheSame) {
+           user.password = bcrypt.hash(newPassword, 8);
+
+           await user.save()
+
+           return {msg: 'Contraseña cambiada correctamente'}
+        } else {
+          throw new Error('Tu contraseña no coincide con la contraseña guardada en la base de datos')
+        }
+      }  else {
+        throw new Error('Las contraseñas deben ser iguales')
+
+      }
+
+      
+
+}
+
 module.exports = {
   getAllUserByName,
   userCreate,
@@ -389,5 +415,6 @@ module.exports = {
   /* a inplementar cuando tengamos terminado lo basico */
   /* getFilterUserInfoByDeletedAt,
   deleteUserByAdmin */,
-  newPassword
+  newPassword,
+  changePassword
 };
