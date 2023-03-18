@@ -303,12 +303,12 @@ const getAllUserInfoAdmin = async () => {
 } */
 
 /* funcion que va directo para los Admins, que permite borrar al usuario y ademas que el usuario no tenga la posibilidad de
-volver a recuperar la cuenta por la pripiedad "deletedByAdmin" 
+volver a recuperar la cuenta por la propiedad "eliminatedByAdmin"
 TODO: handler y ruta de esta función.*/
 /* const deleteUserByAdmin = async (userId) => {
   let user = await User.findByPk(userId)
 
-  user.deleteUserByAdmin = true
+  user.eliminatedByAdmin = true
   user.account_state = false
 
   await user.save()

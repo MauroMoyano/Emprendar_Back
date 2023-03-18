@@ -179,7 +179,7 @@ sequelize.sync({ force: false, alter:true })
             let proj2
             newUser.user_name === "lechu"
                 ? (
-                    proj1 = await Project.create({ ...arrProject[0], /* user_name: newUser.user_name, */ userId: newUser.id, validated: 'aceptado' }),
+                    proj1 = await Project.create({ ...arrProject[0], /* user_name: newUser.user_name, */ userId: newUser.id}),
                     arrProject[0].category.map(async (cat) => {
 
                         let catt = await Category.findOne({ where: { name: cat } })
@@ -190,7 +190,7 @@ sequelize.sync({ force: false, alter:true })
 
                         await proj1.setCountry(count)
                     }),
-                    proj2 = await Project.create({ ...arrProject[4], /* user_name: newUser.user_name, */ userId: newUser.id, validated: 'aceptado' }),
+                    proj2 = await Project.create({ ...arrProject[4], /* user_name: newUser.user_name, */ userId: newUser.id}),
                     arrProject[4].category.map(async (cat) => {
 
                         let catt = await Category.findOne({ where: { name: cat } })
@@ -204,7 +204,7 @@ sequelize.sync({ force: false, alter:true })
                 )
                 : newUser.user_name === "sandy"
                     ? (
-                        proj1 = await Project.create({ ...arrProject[1], /* user_name: newUser.user_name, */ userId: newUser.id, validated: 'aceptado' }),
+                        proj1 = await Project.create({ ...arrProject[1], /* user_name: newUser.user_name, */ userId: newUser.id}),
                         arrProject[1].category.map(async (cat) => {
 
                             let catt = await Category.findOne({ where: { name: cat } })
@@ -215,7 +215,7 @@ sequelize.sync({ force: false, alter:true })
 
                             await proj1.setCountry(count)
                         }),
-                        proj2 = await Project.create({ ...arrProject[5], /* user_name: newUser.user_name, */ userId: newUser.id, validated: 'aceptado' }),
+                        proj2 = await Project.create({ ...arrProject[5], /* user_name: newUser.user_name, */ userId: newUser.id}),
                         arrProject[5].category.map(async (cat) => {
 
                             let catt = await Category.findOne({ where: { name: cat } })
@@ -229,7 +229,7 @@ sequelize.sync({ force: false, alter:true })
                     )
                     : newUser.user_name === "jonny"
                         ? (
-                            proj1 = await Project.create({ ...arrProject[2], /* user_name: newUser.user_name, */ userId: newUser.id, validated: 'aceptado' }),
+                            proj1 = await Project.create({ ...arrProject[2], /* user_name: newUser.user_name, */ userId: newUser.id}),
                             arrProject[2].category.map(async (cat) => {
 
                                 let catt = await Category.findOne({ where: { name: cat } })
@@ -240,7 +240,7 @@ sequelize.sync({ force: false, alter:true })
 
                                 await proj1.setCountry(count)
                             }),
-                            proj2 = await Project.create({ ...arrProject[6], /* user_name: newUser.user_name, */ userId: newUser.id, validated: 'aceptado' }),
+                            proj2 = await Project.create({ ...arrProject[6], /* user_name: newUser.user_name, */ userId: newUser.id}),
                             arrProject[6].category.map(async (cat) => {
 
                                 let catt = await Category.findOne({ where: { name: cat } })
@@ -254,7 +254,7 @@ sequelize.sync({ force: false, alter:true })
                         )
                         : newUser.user_name === "nachito"
                             ? (
-                                proj1 = await Project.create({ ...arrProject[3], /* user_name: newUser.user_name, */ userId: newUser.id, validated: 'aceptado' }),
+                                proj1 = await Project.create({ ...arrProject[3], /* user_name: newUser.user_name, */ userId: newUser.id}),
                                 arrProject[3].category.map(async (cat) => {
 
                                     let catt = await Category.findOne({ where: { name: cat } })
@@ -265,7 +265,7 @@ sequelize.sync({ force: false, alter:true })
 
                                     await proj1.setCountry(count)
                                 }),
-                                proj2 = await Project.create({ ...arrProject[7], /* user_name: newUser.user_name, */ userId: newUser.id, validated: 'aceptado' }),
+                                proj2 = await Project.create({ ...arrProject[7], /* user_name: newUser.user_name, */ userId: newUser.id}),
                                 arrProject[7].category.map(async (cat) => {
 
                                     let catt = await Category.findOne({ where: { name: cat } })

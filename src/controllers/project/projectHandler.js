@@ -113,10 +113,10 @@ const updateValidateHl = async (req, res) => {
 
 const { getAllProjectsAdmin } = require('./projectController')
 
-const getAllProjecstAdminHl = async (req, res) => {
-
+const getAllProjectsAdminHl = async (req, res) => {
+    const {filter} = req.query
     try {
-        let result = await getAllProjectsAdmin()
+        let result = await getAllProjectsAdmin(filter)
         res.status(201).json(result)
     } catch (error) {
         res.status(406).json({ error: error.message })
@@ -138,5 +138,5 @@ module.exports = {
     /* de solo ADMIN */
     updateValidateHl,
 
-    getAllProjecstAdminHl
+    getAllProjectsAdminHl
 }
