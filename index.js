@@ -5,9 +5,8 @@ const cors = require("cors");
 const { conectarDB } = require("./src/db");
 const socket = require("socket.io");
 require("dotenv").config();
-
+const morgan = require("morgan");
 //creamos el servidor
-
 const app = express();
 
 app.use(passport.initialize());
@@ -26,6 +25,7 @@ app.use(cors(opcionesCors));
 //habilitamos leer los valores del body
 
 app.use(express.json());
+app.use(morgan("dev"))
 app.use(bodyParser.urlencoded({ extended: false }));
 // dejamos definido el puerto para railway, si no existe usamos 3001
 
@@ -54,6 +54,10 @@ io.on("connection", (socket) => {
   console.log("conectado a socket.io");
 
   //definir los eventos
+  
+  socket.on("messages",(text)=>{
+    socket.broadcast.emit("messages", text)
+  })
 
   socket.on("abrir proyecto", (project) => {
     socket.join(project);
