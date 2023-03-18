@@ -4,6 +4,7 @@ const { generateJWT } = require("../../../utils/generateJWT");
 const bcrypt = require("bcrypt")
 
 const { User, Project, Country, Category } = require("../../db");
+const { Op } = require("sequelize");
 
 const userCreate = async (data) => {
   let { user_name, name, last_name, email, password, profile_img } = data
@@ -119,26 +120,55 @@ const authUser = async (data) => {
 
 /* como bien lo dice, trae a todos los usuarios para una especie de "busqueda" de los perfiles de usuarios ademas de los "proyectos"
 se le aplicaran "filtros" desde el front. exeptuanco la busqueda propia por back */
-const getAllUsers = async () => {
-  const infoDB = await User.findAll({
-    where: {
-      deletedAt: null
+const getAllUsers = async (data, pageNum = 2) => {
 
-    }
-  });
-  const infoClean = infoDB.map(user => {
-    return {
-      id: user.dataValues.id,
-      user_name: user.dataValues.user_name,
-      name: user.dataValues.name,
-      last_name: user.dataValues.last_name,
-      email: user.dataValues.email,
-      reputation: user.dataValues.reputation,
-      profile_img: user.dataValues.profile_img,
-    }
-  });
+  const { page, orden, search } = data
 
-  return infoClean;
+  let order
+  orden
+    ? order = [['user_name', orden]]
+    : order = null
+
+  let where1 = {}
+  search
+    ? where1.where = { confirmed: true, eliminatedByAdmin: false, deletedAt: null, user_name: { [Op.iLike]: `%${search}%` } }
+    : where1.where = { confirmed: true, eliminatedByAdmin: false, deletedAt: null }
+
+  let offset = (page - 1) * pageNum;
+  let limit = pageNum;
+
+  /* solo setea los numeros de coincidencia */
+  const { count } = await User.findAndCountAll({
+    offset,
+    limit,
+    order,
+    where: where1.where,
+  })
+  /* retorna en rows los valores de las coincidencias */
+  const { rows } = await User.findAndCountAll({
+    offset,
+    limit,
+    order,
+    attributes: ['id', 'user_name', 'name', 'last_name', 'reputation', 'profile_img'],
+    where: where1.where,
+  })
+
+  let result = []
+  for (const user of rows) {
+    let project = await Project.findAll({ where: { userId: user.dataValues.id, validated: 'aceptado', deletedAt: null }, attributes: ['id', 'title',] })
+    result.push({
+      ...user.dataValues,
+      project
+    })
+  }
+
+
+  console.log(result)
+
+  return {
+    data: result,
+    pages: Math.ceil(count / pageNum),
+  };
 };
 
 
@@ -265,6 +295,7 @@ const deleteUser = async (userID) => {
   }
 }
 
+
 /* controladores para ADMINS. !!!!! */
 
 /* pasamos a los Admins los datos del usuario
@@ -323,50 +354,50 @@ TODO: handler y ruta de esta función.*/
 
 
 const resetPassword = async (email) => {
-  const user = await User.findOne({where: {email : email}})
+  const user = await User.findOne({ where: { email: email } })
 
-  if(!user) {
+  if (!user) {
     throw new Error('El usuario no existe')
   }
 
-    user.token = generateToken()
+  user.token = generateToken()
 
-    await user.save()
-      //enviar email 
-      emailResetPassword({
-        email:user.email,
-        name: user.name,
-        token: user.token
+  await user.save()
+  //enviar email 
+  emailResetPassword({
+    email: user.email,
+    name: user.name,
+    token: user.token
 
-      })
+  })
 
-      return {msg: 'Enviamos el email con las instrucciones'}
-  }
+  return { msg: 'Enviamos el email con las instrucciones' }
+}
 
 const comprobarToken = async (token) => {
 
-  const tokenValido = await User.findOne({where:{token}});
+  const tokenValido = await User.findOne({ where: { token } });
 
-  if(tokenValido) {
-         return {msg: "Token valido y el usuario existe"}
+  if (tokenValido) {
+    return { msg: "Token valido y el usuario existe" }
   } else {
-        throw new Error('Token invalido')
+    throw new Error('Token invalido')
   }
 }
 
 
 
-const newPassword = async (token,password) => {
+const newPassword = async (token, password) => {
 
-  const user = await User.findOne({where: {token:token}})
+  const user = await User.findOne({ where: { token: token } })
 
-  if(user) {
+  if (user) {
     user.password = await bcrypt.hash(password, 8);
     user.token = '';
 
     await user.save()
 
-    return {msg: 'Contraseña cambiada correctamente'}
+    return { msg: 'Contraseña cambiada correctamente' }
   } else {
     return ('Token no valido')
   }
