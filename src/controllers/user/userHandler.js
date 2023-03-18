@@ -187,6 +187,7 @@ module.exports = {
   authedUserhl,
   resetPasswordHl,
   newPasswordHl,
-  comprobarTokenHl
+  comprobarTokenHl,
+  changePasswordHl
 };
 // {}
