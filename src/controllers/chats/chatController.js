@@ -1,6 +1,6 @@
 
 const { Chat, User} = require("../../db");
-const {QueryTypes} = require("sequelize")
+const {QueryTypes, where} = require("sequelize")
 const {sequelize} =require("../../db")
 //esta funcion crea los mensajes 
 const chatCreate = async (data) => {
@@ -13,22 +13,63 @@ const chatCreate = async (data) => {
 
     return newChat;
 };
-//esta funcion trae todos los mensajes que envio un usuario especifico
-const getOwnChats = async(userSender) =>{
+
+//recibo el nombre del usuario logeadi
+const getOwnChats = async(user) =>{
     
-    const allchat = Chat.findAll(
-        {where: {
-            userSender    
-        }})
-    return allchat
+
+    //array de los nombres de usuarios con los que hable 
+    let array = [];
+    //chats que yo incie 
+    const first_chats = await Chat.findAll({
+        where: {
+            usersender: user    
+        }}
+    )
+
+
+    //chats en las que yo recibi el preimer mensaj
+    const second_chats = await Chat.findAll({
+        where :{
+            userreceiver: user
+        }}
+    )
+   
+    //aca debo comparar el dato que se encuentra en userreceiver
+    first_chats.forEach(chat => {
+        let {userreceiver} = chat;
+        if (array.indexOf(userreceiver) === -1) {
+            array.push(userreceiver)
+        }            
+    });
+
+    second_chats.forEach(chat => {
+        let {usersender} = chat;
+        if (array.indexOf(usersender) === -1) {
+            array.push(usersender)
+        }            
+    });
+
+    let users_conversations = [];
+
+    for (let x = 0; x < array.length; x++) {
+        const element = array[x];
+        let result = await User.findAll({
+                where : {
+                    user_name: element
+                } 
+            }) 
+        users_conversations.push(result[0])
+    }
+    return users_conversations
 
 }
 
 
 
+
 //esta funcion trae todas las conversaciones entre dos usuarios
 const getChatsforUsers = async(userSender,  userReceiver) =>{
-    console.log("ssssssssssss====>", userSender);
 
     const result = await Chat.findAll({
         where : {
