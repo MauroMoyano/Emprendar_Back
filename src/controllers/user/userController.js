@@ -151,13 +151,22 @@ const getAllUsers = async (data, pageNum = 2) => {
     order,
     attributes: ['id', 'user_name', 'name', 'last_name', 'reputation', 'profile_img'],
     where: where1.where,
-    include: [
-      { model: Project, attributes: ['id', 'title',], where: { validated: 'aceptado', deletedAt: null } }
-    ]
   })
 
+  let result = []
+  for (const user of rows) {
+    let project = await Project.findAll({ where: { userId: user.dataValues.id, validated: 'aceptado', deletedAt: null }, attributes: ['id', 'title',] })
+    result.push({
+      ...user.dataValues,
+      project
+    })
+  }
+
+
+  console.log(result)
+
   return {
-    data: rows,
+    data: result,
     pages: Math.ceil(count / pageNum),
   };
 };
