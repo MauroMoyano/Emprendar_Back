@@ -28,8 +28,7 @@ const stripe = require('stripe')('sk_test_51Mk4HfG6CreG8V9N5nKgDAm4wc1uwltulf3qM
         cancel_url: `${process.env.FRONTEND_URL}/detailUser/${req.body.userId}/${req.body.id}/?canceled=true`,
       });
 
-
-
+      res.redirect(303, session.url);
     const project = await Project.findByPk(req.body.id)
     
     const collectedAmount = parseInt(project.amount_collected);
@@ -37,9 +36,6 @@ const stripe = require('stripe')('sk_test_51Mk4HfG6CreG8V9N5nKgDAm4wc1uwltulf3qM
     const totalAmount = collectedAmount + paymentAmount;
     project.amount_collected = totalAmount.toString();
     await project.save();
-
-    
-      res.redirect(303, session.url);
     } catch (err) {
       res.status(err.statusCode || 500).json(err.message);
     }
