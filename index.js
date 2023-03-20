@@ -55,10 +55,18 @@ io.on("connection", (socket) => {
 
   //definir los eventos
   
-  socket.on("messages",(text)=>{
-    socket.broadcast.emit("messages", text)
+
+  // (/chats)
+  socket.on("messages",(data)=>{
+    //data contien los datos del user que envia y el que recibe la info para saber que usuarios deberiar renderizar sus chats
+
+    socket.broadcast.emit("messages", data)
   })
 
+
+
+
+  // (/comments)
   socket.on("abrir proyecto", (project) => {
     socket.join(project);
   });
@@ -68,7 +76,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("eliminar comentario", (data) => {
-    console.log(data);
     socket.to(data).emit("comentario eliminado", data);
   });
 });

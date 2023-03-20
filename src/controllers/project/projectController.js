@@ -7,8 +7,10 @@ const addProject = async (data) => {
 
     //TODO crear validaciones
 
+
     console.log('aca esta la data', data)
     const { title, summary, description, goal, img, userId, country, category } = data
+
     //validacion precaria xd
     if (title === '' || summary === '' || description === '' || img === '' || userId === '') {
         return {
