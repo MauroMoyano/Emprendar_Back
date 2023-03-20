@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { getProjects, postProject, detailProject, updateProjectHl, deleteProjectHl, updateValidateHl, getAllFilteredProjects, getAllProjectsAdminHl } = require('../controllers/project/projectHandler')
+const { getProjects, postProject, amountCollected, detailProject, updateProjectHl, deleteProjectHl, updateValidateHl, getAllFilteredProjects, getAllProjectsAdminHl } = require('../controllers/project/projectHandler')
 const routerProject = Router()
 
 /* rutas de Usuarios */

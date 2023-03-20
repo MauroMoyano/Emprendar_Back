@@ -7,6 +7,7 @@ const {
   deleteUser,
   confirmeUser,
   authUser,
+  deleteUserByAdmin,
   getAllUserInfoAdmin
 } = require("../user/userController");
 
@@ -110,6 +111,17 @@ const getAllUserDataAdmin = async function (req, res) {
   }
 }
 
+const deleteUserByAdminHl = async function (req, res){
+  try{
+    const { id } = req.params
+    const result = await deleteUserByAdmin(id)
+    res.status(200).json(result)
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+
+}
+
 
 
 module.exports = {
@@ -122,6 +134,7 @@ module.exports = {
   authUserHl,
   /* handlers ADMINS. */
   getAllUserDataAdmin,
+  deleteUserByAdminHl,
   authedUserhl
 };
 // {}

@@ -271,7 +271,6 @@ const deleteUser = async (userID) => {
 TODO: crear filtros por ciertos parametros de usuario, como deletedAt 
 (con su instancia de usuario borrado. no se el valor que se le da con el destroy({<})) */
 const getAllUserInfoAdmin = async () => {
-  console.log("match");
   const infoDB = await User.findAll();
   const infoClean = infoDB.map(user => {
     return {
@@ -305,7 +304,7 @@ const getAllUserInfoAdmin = async () => {
 /* funcion que va directo para los Admins, que permite borrar al usuario y ademas que el usuario no tenga la posibilidad de
 volver a recuperar la cuenta por la propiedad "eliminatedByAdmin"
 TODO: handler y ruta de esta función.*/
-/* const deleteUserByAdmin = async (userId) => {
+ const deleteUserByAdmin = async (userId) => {
   let user = await User.findByPk(userId)
 
   user.eliminatedByAdmin = true
@@ -318,7 +317,7 @@ TODO: handler y ruta de esta función.*/
   }
 
   return { msg: 'usuario borrado con exito.' }
-} */
+}
 
 
 
@@ -333,6 +332,7 @@ module.exports = {
   authUser,
   /* los controladores de los admins */
   getAllUserInfoAdmin,
+  deleteUserByAdmin
   /* a inplementar cuando tengamos terminado lo basico */
   /* getFilterUserInfoByDeletedAt,
   deleteUserByAdmin */
