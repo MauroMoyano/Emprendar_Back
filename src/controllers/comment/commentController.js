@@ -3,7 +3,6 @@ const { Comment, User } = require('../../db')
 const getCommentByIdProject = async function (data) {
 
     let { projectId } = data
-
     const result = await Comment.findAll({
         where: {
             deletedAt: null,
@@ -34,11 +33,22 @@ const newComment = async function (data) {
         throw new Error('debes completar el campo antes de enviar')
     }
 
-    return await Comment.create({
+    const user = await User.findByPk(userId)
+
+
+        const usuario = {
+            profile_img: user.profile_img,
+            user_name : user.user_name
+        };
+
+   const commentCreate = await Comment.create({
         userId,
         projectId,
         comment
     })
+
+      
+   return await getCommentByIdProject({projectId})
 }
 
 
