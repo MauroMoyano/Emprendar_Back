@@ -1,11 +1,7 @@
 const { Router } = require('express')
-<<<<<<< HEAD
-const { getProjects, postProject, amountCollected, detailProject, updateProjectHl, deleteProjectHl, updateValidateHl, getAllFilteredProjects, getAllProjectsAdminHl } = require('../controllers/project/projectHandler')
-=======
 
 const { getProjects, postProject, detailProject, updateProjectHl, deleteProjectHl, updateValidateHl, getAllFilteredProjects, getAllProjectsAdminHl, getProjectsToCopy } = require('../controllers/project/projectHandler')
 
->>>>>>> 3052e1ec3036011fca3e7ddce40ae24f0e850a5d
 const routerProject = Router()
 
 /* rutas de Usuarios */

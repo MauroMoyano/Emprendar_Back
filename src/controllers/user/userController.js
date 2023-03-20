@@ -440,15 +440,12 @@ module.exports = {
   authUser,
   /* los controladores de los admins */
   getAllUserInfoAdmin,
-<<<<<<< HEAD
-  deleteUserByAdmin
-=======
+  deleteUserByAdmin,
   resetPassword,
-  comprobarToken
->>>>>>> 3052e1ec3036011fca3e7ddce40ae24f0e850a5d
+  comprobarToken,
   /* a inplementar cuando tengamos terminado lo basico */
   /* getFilterUserInfoByDeletedAt,
-  deleteUserByAdmin */,
+  deleteUserByAdmin */
   newPassword,
   changePassword
 };

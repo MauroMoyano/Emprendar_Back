@@ -7,20 +7,12 @@ const {
   deleteUser,
   confirmeUser,
   authUser,
-<<<<<<< HEAD
   deleteUserByAdmin,
-  getAllUserInfoAdmin
-=======
   getAllUserInfoAdmin,
   resetPassword,
   comprobarToken,
-<<<<<<< HEAD
-  newPassword
->>>>>>> 3052e1ec3036011fca3e7ddce40ae24f0e850a5d
-=======
   newPassword,
   changePassword
->>>>>>> 2073edbbf2c13f57eb22a91a489f86ae83924820
 } = require("../user/userController");
 
 const postUserHanlder = async function (req, res) {
@@ -204,19 +196,11 @@ module.exports = {
   authUserHl,
   /* handlers ADMINS. */
   getAllUserDataAdmin,
-<<<<<<< HEAD
   deleteUserByAdminHl,
-  authedUserhl
-=======
   authedUserhl,
   resetPasswordHl,
   newPasswordHl,
-<<<<<<< HEAD
-  comprobarTokenHl
->>>>>>> 3052e1ec3036011fca3e7ddce40ae24f0e850a5d
-=======
   comprobarTokenHl,
   changePasswordHl
->>>>>>> 2073edbbf2c13f57eb22a91a489f86ae83924820
 };
 // {}
