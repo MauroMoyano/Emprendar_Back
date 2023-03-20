@@ -126,30 +126,29 @@ const totalGoalColected = async ()=>{
 }
 
 const amount_collectedByID = async (id)=>{
-    console.log(id)
     if(id){
-        const infoDB = await User.findByPk(id, {
-        attributes: [], include: [{
-            model: Project, attributes: ['amount_collected']
-        }]
-    })
+        const infoDB = await Project.findAll({
+            attributes: ['amount_collected'],
+            where:{ validated: 'aceptado', deletedAt: null, },
+            include: [{model: User, where: { id: id, confirmed: true, eliminatedByAdmin: false, deletedAt: null },
+            attributes: []
+            }]
+        })
 
-    console.log(infoDB, 'esto es la data de infoDB')
     let sumatoria = 0;
 
     infoDB.map(project => {
         sumatoria = sumatoria + Number(project.amount_collected);
     })
 
-    console.log(sumatoria, 'esta es la sumatoria del monto recolectado')
     return sumatoria;
     }else{
         throw new Error('No se recibio un ID para hacer la consulta');
     }
-    
-    
-
 }
+
+
+
 
 
 
