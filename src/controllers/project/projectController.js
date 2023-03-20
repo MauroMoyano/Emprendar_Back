@@ -7,8 +7,8 @@ const addProject = async (data) => {
 
     //TODO crear validaciones
 
+    console.log('aca esta la data', data)
     const { title, summary, description, goal, img, userId, country, category } = data
-
     //validacion precaria xd
     if (title === '' || summary === '' || description === '' || img === '' || userId === '') {
         return {
@@ -18,13 +18,25 @@ const addProject = async (data) => {
     let user = await User.findByPk(userId)
     let countries = await Country.findOne({ where: { name: country } })
     //crear el projecto
-    const projecto = await Project.create({
-        title,
-        summary,
-        description,
-        goal,
-        img,
-    })
+    let projecto
+    
+    if(img===null){
+        projecto = await Project.create({
+            title,
+            summary,
+            description,
+            goal,
+        })
+    }else{
+        projecto = await Project.create({
+                title,
+                summary,
+                description,
+                goal,
+                img,
+        })
+    }
+    
 
     if (category.length < 5) {
         let long = 5 - category.length
