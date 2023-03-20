@@ -124,7 +124,7 @@ const getAllProjects = async (data, pageNum = 4) => {
         order,
         include: [
             { model: Country, attributes: ['name'], where: where2.where },
-            { model: User, attributes: ['user_name', 'profile_img'] },
+            { model: User, attributes: ['user_name', 'profile_img'], where: { confirmed: true, eliminatedByAdmin: false, deletedAt: null } },
             { model: Category, attributes: [], where: where3.where, through: { attributes: [] } },
         ],
         where: where1.where
@@ -343,13 +343,12 @@ const updateValidate = async (id, newValidateValue) => {
 
 
 const getAllProjectsAdmin = async () => {
-    //
-    const projects = await Project.findAll();
+
+    const projects = await Project.findAll({order : [['title', "ASC"]]});
     if (!projects) {
         throw new Error('No se encontró ningun proyecto');
     }
-
-    return projects;
+    return [...projects.sort((a,b)=> a.title.localeCompare(b.title))]
 }
 
 
