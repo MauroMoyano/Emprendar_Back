@@ -44,7 +44,8 @@ module.exports = (sequelize) => {
             defaultValue: 0
         },
         img: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            defaultValue: 'https://res.cloudinary.com/df4kwquv8/image/upload/v1679261253/emprendar_sources/mzjvegpc6r8g1vhuthmp.jpg'
         },
         /* user_name: {
             type: DataTypes.STRING

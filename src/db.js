@@ -45,7 +45,7 @@ let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map(entry => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
 sequelize.models = Object.fromEntries(capsEntries)
 
-sequelize.sync({ force: false, alter:true })
+sequelize.sync({ force: true })
     .then(() => {
         console.log('tablas creadas')
     })
@@ -286,7 +286,6 @@ sequelize.sync({ force: false, alter:true })
 
 const { Project, User, Category, Comment, Country } = sequelize.models
 
-
 /* relacion de uno a muchos entre User(uno) a project */
 User.hasMany(Project);
 Project.belongsTo(User);
@@ -308,7 +307,6 @@ Project.hasMany(Comment);
 Comment.belongsTo(Project);
 
 
-
 //exportamos la funcion y la instancia para luego crear los modelos
 
-module.exports = { conectarDB, ...sequelize.models };
+module.exports = { conectarDB, ...sequelize.models, sequelize };

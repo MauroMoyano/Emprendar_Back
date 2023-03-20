@@ -5,9 +5,8 @@ const cors = require("cors");
 const { conectarDB } = require("./src/db");
 const socket = require("socket.io");
 require("dotenv").config();
-
+const morgan = require("morgan");
 //creamos el servidor
-
 const app = express();
 
 app.use(passport.initialize());
@@ -26,6 +25,7 @@ app.use(cors(opcionesCors));
 //habilitamos leer los valores del body
 
 app.use(express.json());
+app.use(morgan("dev"))
 app.use(bodyParser.urlencoded({ extended: false }));
 // dejamos definido el puerto para railway, si no existe usamos 3001
 
@@ -54,7 +54,19 @@ io.on("connection", (socket) => {
   console.log("conectado a socket.io");
 
   //definir los eventos
+  
 
+  // (/chats)
+  socket.on("messages",(data)=>{
+    //data contien los datos del user que envia y el que recibe la info para saber que usuarios deberiar renderizar sus chats
+
+    socket.broadcast.emit("messages", data)
+  })
+
+
+
+
+  // (/comments)
   socket.on("abrir proyecto", (project) => {
     socket.join(project);
   });
@@ -64,7 +76,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("eliminar comentario", (data) => {
-    console.log(data);
     socket.to(data).emit("comentario eliminado", data);
   });
 });
