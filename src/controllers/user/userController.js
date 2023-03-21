@@ -299,13 +299,15 @@ const deleteUser = async (userID) => {
 }
 
 
+
+
 /* controladores para ADMINS. !!!!! */
 
 /* pasamos a los Admins los datos del usuario
 TODO: crear filtros por ciertos parametros de usuario, como deletedAt 
 (con su instancia de usuario borrado. no se el valor que se le da con el destroy({<})) */
 const getAllUserInfoAdmin = async () => {
-  const infoDB = await User.findAll();
+  const infoDB = await User.findAll({order : [['user_name', "ASC"]], paranoid: false});
   const infoClean = infoDB.map(user => {
     return {
       id: user.dataValues.id,
@@ -316,7 +318,8 @@ const getAllUserInfoAdmin = async () => {
       reputation: user.dataValues.reputation,
       profile_img: user.dataValues.profile_img,
       confirmed: user.dataValues.confirmed,
-      createdAt: user.dataValues.createdAt
+      createdAt: user.dataValues.createdAt,
+      deletedAt: user.dataValues.deletedAt
     }
   });
   return infoClean;
@@ -353,6 +356,16 @@ TODO: handler y ruta de esta función.*/
   return { msg: 'usuario borrado con exito.' }
 }
 
+const enableUserByAdmin = async (id) =>{
+  if(!id){
+    throw new Error("No se asigno un ID")
+  }else{
+    const user = await User.findByPk(id, {paranoid: false})
+    await user.restore()
+    user.eliminatedByAdmin = false
+    await user.save()
+  }
+}
 
 
 const resetPassword = async (email) => {
@@ -442,6 +455,7 @@ module.exports = {
   confirmeUser,
   authUser,
   /* los controladores de los admins */
+  enableUserByAdmin,
   getAllUserInfoAdmin,
   deleteUserByAdmin,
   resetPassword,

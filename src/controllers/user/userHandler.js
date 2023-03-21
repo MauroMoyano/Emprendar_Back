@@ -14,6 +14,7 @@ const {
   newPassword,
   changePassword
 } = require("../user/userController");
+const {enableUserByAdmin} = require("./userController");
 
 const postUserHanlder = async function (req, res) {
   try {
@@ -126,6 +127,15 @@ const deleteUserByAdminHl = async function (req, res){
 
 }
 
+const enableUserByAdminHl = async function (req, res){
+  try{
+    const { id } = req.params
+    const result = await enableUserByAdmin(id)
+    res.status(200).json(result)
+  }catch (error) {
+
+  }
+}
 
 
 const resetPasswordHl = async (req, res) => {
@@ -195,6 +205,7 @@ module.exports = {
   confirmeUserHl,
   authUserHl,
   /* handlers ADMINS. */
+  enableUserByAdminHl,
   getAllUserDataAdmin,
   deleteUserByAdminHl,
   authedUserhl,
