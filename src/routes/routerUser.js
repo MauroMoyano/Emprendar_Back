@@ -12,7 +12,8 @@ const {
   resetPasswordHl,
   newPasswordHl,
   comprobarTokenHl,
-  changePasswordHl
+  changePasswordHl,
+  contactUsHl
 } = require("../controllers/user/userHandler");
 const { checkAuth } = require("../middleware/checkAuth");
 const routerUser = Router();
@@ -82,6 +83,8 @@ routerUser.get('/config/resetpassword/:token', comprobarTokenHl)
 routerUser.post('/config/resetpassword/:token',newPasswordHl)
 
 routerUser.post('/config/changepassowrd/',checkAuth,changePasswordHl)
+
+routerUser.post('/contactUs/sendMessage', contactUsHl)
 
 
 module.exports = routerUser;
