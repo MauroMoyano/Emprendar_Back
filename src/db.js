@@ -306,6 +306,8 @@ Comment.belongsTo(User);
 Project.hasMany(Comment);
 Comment.belongsTo(Project);
 
+/* relacion de muchos a muchos  */
+
 
 //exportamos la funcion y la instancia para luego crear los modelos
 

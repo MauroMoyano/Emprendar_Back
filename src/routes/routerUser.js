@@ -13,7 +13,7 @@ const {
   newPasswordHl,
   comprobarTokenHl,
   changePasswordHl,
-  contactUsHl
+  contactUsHl, enableUserByAdminHl
 } = require("../controllers/user/userHandler");
 const { checkAuth } = require("../middleware/checkAuth");
 const routerUser = Router();
@@ -44,7 +44,9 @@ routerUser.get("/login/me", checkAuth, authedUserhl);
 
 /* ruta de ADMINS. */
 routerUser.get("/admin/users", getAllUserDataAdmin);
+routerUser.put("/admin/enableUser/:id", enableUserByAdminHl)
 routerUser.put("/admin/deleteUser/:id", deleteUserByAdminHl)
+
 
 routerUser.get(
   "/auth/google",
