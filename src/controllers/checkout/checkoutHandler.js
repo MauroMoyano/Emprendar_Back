@@ -27,18 +27,33 @@ async function checkoutHl(req, res) {
         mode: "payment",
         success_url: `${process.env.FRONTEND_URL}/detailUser/${req.body.userId}/${req.body.id}/?success=true`,
         cancel_url: `${process.env.FRONTEND_URL}/detailUser/${req.body.userId}/${req.body.id}/?canceled=true`,
-      });
+      })
 
-      if (session.payment_status === "paid") {
-        const project = await Project.findByPk(req.body.id);
-        const collectedAmount = parseInt(project.amount_collected);
-        const paymentAmount = parseInt(req.body.amount);
-        const totalAmount = collectedAmount + paymentAmount;
-        project.amount_collected = totalAmount.toString();
-        await project.save();
-      }
-
+      // Redirect the user to the payment page.
       res.redirect(303, session.url);
+
+      // Set up a webhook handler to listen for the `checkout.session.completed` event.
+      const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+      const webhookHandler = stripe.webhooks.constructEvent(
+        req.body,
+        req.headers["stripe-signature"],
+        webhookSecret
+      );
+
+      if (webhookHandler.type === "checkout.session.completed") {
+        const paymentIntent = webhookHandler.data.object.payment_intent;
+        const payment = await stripe.paymentIntents.retrieve(paymentIntent);
+        
+        // Check if payment was successful.
+        if (payment.status === "succeeded") {
+          const project = await Project.findByPk(req.body.id);
+          const collectedAmount = parseInt(project.amount_collected);
+          const paymentAmount = parseInt(req.body.amount);
+          const totalAmount = collectedAmount + paymentAmount;
+          project.amount_collected = totalAmount.toString();
+          await project.save();
+        }
+      }
     } catch (err) {
       res.status(err.statusCode || 500).json(err.message);
     }
