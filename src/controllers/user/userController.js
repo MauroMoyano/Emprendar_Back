@@ -230,7 +230,8 @@ const userByID = async (userId) => {
         last_name: infoUserDB.last_name,
         email: infoUserDB.email,
         account_state: infoUserDB.account_state,
-        reputation: await getReputationUser({ qualifiedUser: infoUserDB.id }),
+        reputation: await (getReputationUser({ qualifiedUser: infoUserDB.id })).reputation,
+        cantFeedBack: await (getReputationUser({ qualifiedUser: infoUserDB.id })).count,
         validated: infoUserDB.validated,
         profile_img: infoUserDB.profile_img,
       };
@@ -315,7 +316,6 @@ const getAllUserInfoAdmin = async () => {
       name: user.dataValues.name,
       last_name: user.dataValues.last_name,
       email: user.dataValues.email,
-      reputation: user.dataValues.reputation,
       profile_img: user.dataValues.profile_img,
       confirmed: user.dataValues.confirmed,
       createdAt: user.dataValues.createdAt,
