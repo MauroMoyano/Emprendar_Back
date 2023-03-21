@@ -31,7 +31,11 @@ async function checkoutHl(req, res) {
 
       // Redirect the user to the payment page.
       res.redirect(303, session.url);
-
+      const project = await Project.findByPk(req.body.id);
+      const collectedAmount = parseInt(project.amount_collected);
+      const paymentAmount = parseInt(req.body.amount);
+      const totalAmount = collectedAmount + paymentAmount;
+      project.amount_collected = totalAmount.toString();
       // Set up a webhook handler to listen for the `checkout.session.completed` event.
       const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
       const webhookHandler = stripe.webhooks.constructEvent(
@@ -46,11 +50,7 @@ async function checkoutHl(req, res) {
         
         // Check if payment was successful.
         if (payment.status === "succeeded") {
-          const project = await Project.findByPk(req.body.id);
-          const collectedAmount = parseInt(project.amount_collected);
-          const paymentAmount = parseInt(req.body.amount);
-          const totalAmount = collectedAmount + paymentAmount;
-          project.amount_collected = totalAmount.toString();
+
           await project.save();
         }
       }
