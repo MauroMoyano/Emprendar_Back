@@ -15,11 +15,17 @@ const checkAuth = async (req, res, next) => {
         try {
           const user = jwt.verify(token, process.env.JWT_SECRET);
     
-          
-          req.user = await userByID(user.id)
+            const userById = await userByID(user.id)
+
+            if(!userById) {
+              res.json('error')
+            } else {
+              req.user = userById
+
+            }
         } catch (error) {
           console.log(error)
-         res.json('error')
+        
         }
       }
     
