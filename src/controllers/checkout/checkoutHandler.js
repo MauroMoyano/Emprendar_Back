@@ -30,38 +30,24 @@ async function checkoutHl(req, res) {
       })
 
       // Redirect the user to the payment page.
-      res.redirect(303, session.url);
-      const project = await Project.findByPk(req.body.id);
-      const collectedAmount = parseInt(project.amount_collected);
-      const paymentAmount = parseInt(req.body.amount);
-      const totalAmount = collectedAmount + paymentAmount;
-      project.amount_collected = totalAmount.toString();
-      // Set up a webhook handler to listen for the `checkout.session.completed` event.
-      const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-      const webhookHandler = stripe.webhooks.constructEvent(
-        req.body,
-        req.headers["stripe-signature"],
-        webhookSecret
-      );
+           res.redirect(303, session.url);
 
-      if (webhookHandler.type === "checkout.session.completed") {
-        const paymentIntent = webhookHandler.data.object.payment_intent;
-        const payment = await stripe.paymentIntents.retrieve(paymentIntent);
+          const project = await Project.findByPk(req.body.id);
+          const collectedAmount = parseInt(project.amount_collected);
+          const paymentAmount = parseInt(req.body.amount);
+          const totalAmount = collectedAmount + paymentAmount;
+          project.amount_collected = totalAmount.toString();
+
+         await project.save()
         
-        // Check if payment was successful.
-        if (payment.status === "succeeded") {
-
-          await project.save();
+        } catch (err) {
+          res.status(err.statusCode || 500).json(err.message);
         }
+      } else {
+        res.setHeader("Allow", "POST");
+        res.status(405).end("Method Not Allowed");
       }
-    } catch (err) {
-      res.status(err.statusCode || 500).json(err.message);
     }
-  } else {
-    res.setHeader("Allow", "POST");
-    res.status(405).end("Method Not Allowed");
-  }
-}
 
 module.exports = {
   checkoutHl,
