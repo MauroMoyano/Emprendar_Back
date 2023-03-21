@@ -16,14 +16,15 @@ const getReputationUser = async (data) => {
     console.log(qualifiedUser);
     return await Reputation.findAll({ where: { qualifiedUser: qualifiedUser }, attributes: ['qualification'] })
         .then(res => {
-            if (!res.length) return 0
+            if (!res.length) return { reputation: 0, count: 0 }
             let result = []
-            let div = 0
+            let div = res.length
             for (const rep of res) {
-                div = div + 1
                 result.push(Number(rep.dataValues.qualification))
             }
-            return Math.floor((result.reduce((a, b) => a + b, 0)) / div)
+
+            let resss = { reputation: Math.floor((result.reduce((a, b) => a + b, 0)) / div), count: div }
+            return resss
         })
 }
 
