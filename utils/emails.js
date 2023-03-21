@@ -1,28 +1,25 @@
-const nodemailer =  require('nodemailer')
+const nodemailer = require("nodemailer");
 
+const emailRegistration = async (datos) => {
+  const { email, name, token } = datos;
 
- const emailRegistration = async (datos) => {
+  const transport = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
 
-    
-    const { email, name, token } = datos;
+  //informacion del email
 
-    const transport = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port:process.env.EMAIL_PORT ,
-        auth: {
-            user:process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
-        }
-    });
-
-    //informacion del email
-
-    const info = await transport.sendMail({
-        from: '"Emprendar" <cuentas@emprendar.com> ',
-        to: email,
-        subject: "Emprendar - Confirma tu cuenta",
-        text: "Confirma tu cuenta en Emprendar",
-        html: ` 
+  const info = await transport.sendMail({
+    from: '"Emprendar" <cuentas@emprendar.com> ',
+    to: email,
+    subject: "Emprendar - Confirma tu cuenta",
+    text: "Confirma tu cuenta en Emprendar",
+    html: ` 
         <table style="width: 720px; margin: 0 auto;">
                     
                     <tr style="display: flex; width: 720px; justify-content: center;">
@@ -50,35 +47,28 @@ const nodemailer =  require('nodemailer')
                     </tr>
         </table>
                 
-        `
-    })
+        `,
+  });
+};
 
-}
+const emailResetPassword = async (datos) => {
+  const { email, name, token } = datos;
 
+  const transport = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
 
-
-const emailResetPassword =  async (datos) => {
-
-    const {email, name, token} = datos
-
-    const transport = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port:process.env.EMAIL_PORT ,
-        auth: {
-            user:process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
-        }
-    });
-
-
-    const info = await transport.sendMail({
-
-
-        from: '"Emprendar" <cuentas@emprendar.com> ',
-        to: email,
-        subject: "Emprendar - Recupera tu cuenta",
-        text: "Recupera  tu cuenta en Emprendar",
-        html: ` 
+  const info = await transport.sendMail({
+    from: '"Emprendar" <cuentas@emprendar.com> ',
+    to: email,
+    subject: "Emprendar - Recupera tu cuenta",
+    text: "Recupera  tu cuenta en Emprendar",
+    html: ` 
         <table style="width: 720px; margin: 0 auto;">
                     
                     <tr style="display: flex; width: 720px; justify-content: center;">
@@ -106,14 +96,49 @@ const emailResetPassword =  async (datos) => {
                     </tr>
         </table>
                 
-        `
+        `,
+  });
+};
 
-    })
+const contactUsSendMessage = async (datos) => {
+  const { name, message, email } = datos;
 
-}
+  const transport = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
 
+  const info = await transport.sendMail({
+    from: "emprendar2023@gmail.com",
+    to: "emprendar2023@gmail.com",
+    subject: "Emprendar - Un usuario ha mandado un mensaje",
+    text: "Mnesaje de: " + name,
+    html: ` 
+        <table style="width: 720px; margin: 0 auto;">
+                    
+                    <tr style="display: flex; width: 720px; justify-content: center;">
+                        <hr />
+                        <img src="https://res.cloudinary.com/nachito02/image/upload/v1678480886/m3xfx5kv4buvgvnxdqlw.png" alt="LogoEmprendar" width="720px" />
+                    </tr>
+                    <tr style="width: 720px; text-align: center;">
+                        <h3>Tenemos un mensaje de un usuario</h3>
+                    </tr>
+                    <tr style="width: 720px; text-align: center;">
+                    <p> El usuario ${name} con el email de ${email} ha escrito </p>
+                    <p> ${message} </p>
+                    </tr>
+        </table>
+                
+        `,
+  });
+};
 
 module.exports = {
-    emailRegistration,
-    emailResetPassword
-}
+  emailRegistration,
+  emailResetPassword,
+  contactUsSendMessage,
+};
