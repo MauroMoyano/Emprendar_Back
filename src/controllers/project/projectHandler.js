@@ -92,8 +92,10 @@ const { updateProject } = require('./projectController')
 /* update de datos del proyecto. recibe el id por params y los datos a cambiar por body */
 const updateProjectHl = async (req, res) => {
 
+    const { id } = req.params
+
     try {
-        let result = await updateProject(req.params, req.body)
+        let result = await updateProject(id, req.body)
         res.status(201).json(result)
     } catch (error) {
         res.status(406).json({ error: error.message })
@@ -119,7 +121,7 @@ const updateValidateHl = async (req, res) => {
 const { getAllProjectsAdmin } = require('./projectController')
 
 const getAllProjectsAdminHl = async (req, res) => {
-    const {filter} = req.query
+    const { filter } = req.query
     try {
         let result = await getAllProjectsAdmin(filter)
         res.status(201).json(result)

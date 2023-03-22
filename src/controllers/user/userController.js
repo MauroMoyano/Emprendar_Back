@@ -421,30 +421,33 @@ const newPassword = async (token, password) => {
 
 }
 
+const verifyPassword = async (password, id) => {
+  console.log('Llega al controller')
+  console.log('password ->', password)
+  console.log('id ->', id)
+  if (!password || !id) {
+    throw new Error('Falta algunos de los datos')
+  } else {
+    const user = await User.findByPk(id)
+    console.log(user)
 
-const changePassword = async (id, password, newPassword, verifyPassword) => {
-
-  const user = await User.findByPk(id)
-
-  if (newPassword === verifyPassword) {
     const passwordIsTheSame = bcrypt.compareSync(password, user.password)
 
-    if (passwordIsTheSame) {
-      user.password = bcrypt.hash(newPassword, 8);
-
-      await user.save()
-
-      return { msg: 'Contraseña cambiada correctamente' }
-    } else {
-      throw new Error('Tu contraseña no coincide con la contraseña guardada en la base de datos')
-    }
-  } else {
-    throw new Error('Las contraseñas deben ser iguales')
-
+    return passwordIsTheSame;
   }
 
+}
 
+const changePassword = async (id, newPassword) => {
 
+  console.log('id en el controller ->', id)
+  console.log('pass en el controller ->', newPassword)
+  console.log('typeof ->', typeof newPassword);
+
+  const user = await User.findByPk(id)
+  user.password = await bcrypt.hash(newPassword, 8);
+  await user.save()
+  return { msg: 'Contraseña cambiada correctamente' }
 }
 
 module.exports = {
@@ -466,5 +469,6 @@ module.exports = {
   /* getFilterUserInfoByDeletedAt,
   deleteUserByAdmin */
   newPassword,
-  changePassword
+  changePassword,
+  verifyPassword
 };
