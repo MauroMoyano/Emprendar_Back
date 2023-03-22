@@ -358,7 +358,7 @@ const updateValidate = async (id, newValidateValue) => {
 
 const getAllProjectsAdmin = async () => {
 
-    const projects = await Project.findAll({order : [['title', "ASC"]]});
+    const projects = await Project.findAll({order : [['title', "ASC"]], include: [{ model: User, attributes: [], where: {deletedAt: null, eliminatedByAdmin: false}}]});
     if (!projects) {
         throw new Error('No se encontró ningun proyecto');
     }
