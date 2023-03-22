@@ -1,4 +1,4 @@
-const { emailRegistration, emailResetPassword, emailUserValidateRejected, emailUserValidateAcepted} = require("../../../utils/emails");
+const { emailRegistration, emailResetPassword } = require("../../../utils/emails");
 const { generateToken } = require("../../../utils/generateToken");
 const { generateJWT } = require("../../../utils/generateJWT");
 const bcrypt = require("bcrypt")
@@ -13,7 +13,7 @@ const userCreate = async (data) => {
     throw new Error("Por favor complete todos los campos");
   } else {
     const findUser = await User.findOne({ where: { user_name: user_name } })
-    const findEmail = await User.findOne({ where: { email: email }, paranoid: false})
+    const findEmail = await User.findOne({ where: { email: email } })
 
     if (findEmail) {
       throw new Error("Este correo electrónico ya está registrado");
@@ -101,8 +101,7 @@ const authUser = async (data) => {
       name: user.name,
       last_name: user.last_name,
       email: user.email,
-      token: generateJWT(user.id, user.user_name),
-      isAdmin: user.isAdmin
+      token: generateJWT(user.id, user.user_name)
     }
 
 
@@ -234,7 +233,6 @@ const userByID = async (userId) => {
         reputation: await getReputationUser({ qualifiedUser: infoUserDB.id }),
         validated: infoUserDB.validated,
         profile_img: infoUserDB.profile_img,
-        isAdmin: infoUserDB.isAdmin
       };
 
       const infoProjectDB = await Project.findAll({
@@ -344,7 +342,7 @@ volver a recuperar la cuenta por la propiedad "eliminatedByAdmin"
 TODO: handler y ruta de esta función.*/
 const deleteUserByAdmin = async (userId) => {
   let user = await User.findByPk(userId)
-  await emailUserValidateRejected(user)
+
   user.eliminatedByAdmin = true
   user.account_state = false
 
@@ -365,7 +363,6 @@ const enableUserByAdmin = async (id) => {
     await user.restore()
     user.eliminatedByAdmin = false
     await user.save()
-    await emailUserValidateAcepted(user)
   }
 }
 
