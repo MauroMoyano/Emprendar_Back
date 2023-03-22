@@ -12,7 +12,8 @@ const {
   resetPasswordHl,
   newPasswordHl,
   comprobarTokenHl,
-  changePasswordHl
+  changePasswordHl,
+  verifyPasswordHl
 } = require("../controllers/user/userHandler");
 const { checkAuth } = require("../middleware/checkAuth");
 const routerUser = Router();
@@ -48,7 +49,7 @@ routerUser.put("/admin/deleteUser/:id", deleteUserByAdminHl)
 routerUser.get(
   "/auth/google",
   passport.authenticate("google"),
-  function (req, res) {}
+  function (req, res) { }
 );
 
 routerUser.get(
@@ -79,9 +80,11 @@ routerUser.get(
 routerUser.post('/config/resetpassword', resetPasswordHl)
 routerUser.get('/config/resetpassword/:token', comprobarTokenHl)
 
-routerUser.post('/config/resetpassword/:token',newPasswordHl)
+routerUser.post('/config/resetpassword/:token', newPasswordHl)
 
-routerUser.post('/config/changepassowrd/',checkAuth,changePasswordHl)
+routerUser.post('/config/changepassword/', changePasswordHl)
+
+routerUser.post('/config/verifyPassword', verifyPasswordHl)
 
 
 module.exports = routerUser;

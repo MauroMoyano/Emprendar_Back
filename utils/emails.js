@@ -39,7 +39,7 @@ const nodemailer =  require('nodemailer')
                     <p> Tu cuenta ya esta casi lista, solo debes comprobarla en el siguiente enlace: </p>
                     </tr>
                     <tr style="width: 720px; text-align: center;">
-                    <a href="${process.env.FRONTEND_URL}/confirmar/${token}">
+                    <a target='_blank' rel="noreferrer" href="${process.env.FRONTEND_URL}/confirmar/${token}">
                         <button style="background-color: #594A78; border:none; border-radius: 10px; width: fit-content; height:fit-content; padding: 10px; cursor:pointer; ">Confirmar Email</button>
                     </a>
                     </tr>

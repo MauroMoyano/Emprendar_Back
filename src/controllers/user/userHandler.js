@@ -12,7 +12,8 @@ const {
   resetPassword,
   comprobarToken,
   newPassword,
-  changePassword
+  changePassword,
+  verifyPassword
 } = require("../user/userController");
 
 const postUserHanlder = async function (req, res) {
@@ -115,8 +116,8 @@ const getAllUserDataAdmin = async function (req, res) {
   }
 }
 
-const deleteUserByAdminHl = async function (req, res){
-  try{
+const deleteUserByAdminHl = async function (req, res) {
+  try {
     const { id } = req.params
     const result = await deleteUserByAdmin(id)
     res.status(200).json(result)
@@ -172,17 +173,35 @@ const newPasswordHl = async (req, res) => {
 
 }
 
-const changePasswordHl = async (req,res) => {
+const verifyPasswordHl = async (req, res) => {
+  console.log('Llega al handler')
 
-  const {password, newPassword, verifyPassword} = req.body
-  const {id}  = req.user
-    try {
-      const response = await changePassword(id,password, newPassword,verifyPassword)
+  const { password, id } = req.body
+  console.log('password ->', password)
+  console.log('id ->', id)
+  try {
+    const response = await verifyPassword(password, id )
 
-      res.status(200).json(response)
-    } catch (error) {
-      res.status(400).json({error: error.message})
-    }
+    res.status(200).send(response)
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
+const changePasswordHl = async (req, res) => {
+
+  const { id, newPassword } = req.body
+
+  console.log('id en el handler', id)
+  console.log('pass en el handler', newPassword)
+  
+  try {
+    const response = await changePassword(id, newPassword)
+
+    res.status(200).json(response)
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
 
 }
 
@@ -201,6 +220,7 @@ module.exports = {
   resetPasswordHl,
   newPasswordHl,
   comprobarTokenHl,
-  changePasswordHl
+  changePasswordHl,
+  verifyPasswordHl
 };
 // {}
