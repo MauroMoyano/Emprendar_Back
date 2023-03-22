@@ -231,8 +231,7 @@ const userByID = async (userId) => {
         last_name: infoUserDB.last_name,
         email: infoUserDB.email,
         account_state: infoUserDB.account_state,
-        reputation: await (getReputationUser({ qualifiedUser: infoUserDB.id })).reputation,
-        cantFeedBack: await (getReputationUser({ qualifiedUser: infoUserDB.id })).count,
+        reputation: await getReputationUser({ qualifiedUser: infoUserDB.id }),
         validated: infoUserDB.validated,
         profile_img: infoUserDB.profile_img,
         isAdmin: infoUserDB.isAdmin
@@ -310,7 +309,7 @@ const deleteUser = async (userID) => {
 TODO: crear filtros por ciertos parametros de usuario, como deletedAt 
 (con su instancia de usuario borrado. no se el valor que se le da con el destroy({<})) */
 const getAllUserInfoAdmin = async () => {
-  const infoDB = await User.findAll({order : [['user_name', "ASC"]], paranoid: false});
+  const infoDB = await User.findAll({ order: [['user_name', "ASC"]], paranoid: false });
   const infoClean = infoDB.map(user => {
     return {
       id: user.dataValues.id,
@@ -343,7 +342,7 @@ const getAllUserInfoAdmin = async () => {
 /* funcion que va directo para los Admins, que permite borrar al usuario y ademas que el usuario no tenga la posibilidad de
 volver a recuperar la cuenta por la propiedad "eliminatedByAdmin"
 TODO: handler y ruta de esta función.*/
- const deleteUserByAdmin = async (userId) => {
+const deleteUserByAdmin = async (userId) => {
   let user = await User.findByPk(userId)
 
   user.eliminatedByAdmin = true
@@ -358,11 +357,11 @@ TODO: handler y ruta de esta función.*/
   return { msg: 'usuario borrado con exito.' }
 }
 
-const enableUserByAdmin = async (id) =>{
-  if(!id){
+const enableUserByAdmin = async (id) => {
+  if (!id) {
     throw new Error("No se asigno un ID")
-  }else{
-    const user = await User.findByPk(id, {paranoid: false})
+  } else {
+    const user = await User.findByPk(id, { paranoid: false })
     await user.restore()
     user.eliminatedByAdmin = false
     await user.save()
