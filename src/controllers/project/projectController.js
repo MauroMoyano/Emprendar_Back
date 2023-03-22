@@ -82,7 +82,7 @@ const getProjectById = async (id) => {
 
 /* a incluir filtros tambien. */
 
-const getAllProjects = async (data, pageNum = 4) => {
+const getAllProjects = async (data, pageNum = 8) => {
     //buscamos todos los projectos y los filtramos si recibimos en datos algo mas que page
 
     const { orden, page, country, category, search } = data

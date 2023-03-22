@@ -121,7 +121,7 @@ const authUser = async (data) => {
 
 /* como bien lo dice, trae a todos los usuarios para una especie de "busqueda" de los perfiles de usuarios ademas de los "proyectos"
 se le aplicaran "filtros" desde el front. exeptuanco la busqueda propia por back */
-const getAllUsers = async (data, pageNum = 2) => {
+const getAllUsers = async (data, pageNum = 6) => {
 
   const { page, orden, search } = data
 
