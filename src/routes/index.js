@@ -7,6 +7,7 @@ const routerCountry = require('./routerCountry')
 const routerImage = require('./routerImage')
 const routerCheckout = require('./routerCheckout')
 const routerChat = require('./routerChat')
+const routerReputation = require('./routerReputarion')
 const routerStats = require('./routerStats')
 
 
@@ -21,8 +22,8 @@ mainRouter.use('/category', routerCategory)
 mainRouter.use('/country', routerCountry)
 mainRouter.use('/images', routerImage)
 mainRouter.use('/checkout', routerCheckout)
-mainRouter.use("/chats", routerChat )
-
+mainRouter.use("/chats", routerChat)
+mainRouter.use("/reputation", routerReputation)
 mainRouter.use('/stats', routerStats)
 
 module.exports = mainRouter

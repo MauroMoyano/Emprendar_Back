@@ -1,3 +1,4 @@
+  const { contactUsSendMessage } = require("../../../utils/emails");
 const {
   userCreate,
   getAllUsers,
@@ -196,6 +197,21 @@ const changePasswordHl = async (req,res) => {
 
 }
 
+const contactUsHl = async  (req,res) => {
+
+  const {email,name, message} = req.body
+
+  try {
+    await contactUsSendMessage({email,name, message})
+
+    res.status(200).json({msg: 'Correo enviado correctamente, te responderemos a la brevedad'})
+  } catch (error) {
+    console.log(error)
+    res.status(400).json(error)
+  }
+
+}
+
 module.exports = {
   postUserHanlder,
   getAllUsersHandler,
@@ -212,6 +228,7 @@ module.exports = {
   resetPasswordHl,
   newPasswordHl,
   comprobarTokenHl,
-  changePasswordHl
+  changePasswordHl,
+  contactUsHl
 };
 // {}

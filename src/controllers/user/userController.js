@@ -3,8 +3,9 @@ const { generateToken } = require("../../../utils/generateToken");
 const { generateJWT } = require("../../../utils/generateJWT");
 const bcrypt = require("bcrypt")
 
-const { User, Project, Country, Category } = require("../../db");
+const { User, Project, Country, Category, Reputation } = require("../../db");
 const { Op } = require("sequelize");
+const { getReputationUser } = require("../Reputation/reputarionController");
 
 const userCreate = async (data) => {
   let { user_name, name, last_name, email, password, profile_img } = data
@@ -149,16 +150,18 @@ const getAllUsers = async (data, pageNum = 2) => {
     offset,
     limit,
     order,
-    attributes: ['id', 'user_name', 'name', 'last_name', 'reputation', 'profile_img'],
     where: where1.where,
+    attributes: ['id', 'user_name', 'name', 'last_name'/* , 'reputation' */, 'profile_img']
   })
 
   let result = []
   for (const user of rows) {
     let project = await Project.findAll({ where: { userId: user.dataValues.id, validated: 'aceptado', deletedAt: null }, attributes: ['id', 'title',] })
+    let reputation = await getReputationUser({ qualifiedUser: user.dataValues.id })
     result.push({
       ...user.dataValues,
-      project
+      project,
+      reputation
     })
   }
 
@@ -227,7 +230,8 @@ const userByID = async (userId) => {
         last_name: infoUserDB.last_name,
         email: infoUserDB.email,
         account_state: infoUserDB.account_state,
-        reputation: infoUserDB.reputation,
+        reputation: await (getReputationUser({ qualifiedUser: infoUserDB.id })).reputation,
+        cantFeedBack: await (getReputationUser({ qualifiedUser: infoUserDB.id })).count,
         validated: infoUserDB.validated,
         profile_img: infoUserDB.profile_img,
       };
@@ -312,7 +316,6 @@ const getAllUserInfoAdmin = async () => {
       name: user.dataValues.name,
       last_name: user.dataValues.last_name,
       email: user.dataValues.email,
-      reputation: user.dataValues.reputation,
       profile_img: user.dataValues.profile_img,
       confirmed: user.dataValues.confirmed,
       createdAt: user.dataValues.createdAt,
@@ -417,28 +420,28 @@ const newPassword = async (token, password) => {
 }
 
 
-const changePassword = async (id,password,newPassword,verifyPassword) => {
+const changePassword = async (id, password, newPassword, verifyPassword) => {
 
-    const user = await User.findByPk(id)
+  const user = await User.findByPk(id)
 
-      if(newPassword === verifyPassword) {
-        const passwordIsTheSame =  bcrypt.compareSync(password, user.password)
+  if (newPassword === verifyPassword) {
+    const passwordIsTheSame = bcrypt.compareSync(password, user.password)
 
-        if(passwordIsTheSame) {
-           user.password = bcrypt.hash(newPassword, 8);
+    if (passwordIsTheSame) {
+      user.password = bcrypt.hash(newPassword, 8);
 
-           await user.save()
+      await user.save()
 
-           return {msg: 'Contraseña cambiada correctamente'}
-        } else {
-          throw new Error('Tu contraseña no coincide con la contraseña guardada en la base de datos')
-        }
-      }  else {
-        throw new Error('Las contraseñas deben ser iguales')
+      return { msg: 'Contraseña cambiada correctamente' }
+    } else {
+      throw new Error('Tu contraseña no coincide con la contraseña guardada en la base de datos')
+    }
+  } else {
+    throw new Error('Las contraseñas deben ser iguales')
 
-      }
+  }
 
-      
+
 
 }
 

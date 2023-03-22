@@ -37,11 +37,10 @@ module.exports = (sequelize) => {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       }, */
-      reputation: {
+      /* reputation: {
         type: DataTypes.DECIMAL,
         defaultValue: 0,
-      },
-
+      }, */
       profile_img: {
         type: DataTypes.TEXT,
         /* default: poner <imagen> (link), a nube de imagen tipica de usuario sin foto de perfil */
