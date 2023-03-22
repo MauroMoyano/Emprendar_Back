@@ -248,11 +248,85 @@ const emailPostValidateRejected = async (datos) => {
   });
 };
 
+const emailUserValidateRejected = async (datos) => {
+  const { name, email } = datos;
+
+  const transport = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const info = await transport.sendMail({
+    from: "emprendar2023@gmail.com",
+    to: email,
+    subject: "Tu cuenta ha sido baneada",
+    text: "Información de cuenta",
+    html: ` 
+        <table style="width: 720px; margin: 0 auto;">
+                    
+                    <tr style="display: flex; width: 720px; justify-content: center;">
+                        <hr />
+                        <img src="https://res.cloudinary.com/nachito02/image/upload/v1678480886/m3xfx5kv4buvgvnxdqlw.png" alt="LogoEmprendar" width="720px" />
+                    </tr>
+                    <tr style="width: 720px; text-align: center;">
+                        <h3>Hemos decidido banear tu cuenta porque no cumples con nuestra politica.</h3>
+                    </tr>
+                    <tr style="width: 720px; text-align: center;">
+                    <p> Hola ${name} tu cuenta fue baneada lo sentimos, pero viola las normas de Emprendar.</p>
+                    
+                    </tr>
+        </table>
+                
+        `,
+  });
+};
+
+const emailUserValidateAcepted = async (datos) => {
+  const { name, email } = datos;
+
+  const transport = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const info = await transport.sendMail({
+    from: "emprendar2023@gmail.com",
+    to: email,
+    subject: "Tu cuenta ha sido reactivada",
+    text: "Información de cuenta",
+    html: ` 
+        <table style="width: 720px; margin: 0 auto;">
+                    
+                    <tr style="display: flex; width: 720px; justify-content: center;">
+                        <hr />
+                        <img src="https://res.cloudinary.com/nachito02/image/upload/v1678480886/m3xfx5kv4buvgvnxdqlw.png" alt="LogoEmprendar" width="720px" />
+                    </tr>
+                    <tr style="width: 720px; text-align: center;">
+                        <h3>Hemos decidido reactivar tu cuenta esperamos seas responsable con su uso.</h3>
+                    </tr>
+                    <tr style="width: 720px; text-align: center;">
+                    <p> Hola ${name} tu cuenta fue reactivada bienvenido nuevamente a Emprendar.</p>
+                    </tr>
+        </table>
+                
+        `,
+  });
+};
 module.exports = {
   emailRegistration,
   emailResetPassword,
   contactUsSendMessage,
   proyectCreateEmail,
   emailPostValidateSuccess,
-  emailPostValidateRejected
+  emailPostValidateRejected,
+  emailUserValidateRejected,
+  emailUserValidateAcepted
 };
