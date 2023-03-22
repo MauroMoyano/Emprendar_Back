@@ -1,12 +1,15 @@
 const { Promise } = require('bluebird')
 const sequelize = require('sequelize')
 const { Op, Sequelize } = require('sequelize')
+const { proyectCreateEmail } = require('../../../utils/emails')
 const { Project, User, Country, Category } = require('../../db')
 
 const addProject = async (data) => {
 
     //TODO crear validaciones
 
+
+      
 
     console.log('aca esta la data', data)
     const { title, summary, description, goal, img, userId, country, category } = data
@@ -37,6 +40,8 @@ const addProject = async (data) => {
                 goal,
                 img,
         })
+
+    
     }
     
 
@@ -56,7 +61,7 @@ const addProject = async (data) => {
     await projecto.setCountry(countries)
 
     return {
-        msg: 'Projecto Creado correctamente'
+        msg: 'Projecto Creado correctamente, lo estamos revisando, revisa tu email para mas informacion'
     }
 }
 
