@@ -101,7 +101,8 @@ const authUser = async (data) => {
       name: user.name,
       last_name: user.last_name,
       email: user.email,
-      token: generateJWT(user.id, user.user_name)
+      token: generateJWT(user.id, user.user_name),
+      isAdmin: user.isAdmin
     }
 
 
@@ -234,6 +235,7 @@ const userByID = async (userId) => {
         cantFeedBack: await (getReputationUser({ qualifiedUser: infoUserDB.id })).count,
         validated: infoUserDB.validated,
         profile_img: infoUserDB.profile_img,
+        isAdmin: infoUserDB.isAdmin
       };
 
       const infoProjectDB = await Project.findAll({
