@@ -223,6 +223,8 @@ const userByID = async (userId) => {
     if (!infoUserDB) {
       throw new Error("No se encontró ningún usuario con ese ID")
     } else {
+      let reputation = await getReputationUser({ qualifiedUser: infoUserDB.id })
+      console.log(reputation);
       const infoUserClean = {
         id: infoUserDB.id,
         user_name: infoUserDB.user_name,
@@ -230,9 +232,11 @@ const userByID = async (userId) => {
         last_name: infoUserDB.last_name,
         email: infoUserDB.email,
         account_state: infoUserDB.account_state,
-        reputation: await getReputationUser({ qualifiedUser: infoUserDB.id }),
+        reputation: reputation.reputation,
+        count: reputation.count,
         validated: infoUserDB.validated,
         profile_img: infoUserDB.profile_img,
+        isAdmin: infoUserDB.isAdmin
       };
 
       const infoProjectDB = await Project.findAll({
