@@ -13,7 +13,7 @@ const userCreate = async (data) => {
     throw new Error("Por favor complete todos los campos");
   } else {
     const findUser = await User.findOne({ where: { user_name: user_name } })
-    const findEmail = await User.findOne({ where: { email: email } })
+    const findEmail = await User.findOne({ where: { email: email }, paranoid: false})
 
     if (findEmail) {
       throw new Error("Este correo electrónico ya está registrado");

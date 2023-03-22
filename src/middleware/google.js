@@ -24,17 +24,24 @@ passport.use("google", new GoogleStrategy({
        const newUser = await User.findOne({
         where: {
             email : profile._json.email,
-        }
+
+        },
+           paranoid: false
        })
-    
-       if(newUser) {    
+        // console.log("arreglando con colsole log ", newUser)
+
+
+    if(newUser?.dataValues?.deletedAt) {
+        done("error")
+        return
+    }
+
+    if(newUser) {
             const user = await userByID(newUser.id)
-            console.log('nuevo usuaro  ===>', newUser.id)
             user.token =  generateJWT(user.id, user.user_name)
             done(null,user)
        } else {
 
-        console.log(profile)
         const userByGoogle = await User.create({
 
             name : profile.name.givenName,
