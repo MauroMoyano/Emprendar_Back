@@ -1,4 +1,4 @@
-const { emailRegistration, emailResetPassword } = require("../../../utils/emails");
+const { emailRegistration, emailResetPassword, emailUserValidateRejected, emailUserValidateAcepted} = require("../../../utils/emails");
 const { generateToken } = require("../../../utils/generateToken");
 const { generateJWT } = require("../../../utils/generateJWT");
 const bcrypt = require("bcrypt")
@@ -344,7 +344,7 @@ volver a recuperar la cuenta por la propiedad "eliminatedByAdmin"
 TODO: handler y ruta de esta función.*/
 const deleteUserByAdmin = async (userId) => {
   let user = await User.findByPk(userId)
-
+  await emailUserValidateRejected(user)
   user.eliminatedByAdmin = true
   user.account_state = false
 
@@ -365,6 +365,7 @@ const enableUserByAdmin = async (id) => {
     await user.restore()
     user.eliminatedByAdmin = false
     await user.save()
+    await emailUserValidateAcepted(user)
   }
 }
 
