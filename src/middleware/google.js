@@ -32,7 +32,7 @@ passport.use("google", new GoogleStrategy({
 
 
     if(newUser?.dataValues?.deletedAt) {
-        done("Esta cuenta esta bañada")
+        done("Esta cuenta esta baneada")
         return
     }
 
