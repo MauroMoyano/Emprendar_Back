@@ -1,3 +1,4 @@
+const { proyectCreateEmail } = require('../../../utils/emails')
 const { searchProject, getAllProjects } = require('./projectController')
 /* este handler trae como bien dice todos los proyectos */
 const getProjects = async (req, res) => {
@@ -44,8 +45,12 @@ const { addProject } = require('./projectController')
 /* posteo de un proyecto de un usuario particular.
 TODO: agregarle los parentsData (o prototipos) de los datos que puede subir (o como les digan a eso) */
 const postProject = async (req, res) => {
+    const {name, email} = req.user
+    const {title} = req.body
     try {
         let result = await addProject(req.body)
+    proyectCreateEmail({name,email, title})
+
         res.status(201).json(result)
     } catch (error) {
         res.status(406).json({ error: error.message })

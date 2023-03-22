@@ -1,4 +1,4 @@
-const { emailRegistration, emailResetPassword } = require("../../../utils/emails");
+const { emailRegistration, emailResetPassword, emailUserValidateRejected, emailUserValidateAcepted} = require("../../../utils/emails");
 const { generateToken } = require("../../../utils/generateToken");
 const { generateJWT } = require("../../../utils/generateJWT");
 const bcrypt = require("bcrypt")
@@ -13,7 +13,7 @@ const userCreate = async (data) => {
     throw new Error("Por favor complete todos los campos");
   } else {
     const findUser = await User.findOne({ where: { user_name: user_name } })
-    const findEmail = await User.findOne({ where: { email: email } })
+    const findEmail = await User.findOne({ where: { email: email }, paranoid: false})
 
     if (findEmail) {
       throw new Error("Este correo electrónico ya está registrado");
@@ -101,7 +101,8 @@ const authUser = async (data) => {
       name: user.name,
       last_name: user.last_name,
       email: user.email,
-      token: generateJWT(user.id, user.user_name)
+      token: generateJWT(user.id, user.user_name),
+      isAdmin: user.isAdmin
     }
 
 
@@ -121,7 +122,7 @@ const authUser = async (data) => {
 
 /* como bien lo dice, trae a todos los usuarios para una especie de "busqueda" de los perfiles de usuarios ademas de los "proyectos"
 se le aplicaran "filtros" desde el front. exeptuanco la busqueda propia por back */
-const getAllUsers = async (data, pageNum = 2) => {
+const getAllUsers = async (data, pageNum = 6) => {
 
   const { page, orden, search } = data
 
@@ -233,6 +234,7 @@ const userByID = async (userId) => {
         reputation: await getReputationUser({ qualifiedUser: infoUserDB.id }),
         validated: infoUserDB.validated,
         profile_img: infoUserDB.profile_img,
+        isAdmin: infoUserDB.isAdmin
       };
 
       const infoProjectDB = await Project.findAll({
@@ -299,13 +301,15 @@ const deleteUser = async (userID) => {
 }
 
 
+
+
 /* controladores para ADMINS. !!!!! */
 
 /* pasamos a los Admins los datos del usuario
 TODO: crear filtros por ciertos parametros de usuario, como deletedAt 
 (con su instancia de usuario borrado. no se el valor que se le da con el destroy({<})) */
 const getAllUserInfoAdmin = async () => {
-  const infoDB = await User.findAll();
+  const infoDB = await User.findAll({ order: [['user_name', "ASC"]], paranoid: false });
   const infoClean = infoDB.map(user => {
     return {
       id: user.dataValues.id,
@@ -313,10 +317,10 @@ const getAllUserInfoAdmin = async () => {
       name: user.dataValues.name,
       last_name: user.dataValues.last_name,
       email: user.dataValues.email,
-      reputation: user.dataValues.reputation,
       profile_img: user.dataValues.profile_img,
       confirmed: user.dataValues.confirmed,
-      createdAt: user.dataValues.createdAt
+      createdAt: user.dataValues.createdAt,
+      deletedAt: user.dataValues.deletedAt
     }
   });
   return infoClean;
@@ -340,7 +344,7 @@ volver a recuperar la cuenta por la propiedad "eliminatedByAdmin"
 TODO: handler y ruta de esta función.*/
 const deleteUserByAdmin = async (userId) => {
   let user = await User.findByPk(userId)
-
+  await emailUserValidateRejected(user)
   user.eliminatedByAdmin = true
   user.account_state = false
 
@@ -353,6 +357,17 @@ const deleteUserByAdmin = async (userId) => {
   return { msg: 'usuario borrado con exito.' }
 }
 
+const enableUserByAdmin = async (id) => {
+  if (!id) {
+    throw new Error("No se asigno un ID")
+  } else {
+    const user = await User.findByPk(id, { paranoid: false })
+    await user.restore()
+    user.eliminatedByAdmin = false
+    await user.save()
+    await emailUserValidateAcepted(user)
+  }
+}
 
 
 const resetPassword = async (email) => {
@@ -445,6 +460,7 @@ module.exports = {
   confirmeUser,
   authUser,
   /* los controladores de los admins */
+  enableUserByAdmin,
   getAllUserInfoAdmin,
   deleteUserByAdmin,
   resetPassword,

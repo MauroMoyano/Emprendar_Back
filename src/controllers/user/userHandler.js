@@ -1,3 +1,4 @@
+  const { contactUsSendMessage } = require("../../../utils/emails");
 const {
   userCreate,
   getAllUsers,
@@ -15,6 +16,7 @@ const {
   changePassword,
   verifyPassword
 } = require("../user/userController");
+const {enableUserByAdmin} = require("./userController");
 
 const postUserHanlder = async function (req, res) {
   try {
@@ -127,6 +129,15 @@ const deleteUserByAdminHl = async function (req, res) {
 
 }
 
+const enableUserByAdminHl = async function (req, res){
+  try{
+    const { id } = req.params
+    const result = await enableUserByAdmin(id)
+    res.status(200).json(result)
+  }catch (error) {
+
+  }
+}
 
 
 const resetPasswordHl = async (req, res) => {
@@ -144,7 +155,6 @@ const resetPasswordHl = async (req, res) => {
 const comprobarTokenHl = async (req, res) => {
 
   const { token } = req.params
-  console.log(token)
   try {
     const response = await comprobarToken(token)
     res.status(200).json(response)
@@ -198,9 +208,24 @@ const changePasswordHl = async (req, res) => {
   try {
     const response = await changePassword(id, newPassword)
 
-    res.status(200).json(response)
+      res.status(200).json(response)
+    } catch (error) {
+      res.status(400).json({error: error.message})
+    }
+
+}
+
+const contactUsHl = async  (req,res) => {
+
+  const {email,name, message} = req.body
+
+  try {
+    await contactUsSendMessage({email,name, message})
+
+    res.status(200).json({msg: 'Correo enviado correctamente, te responderemos a la brevedad'})
   } catch (error) {
-    res.status(400).json({ error: error.message })
+    console.log(error)
+    res.status(400).json(error)
   }
 
 }
@@ -214,6 +239,7 @@ module.exports = {
   confirmeUserHl,
   authUserHl,
   /* handlers ADMINS. */
+  enableUserByAdminHl,
   getAllUserDataAdmin,
   deleteUserByAdminHl,
   authedUserhl,
@@ -221,6 +247,7 @@ module.exports = {
   newPasswordHl,
   comprobarTokenHl,
   changePasswordHl,
+  contactUsHl,
   verifyPasswordHl
 };
 // {}

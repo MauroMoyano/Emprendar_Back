@@ -1,6 +1,7 @@
 const { Router } = require('express')
 
 const { getProjects, postProject, detailProject, updateProjectHl, deleteProjectHl, updateValidateHl, getAllFilteredProjects, getAllProjectsAdminHl, getProjectsToCopy } = require('../controllers/project/projectHandler')
+const { checkAuth } = require('../middleware/checkAuth')
 
 const routerProject = Router()
 
@@ -12,7 +13,7 @@ routerProject.get('/filter', getAllFilteredProjects)
 /* ruta para el detalle del proyecto pasado por params */
 routerProject.get('/:id', detailProject)
 /* ruta para postear un nuevo prouecto */
-routerProject.post('/', postProject)
+routerProject.post('/',checkAuth , postProject)
 /* ruta para cambios/actualiazcion de valores del proyecto */
 routerProject.put('/:id', updateProjectHl)
 

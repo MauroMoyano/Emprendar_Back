@@ -1,12 +1,15 @@
 const { Promise } = require('bluebird')
 const sequelize = require('sequelize')
 const { Op, Sequelize } = require('sequelize')
+const { proyectCreateEmail, emailPostValidateSuccess, emailPostValidateRejected} = require('../../../utils/emails')
 const { Project, User, Country, Category } = require('../../db')
 
 const addProject = async (data) => {
 
     //TODO crear validaciones
 
+
+      
 
     console.log('aca esta la data', data)
     const { title, summary, description, goal, img, userId, country, category } = data
@@ -37,6 +40,8 @@ const addProject = async (data) => {
                 goal,
                 img,
         })
+
+    
     }
     
 
@@ -56,7 +61,7 @@ const addProject = async (data) => {
     await projecto.setCountry(countries)
 
     return {
-        msg: 'Projecto Creado correctamente'
+        msg: 'Projecto Creado correctamente, lo estamos revisando, revisa tu email para mas informacion'
     }
 }
 
@@ -77,7 +82,7 @@ const getProjectById = async (id) => {
 
 /* a incluir filtros tambien. */
 
-const getAllProjects = async (data, pageNum = 4) => {
+const getAllProjects = async (data, pageNum = 8) => {
     //buscamos todos los projectos y los filtramos si recibimos en datos algo mas que page
 
     const { orden, page, country, category, search } = data
@@ -347,6 +352,10 @@ const updateProject = async (id, data) => {
 const updateValidate = async (id, newValidateValue) => {
     //
     const projectToUpdate = await Project.findByPk(id);
+    const user = await User.findByPk(projectToUpdate.userId)
+    newValidateValue === "aceptado"
+        ?await emailPostValidateSuccess(user)
+        :await emailPostValidateRejected(user)
     if (!projectToUpdate) {
         throw new Error('No se encontró el proyecto');
     }
@@ -358,7 +367,7 @@ const updateValidate = async (id, newValidateValue) => {
 
 const getAllProjectsAdmin = async () => {
 
-    const projects = await Project.findAll({order : [['title', "ASC"]]});
+    const projects = await Project.findAll({order : [['title', "ASC"]], include: [{ model: User, attributes: [], where: {deletedAt: null, eliminatedByAdmin: false}}]});
     if (!projects) {
         throw new Error('No se encontró ningun proyecto');
     }

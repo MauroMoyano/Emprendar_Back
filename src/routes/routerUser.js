@@ -13,6 +13,7 @@ const {
   newPasswordHl,
   comprobarTokenHl,
   changePasswordHl,
+  contactUsHl, enableUserByAdminHl,
   verifyPasswordHl
 } = require("../controllers/user/userHandler");
 const { checkAuth } = require("../middleware/checkAuth");
@@ -44,12 +45,16 @@ routerUser.get("/login/me", checkAuth, authedUserhl);
 
 /* ruta de ADMINS. */
 routerUser.get("/admin/users", getAllUserDataAdmin);
+routerUser.put("/admin/enableUser/:id", enableUserByAdminHl)
 routerUser.put("/admin/deleteUser/:id", deleteUserByAdminHl)
+
 
 routerUser.get(
   "/auth/google",
   passport.authenticate("google"),
-  function (req, res) { }
+  function (req, res) {
+
+  }
 );
 
 routerUser.get(
@@ -59,8 +64,10 @@ routerUser.get(
     session: false,
   }),
   (req, res) => {
-    const userString = JSON.stringify(req.user);
 
+    try{
+    const userString = JSON.stringify(req.user);
+    console.log(req.url)
     res.send(
       ` 
       <!DOCTYPE html>
@@ -73,7 +80,9 @@ routerUser.get(
       <script> window.opener.postMessage(${userString}, '${process.env.FRONTEND_URL}') </script>
       </html>
       `
-    );
+    )}catch (error) {
+      res.status(400).json({error: error.message})
+    }
   }
 );
 
@@ -85,6 +94,8 @@ routerUser.post('/config/resetpassword/:token', newPasswordHl)
 routerUser.post('/config/changepassword/', changePasswordHl)
 
 routerUser.post('/config/verifyPassword', verifyPasswordHl)
+
+routerUser.post('/contactUs/sendMessage', contactUsHl)
 
 
 module.exports = routerUser;
