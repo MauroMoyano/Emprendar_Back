@@ -51,7 +51,9 @@ routerUser.put("/admin/deleteUser/:id", deleteUserByAdminHl)
 routerUser.get(
   "/auth/google",
   passport.authenticate("google"),
-  function (req, res) {}
+  function (req, res) {
+
+  }
 );
 
 routerUser.get(
@@ -61,8 +63,10 @@ routerUser.get(
     session: false,
   }),
   (req, res) => {
-    const userString = JSON.stringify(req.user);
 
+    try{
+    const userString = JSON.stringify(req.user);
+    console.log(req.url)
     res.send(
       ` 
       <!DOCTYPE html>
@@ -75,7 +79,9 @@ routerUser.get(
       <script> window.opener.postMessage(${userString}, '${process.env.FRONTEND_URL}') </script>
       </html>
       `
-    );
+    )}catch (error) {
+      res.status(400).json({error: error.message})
+    }
   }
 );
 

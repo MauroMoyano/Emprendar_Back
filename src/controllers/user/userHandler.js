@@ -154,7 +154,6 @@ const resetPasswordHl = async (req, res) => {
 const comprobarTokenHl = async (req, res) => {
 
   const { token } = req.params
-  console.log(token)
   try {
     const response = await comprobarToken(token)
     res.status(200).json(response)

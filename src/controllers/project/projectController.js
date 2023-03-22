@@ -1,7 +1,7 @@
 const { Promise } = require('bluebird')
 const sequelize = require('sequelize')
 const { Op, Sequelize } = require('sequelize')
-const { proyectCreateEmail } = require('../../../utils/emails')
+const { proyectCreateEmail, emailPostValidateSuccess, emailPostValidateRejected} = require('../../../utils/emails')
 const { Project, User, Country, Category } = require('../../db')
 
 const addProject = async (data) => {
@@ -352,6 +352,10 @@ const updateProject = async (id, data) => {
 const updateValidate = async (id, newValidateValue) => {
     //
     const projectToUpdate = await Project.findByPk(id);
+    const user = await User.findByPk(projectToUpdate.userId)
+    newValidateValue === "aceptado"
+        ?await emailPostValidateSuccess(user)
+        :await emailPostValidateRejected(user)
     if (!projectToUpdate) {
         throw new Error('No se encontró el proyecto');
     }
