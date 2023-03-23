@@ -1,5 +1,4 @@
-const { postNewReputation, getReputationUser, changeReputation } = require("./reputarionController")
-
+const { postNewReputation, getReputationUser, changeReputation, getMiPostReputation } = require("./reputarionController")
 
 const postReputation = async (req, res) => {
     try {
@@ -19,6 +18,15 @@ const getReputation = async (req, res) => {
     }
 }
 
+const getReputationPost = async (req, res) => {
+    try {
+        let result = await getMiPostReputation(req.query)
+        res.status(201).json(result)
+    } catch (error) {
+        res.status(406).json({ error: error.json })
+    }
+}
+
 const changeReputationUser = async (req, res) => {
     try {
         await changeReputation(req.body)
@@ -33,5 +41,6 @@ const changeReputationUser = async (req, res) => {
 module.exports = {
     postReputation,
     getReputation,
-    changeReputationUser
+    changeReputationUser,
+    getReputationPost
 }

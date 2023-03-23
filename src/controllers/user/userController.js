@@ -1,4 +1,4 @@
-const { emailRegistration, emailResetPassword } = require("../../../utils/emails");
+const { emailRegistration, emailResetPassword, emailUserValidateRejected, emailUserValidateAcepted} = require("../../../utils/emails");
 const { generateToken } = require("../../../utils/generateToken");
 const { generateJWT } = require("../../../utils/generateJWT");
 const bcrypt = require("bcrypt")
@@ -122,7 +122,7 @@ const authUser = async (data) => {
 
 /* como bien lo dice, trae a todos los usuarios para una especie de "busqueda" de los perfiles de usuarios ademas de los "proyectos"
 se le aplicaran "filtros" desde el front. exeptuanco la busqueda propia por back */
-const getAllUsers = async (data, pageNum = 2) => {
+const getAllUsers = async (data, pageNum = 6) => {
 
   const { page, orden, search } = data
 
@@ -224,6 +224,8 @@ const userByID = async (userId) => {
     if (!infoUserDB) {
       throw new Error("No se encontró ningún usuario con ese ID")
     } else {
+      let reputation = await getReputationUser({ qualifiedUser: infoUserDB.id })
+      
       const infoUserClean = {
         id: infoUserDB.id,
         user_name: infoUserDB.user_name,
@@ -231,8 +233,8 @@ const userByID = async (userId) => {
         last_name: infoUserDB.last_name,
         email: infoUserDB.email,
         account_state: infoUserDB.account_state,
-        reputation: await (getReputationUser({ qualifiedUser: infoUserDB.id })).reputation,
-        cantFeedBack: await (getReputationUser({ qualifiedUser: infoUserDB.id })).count,
+        reputation: reputation.reputation,
+        count: reputation.count,
         validated: infoUserDB.validated,
         profile_img: infoUserDB.profile_img,
         isAdmin: infoUserDB.isAdmin
@@ -310,7 +312,7 @@ const deleteUser = async (userID) => {
 TODO: crear filtros por ciertos parametros de usuario, como deletedAt 
 (con su instancia de usuario borrado. no se el valor que se le da con el destroy({<})) */
 const getAllUserInfoAdmin = async () => {
-  const infoDB = await User.findAll({order : [['user_name', "ASC"]], paranoid: false});
+  const infoDB = await User.findAll({ order: [['user_name', "ASC"]], paranoid: false });
   const infoClean = infoDB.map(user => {
     return {
       id: user.dataValues.id,
@@ -343,9 +345,9 @@ const getAllUserInfoAdmin = async () => {
 /* funcion que va directo para los Admins, que permite borrar al usuario y ademas que el usuario no tenga la posibilidad de
 volver a recuperar la cuenta por la propiedad "eliminatedByAdmin"
 TODO: handler y ruta de esta función.*/
- const deleteUserByAdmin = async (userId) => {
+const deleteUserByAdmin = async (userId) => {
   let user = await User.findByPk(userId)
-
+  await emailUserValidateRejected(user)
   user.eliminatedByAdmin = true
   user.account_state = false
 
@@ -358,14 +360,15 @@ TODO: handler y ruta de esta función.*/
   return { msg: 'usuario borrado con exito.' }
 }
 
-const enableUserByAdmin = async (id) =>{
-  if(!id){
+const enableUserByAdmin = async (id) => {
+  if (!id) {
     throw new Error("No se asigno un ID")
-  }else{
-    const user = await User.findByPk(id, {paranoid: false})
+  } else {
+    const user = await User.findByPk(id, { paranoid: false })
     await user.restore()
     user.eliminatedByAdmin = false
     await user.save()
+    await emailUserValidateAcepted(user)
   }
 }
 
@@ -421,30 +424,33 @@ const newPassword = async (token, password) => {
 
 }
 
+const verifyPassword = async (password, id) => {
+  console.log('Llega al controller')
+  console.log('password ->', password)
+  console.log('id ->', id)
+  if (!password || !id) {
+    throw new Error('Falta algunos de los datos')
+  } else {
+    const user = await User.findByPk(id)
+    console.log(user)
 
-const changePassword = async (id, password, newPassword, verifyPassword) => {
-
-  const user = await User.findByPk(id)
-
-  if (newPassword === verifyPassword) {
     const passwordIsTheSame = bcrypt.compareSync(password, user.password)
 
-    if (passwordIsTheSame) {
-      user.password = bcrypt.hash(newPassword, 8);
-
-      await user.save()
-
-      return { msg: 'Contraseña cambiada correctamente' }
-    } else {
-      throw new Error('Tu contraseña no coincide con la contraseña guardada en la base de datos')
-    }
-  } else {
-    throw new Error('Las contraseñas deben ser iguales')
-
+    return passwordIsTheSame;
   }
 
+}
 
+const changePassword = async (id, newPassword) => {
 
+  console.log('id en el controller ->', id)
+  console.log('pass en el controller ->', newPassword)
+  console.log('typeof ->', typeof newPassword);
+
+  const user = await User.findByPk(id)
+  user.password = await bcrypt.hash(newPassword, 8);
+  await user.save()
+  return { msg: 'Contraseña cambiada correctamente' }
 }
 
 module.exports = {
@@ -466,5 +472,6 @@ module.exports = {
   /* getFilterUserInfoByDeletedAt,
   deleteUserByAdmin */
   newPassword,
-  changePassword
+  changePassword,
+  verifyPassword
 };

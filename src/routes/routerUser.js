@@ -13,7 +13,8 @@ const {
   newPasswordHl,
   comprobarTokenHl,
   changePasswordHl,
-  contactUsHl, enableUserByAdminHl
+  contactUsHl, enableUserByAdminHl,
+  verifyPasswordHl
 } = require("../controllers/user/userHandler");
 const { checkAuth } = require("../middleware/checkAuth");
 const routerUser = Router();
@@ -88,9 +89,11 @@ routerUser.get(
 routerUser.post('/config/resetpassword', resetPasswordHl)
 routerUser.get('/config/resetpassword/:token', comprobarTokenHl)
 
-routerUser.post('/config/resetpassword/:token',newPasswordHl)
+routerUser.post('/config/resetpassword/:token', newPasswordHl)
 
-routerUser.post('/config/changepassowrd/',checkAuth,changePasswordHl)
+routerUser.post('/config/changepassword/', changePasswordHl)
+
+routerUser.post('/config/verifyPassword', verifyPasswordHl)
 
 routerUser.post('/contactUs/sendMessage', contactUsHl)
 

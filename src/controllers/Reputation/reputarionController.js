@@ -28,8 +28,24 @@ const getReputationUser = async (data) => {
         })
 }
 
+const getMiPostReputation = async (data) => {
+    let { userQualifier, qualifiedUser } = data
+    console.log('getMi =>>>>>', data);
+    let result = await Reputation.findOne({ where: { qualifiedUser: qualifiedUser, userQualifier: userQualifier }, attributes: ['qualification'] })
+
+    let reputation
+
+    result
+        ? reputation = result.dataValues.reputation
+        : reputation = 0
+
+    return reputation
+
+}
+
 const changeReputation = async (data) => {
     let { userQualifier, qualifiedUser, qualification } = data
+    console.log('getChange =>>>>>', data);
 
     let reputationToChange = await Reputation.findOne({ where: { userQualifier, qualifiedUser } })
 
@@ -42,5 +58,6 @@ const changeReputation = async (data) => {
 module.exports = {
     postNewReputation,
     getReputationUser,
-    changeReputation
+    changeReputation,
+    getMiPostReputation
 }
