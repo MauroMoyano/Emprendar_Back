@@ -3,7 +3,7 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const { PGUSER, PGDATABASE, PGPASSWORD, PGHOST, PGPORT } = process.env;
-
+const bcrypt = require("bcrypt")
 //creamos la instancia de sequelize
 const sequelize = new Sequelize(
   `postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`,
@@ -91,6 +91,12 @@ sequelize
       "El Salvador",
       "Guatemala",
     ];
+
+    let admin =  { user_name: "Emprendar", name: "Emprendar", last_name: "Admin", email: "emprendar@emprendar.com", password: "emprendar123", profile_img: "https://bestbuyerpersona.com/wp-content/uploads/2022/02/undraw_profile_pic_ic5t.png", confirmed: true, isAdmin: true }
+
+    await User.create({
+        ...admin,password: await bcrypt.hash(admin.password, 8)
+    })
 
     arrCountry.forEach(async (country) => {
       Country.create({
