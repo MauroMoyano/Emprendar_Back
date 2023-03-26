@@ -50,7 +50,7 @@ let capsEntries = entries.map((entry) => [
 sequelize.models = Object.fromEntries(capsEntries);
 
 sequelize
-  .sync({ force: true })
+  .sync({ force: false })
   .then(() => {
     console.log("tablas creadas");
   })
@@ -94,18 +94,18 @@ sequelize
 
     let admin =  { user_name: "Emprendar", name: "Emprendar", last_name: "Admin", email: "emprendar@emprendar.com", password: "emprendar123", profile_img: "https://bestbuyerpersona.com/wp-content/uploads/2022/02/undraw_profile_pic_ic5t.png", confirmed: true, isAdmin: true }
 
-    await User.create({
+    await User.findOrCreate({
         ...admin,password: await bcrypt.hash(admin.password, 8)
     })
 
     arrCountry.forEach(async (country) => {
-      Country.create({
+      Country.findOrCreate({
         name: country,
       });
     });
 
     arrCategory.forEach(async (cat) => {
-      await Category.create({
+      await Category.findOrCreate({
         name: cat,
       });
     });
